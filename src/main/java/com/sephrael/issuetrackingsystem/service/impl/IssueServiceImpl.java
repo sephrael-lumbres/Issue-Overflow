@@ -1,10 +1,10 @@
-//package com.sephrael.bugtracker.service.impl;
+//package com.sephrael.issuetrackingsystem.service.impl;
 //
-//import com.sephrael.bugtracker.entity.Issue;
-//import com.sephrael.bugtracker.entity.User;
-//import com.sephrael.bugtracker.repository.IssueRepository;
-//import com.sephrael.bugtracker.repository.UserRepository;
-//import com.sephrael.bugtracker.service.IssueService;
+//import com.sephrael.issuetrackingsystem.entity.Issue;
+//import com.sephrael.issuetrackingsystem.entity.User;
+//import com.sephrael.issuetrackingsystem.repository.IssueRepository;
+//import com.sephrael.issuetrackingsystem.repository.UserRepository;
+//import com.sephrael.issuetrackingsystem.service.IssueService;
 //import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.stereotype.Service;
 //
@@ -24,13 +24,13 @@
 //    }
 //
 //    public Issue save(Issue issue) {
-//        issue.setIssueId(issue.getIssueId());
-//        issue.setIssueTitle(issue.getIssueTitle());
-//        issue.setIssueDescription(issue.getIssueDescription());
-//        issue.setIssueType(issue.getIssueType());
-//        issue.setIssuePriority(issue.getIssuePriority());
-//        issue.setIssueStatus(issue.getIssueStatus());
-//        issue.setIssueCreated(issue.getIssueCreated());
+//        issue.setId(issue.getId());
+//        issue.setTitle(issue.getTitle());
+//        issue.setDescription(issue.getDescription());
+//        issue.setType(issue.getType());
+//        issue.setPriority(issue.getPriority());
+//        issue.setStatus(issue.getStatus());
+//        issue.setDateCreated(issue.getDateCreated());
 ////        issue.setUser(userRepository.getOne(issue.getAuthor()));
 //        issue.setUserEmail(issue.getUserEmail());
 //        return issueRepository.save(issue);

@@ -1,11 +1,11 @@
-// file from https://www.codejava.net/frameworks/spring-boot/user-registration-and-login-tutorial
-
-//package com.sephrael.bugtracker;
+//// file from https://www.codejava.net/frameworks/spring-boot/user-registration-and-login-tutorial
+//
+//package com.sephrael.issuetrackingsystem;
 //
 //import static org.assertj.core.api.Assertions.assertThat;
 //
-//import com.sephrael.bugtracker.entity.User;
-//import com.sephrael.bugtracker.repository.UserRepository;
+//import com.sephrael.issuetrackingsystem.entity.User;
+//import com.sephrael.issuetrackingsystem.repository.UserRepository;
 //import org.junit.jupiter.api.Test;
 //import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
