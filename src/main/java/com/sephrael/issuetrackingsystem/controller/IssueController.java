@@ -61,7 +61,7 @@ public class IssueController {
     public String showViewIssuePage(@PathVariable("id") long id, Model model, Principal principal) {
         Issue issue = issueService.find(id);
         model.addAttribute("comment", new Comment());
-        model.addAttribute("comments", commentRepository.findAll());
+        model.addAttribute("comments", commentRepository.findByIssueId(id));
         model.addAttribute("issue", issue);
         model.addAttribute("user", userRepository.findByEmail(principal.getName()));
 
@@ -88,5 +88,11 @@ public class IssueController {
     @GetMapping(path = "/all")
     public @ResponseBody Iterable<Issue> getAllIssues() {
         return issueService.listAll();
+    }
+
+    // this shows the json format of all the Comments
+    @GetMapping(path = "/comment/all")
+    public @ResponseBody Iterable<Comment> getAllComments() {
+        return commentRepository.findAll();
     }
 }

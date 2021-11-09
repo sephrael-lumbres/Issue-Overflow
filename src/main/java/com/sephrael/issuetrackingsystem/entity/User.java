@@ -61,6 +61,13 @@ public class User {
         issue.setUser(this);
     }
 
+    @OneToMany(mappedBy = "user")
+    private List<Comment> comments;
+
+    public void addToComment(Comment comment) {
+        comment.setUser(this);
+    }
+
     public Long getId() {
         return id;
     }

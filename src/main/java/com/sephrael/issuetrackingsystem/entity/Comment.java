@@ -27,9 +27,25 @@ public class Comment {
     @NotNull
     private User user;
 
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     @ManyToOne
     @NotNull
     private Issue issue;
+
+    public Issue getIssue() {
+        return issue;
+    }
+
+    public void setIssue(Issue issue) {
+        this.issue = issue;
+    }
 
     // maybe add variable for userToBeNotified
 

@@ -6,6 +6,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 public class Issue {
@@ -59,6 +60,14 @@ public class Issue {
     public void setProject(Project project) {
         this.project = project;
     }
+
+    @OneToMany(mappedBy = "issue")
+    private List<Comment> comments;
+
+    public void addToComment(Comment comment) {
+        comment.setIssue(this);
+    }
+
 
     public Long getId() {
         return id;
