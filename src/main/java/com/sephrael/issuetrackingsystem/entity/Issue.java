@@ -64,6 +64,14 @@ public class Issue {
     @OneToMany(mappedBy = "issue")
     private List<Comment> comments;
 
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
+    }
+
     public void addToComment(Comment comment) {
         comment.setIssue(this);
     }

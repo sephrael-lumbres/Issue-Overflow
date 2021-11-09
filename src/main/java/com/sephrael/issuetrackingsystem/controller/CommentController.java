@@ -42,6 +42,6 @@ public class CommentController {
     // this shows the json format of all the Comments of an Issue
     @GetMapping(path = "/all")
     public @ResponseBody Iterable<Comment> getAllCommentsByIssueId(@PathVariable(value = "issueId") Long issueId) {
-        return commentRepository.findByIssueId(issueId);
+        return issueService.find(issueId).getComments();
     }
 }

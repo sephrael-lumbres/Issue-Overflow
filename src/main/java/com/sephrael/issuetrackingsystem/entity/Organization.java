@@ -16,6 +16,14 @@ public class Organization {
     @OneToMany(mappedBy = "organization")
     private List<User> users;
 
+    public List<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(List<User> users) {
+        this.users = users;
+    }
+
     public void addToUser(User user) {
         user.setOrganization(this);
 //        this.users.add(user);

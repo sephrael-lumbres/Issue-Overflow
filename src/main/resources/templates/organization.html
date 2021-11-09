@@ -287,9 +287,9 @@
                                 <div class="d-flex align-items-center justify-content-between">
                                     <div class="me-3">
                                         <div class="small text-white-50">Organization Name:</div>
-                                        <div th:text="${user.organization.name}" class="h1 text-white"></div>
+                                        <div th:text="${currentUser.organization.name}" class="h1 text-white"></div>
                                     </div>
-                                    <div class="text-white">20 Member(s)</div>
+                                    <div class="text-white"><span th:text="${currentUser.organization.getUsers().size()}"></span> Member(s)</div>
                                 </div>
                             </div>
                         </div>

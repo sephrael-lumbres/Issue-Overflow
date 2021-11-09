@@ -61,7 +61,7 @@ public class IssueController {
     public String showViewIssuePage(@PathVariable("id") long id, Model model, Principal principal) {
         Issue issue = issueService.find(id);
         model.addAttribute("comment", new Comment());
-        model.addAttribute("comments", commentRepository.findByIssueId(id));
+        model.addAttribute("comments", issue.getComments());
         model.addAttribute("issue", issue);
         model.addAttribute("user", userRepository.findByEmail(principal.getName()));
 

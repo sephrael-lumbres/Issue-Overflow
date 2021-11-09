@@ -353,7 +353,7 @@
                         <!-- LIST OF THE COMMENTS -->
                         <div class="card mb-4">
                             <!-- BE ABLE TO SHOW THE CORRECT NUMBER OF COMMENTS -->
-                            <div class="card-header">Comments (0)</div>
+                            <div class="card-header">Comments (<span th:text="${issue.getComments().size()}"></span>)</div>
                             <div class="card-body ms-n3">
                                 <!-- THE "list" IS TO GAIN ACCESS TO THE "comments" array's: "size," "count," "last," etc. -->
                                 <ul th:each="comment, list : ${comments}" class="row">

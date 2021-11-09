@@ -295,7 +295,7 @@
                                     <thead>
                                         <tr>
                                             <th>Project Name</th>
-<!--                                            <th>Total Members</th>-->
+                                            <th>Total Members</th>
                                             <th>Created</th>
                                             <th>Actions</th>
                                         </tr>
@@ -303,16 +303,16 @@
                                     <tfoot>
                                         <tr>
                                             <th>Project Name</th>
-<!--                                            <th>Total Members</th>-->
+                                            <th>Total Members</th>
                                             <th>Created</th>
                                             <th>Actions</th>
                                         </tr>
                                     </tfoot>
                                     <tbody>
-                                        <tr th:each="user : ${user.projects}">
-                                            <td th:text="${user.name}"></td>
-<!--                                            <td>8</td>-->
-                                            <td th:text="${user.dateCreated}"></td>
+                                        <tr th:each="currentProject : ${user.projects}">
+                                            <td th:text="${currentProject.name}"></td>
+                                            <td th:text="${currentProject.getUsers().size()}"></td>
+                                            <td th:text="${currentProject.dateCreated}"></td>
                                             <td>
                                                 <button class="btn btn-datatable btn-icon btn-transparent-dark me-2" type="button" data-bs-toggle="modal" data-bs-target="#editGroupModal"><i data-feather="edit"></i></button>
                                                 <a class="btn btn-datatable btn-icon btn-transparent-dark" href="#!"><i data-feather="trash-2"></i></a>
