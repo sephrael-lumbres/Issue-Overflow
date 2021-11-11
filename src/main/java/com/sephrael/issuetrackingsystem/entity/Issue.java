@@ -1,5 +1,6 @@
 package com.sephrael.issuetrackingsystem.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sun.istack.NotNull;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -37,6 +38,7 @@ public class Issue {
 //    @Enumerated(EnumType.STRING)
 //    private IssueStatus issueStatus;
 
+    @JsonIgnore
     @ManyToOne
     @NotNull
     private User user;
@@ -49,6 +51,7 @@ public class Issue {
         this.user = user;
     }
 
+    @JsonIgnore
     @ManyToOne
     @NotNull
     private Project project;

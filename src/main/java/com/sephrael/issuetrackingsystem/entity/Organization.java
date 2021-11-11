@@ -1,5 +1,6 @@
 package com.sephrael.issuetrackingsystem.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.*;
 import java.util.List;
 
@@ -13,6 +14,7 @@ public class Organization {
 
     // insert dateOrganizationJoined variable here (a somewhat working Date variable in Issue.java)
 
+    @JsonIgnore
     @OneToMany(mappedBy = "organization")
     private List<User> users;
 

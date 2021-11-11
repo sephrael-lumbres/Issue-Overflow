@@ -1,5 +1,6 @@
 package com.sephrael.issuetrackingsystem.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sun.istack.NotNull;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -23,6 +24,7 @@ public class Comment {
     private Date dateCreated;
 
     // add variable for author
+    @JsonIgnore
     @ManyToOne
     @NotNull
     private User user;
@@ -35,6 +37,7 @@ public class Comment {
         this.user = user;
     }
 
+    @JsonIgnore
     @ManyToOne
     @NotNull
     private Issue issue;

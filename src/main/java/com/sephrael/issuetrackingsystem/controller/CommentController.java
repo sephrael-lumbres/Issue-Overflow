@@ -13,7 +13,7 @@ import java.security.Principal;
 import java.util.List;
 
 @Controller
-@RequestMapping("/issues/view/{issueId}/comment")
+@RequestMapping("/issues/{accessKey}/view/{issueId}/comment")
 public class CommentController {
     @Autowired
     private CommentRepository commentRepository;
@@ -23,25 +23,25 @@ public class CommentController {
     private UserRepository userRepository;
 
     @PostMapping("/save")
-    public String addComment(@PathVariable(value = "issueId") Long issueId, Comment comment, Principal principal) {
+    public String addComment(@PathVariable(value = "issueId") Long issueId, @PathVariable(name = "accessKey") String accessKey, Comment comment, Principal principal) {
         userRepository.findByEmail(principal.getName()).addToComment(comment);
         issueService.find(issueId).addToComment(comment);
 
         commentRepository.save(comment);
 
-        return "redirect:/issues/view/" + issueId;
+        return "redirect:/issues/{accessKey}/view/" + issueId;
     }
 
     @RequestMapping("/{commentId}/delete")
-    public String deleteComment(@PathVariable(value = "issueId") Long issueId, @PathVariable(value = "commentId") Long commentId) {
+    public String deleteComment(@PathVariable(value = "issueId") Long issueId, @PathVariable(value = "commentId") Long commentId, @PathVariable(name = "accessKey") String accessKey) {
         commentRepository.deleteById(commentId);
 
-        return "redirect:/issues/view/" + issueId;
+        return "redirect:/issues/{accessKey}/view/" + issueId;
     }
 
     // this shows the json format of all the Comments of an Issue
     @GetMapping(path = "/all")
-    public @ResponseBody Iterable<Comment> getAllCommentsByIssueId(@PathVariable(value = "issueId") Long issueId) {
+    public @ResponseBody Iterable<Comment> getAllCommentsByIssueId(@PathVariable(value = "issueId") Long issueId, @PathVariable(name = "accessKey") String accessKey) {
         return issueService.find(issueId).getComments();
     }
 }

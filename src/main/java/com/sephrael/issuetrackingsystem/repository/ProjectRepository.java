@@ -9,4 +9,5 @@ import org.springframework.stereotype.Repository;
 public interface ProjectRepository extends JpaRepository<Project, Long> {
     @Query("SELECT p FROM Project p WHERE p.accessKey = ?1")
     Project findByAccessKey(String accessKey);
+    Project findProjectById(Long id);
 }

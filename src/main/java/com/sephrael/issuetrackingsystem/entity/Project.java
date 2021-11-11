@@ -41,6 +41,10 @@ public class Project {
     @OneToMany(mappedBy = "project")
     private List<Issue> issues;
 
+    public List<Issue> getIssues() {
+        return issues;
+    }
+
     public Organization getOrganization() {
         return organization;
     }

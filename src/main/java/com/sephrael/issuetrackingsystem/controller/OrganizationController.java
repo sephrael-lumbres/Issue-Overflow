@@ -33,6 +33,8 @@ public class OrganizationController {
         // this allowed me to print the Organization that the currently logged-in user belongs to
         model.addAttribute("currentUser", userRepository.findByEmail(principal.getName()));
 
+        model.addAttribute("currentUserProjects", userRepository.findByEmail(principal.getName()).getProjects());
+
         return modelAndView;
     }
 

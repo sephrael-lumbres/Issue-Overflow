@@ -223,15 +223,31 @@
                                 Dashboard
                             </a>
                             <!-- Sidenav Link (Add Issue)-->
-                            <a class="nav-link" href="/issues/new">
+                            <a class="nav-link collapsed" href="javascript:void(0);" data-bs-toggle="collapse"
+                               data-bs-target="#collapseAddIssue" aria-expanded="false" aria-controls="collapseAddIssue">
                                 <div class="nav-link-icon"><i data-feather="plus"></i></div>
                                 Add Issue
+                                <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                             </a>
+                            <div class="collapse" id="collapseAddIssue" data-bs-parent="#accordionSidenav">
+                                <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavAddIssue">
+                                    <a class="nav-link" th:href="@{'/issues/' + ${project.accessKey} +'/new'}"
+                                       th:each="project : ${currentUserProjects}" th:value="${project.id}" th:text="${project.name}">
+                                    </a>
+                                </nav>
+                            </div>
                             <!-- Sidenav Link (Issues List)-->
-                            <a class="nav-link" href="/issues">
+                            <a class="nav-link collapsed" href="javascript:void(0);" data-bs-toggle="collapse"
+                               data-bs-target="#collapseDashboards" aria-expanded="false" aria-controls="collapseDashboards">
                                 <div class="nav-link-icon"><i data-feather="list"></i></div>
                                 Issues
+                                <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                             </a>
+                            <div class="collapse" id="collapseDashboards" data-bs-parent="#accordionSidenav">
+                                <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavPages">
+                                    <a class="nav-link" th:href="@{'/issues/' + ${project.accessKey}}" th:each="project : ${currentUserProjects}" th:value="${project.id}" th:text="${project.name}"></a>
+                                </nav>
+                            </div>
                             <!-- Sidenav Link (Organization)-->
                             <a class="nav-link" href="/organization">
                                 <div class="nav-link-icon"><i data-feather="globe"></i></div>

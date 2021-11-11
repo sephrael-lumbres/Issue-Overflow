@@ -51,6 +51,7 @@ public class UserController {
         List<User> listUsers = userRepository.findAll();
         model.addAttribute("listUsers", listUsers);
         model.addAttribute("user", userRepository.findByEmail(principal.getName()));
+        model.addAttribute("currentUserProjects", userRepository.findByEmail(principal.getName()).getProjects());
 
         return "users";
     }
@@ -80,7 +81,7 @@ public class UserController {
     }
 
     // this returns the json of all the users
-    @GetMapping(path = "/allUsers")
+    @GetMapping(path = "/users/all")
     public @ResponseBody Iterable<User> getAllUsers() {
         return userRepository.findAll();
     }
