@@ -23,8 +23,6 @@ public class ProjectController {
     private ProjectRepository projectRepository;
     @Autowired
     private UserRepository userRepository;
-    @Autowired
-    private OrganizationRepository organizationRepository;
 
     @RequestMapping("")
     public String viewProjects(Model model, Principal principal) {
@@ -32,7 +30,7 @@ public class ProjectController {
         model.addAttribute("user", userRepository.findByEmail(principal.getName()));
         model.addAttribute("currentUserProjects", userRepository.findByEmail(principal.getName()).getProjects());
 
-        return "projects";
+        return "/projects/projects";
     }
 
     @PostMapping("/new")

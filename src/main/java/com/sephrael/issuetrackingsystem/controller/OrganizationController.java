@@ -1,7 +1,6 @@
 package com.sephrael.issuetrackingsystem.controller;
 
 import com.sephrael.issuetrackingsystem.entity.Organization;
-import com.sephrael.issuetrackingsystem.entity.User;
 import com.sephrael.issuetrackingsystem.repository.OrganizationRepository;
 import com.sephrael.issuetrackingsystem.repository.UserRepository;
 import com.sephrael.issuetrackingsystem.service.UserService;
@@ -28,7 +27,7 @@ public class OrganizationController {
     @RequestMapping("")
     public ModelAndView viewOrganizationDetails(Model model, Principal principal) {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("organization");
+        modelAndView.setViewName("/organization/organization");
 
         // this allowed me to print the Organization that the currently logged-in user belongs to
         model.addAttribute("currentUser", userRepository.findByEmail(principal.getName()));
@@ -40,7 +39,7 @@ public class OrganizationController {
 
     @RequestMapping("/select")
     public String showCreateOrJoinOrganizationPage() {
-        return ("select-organization");
+        return ("/organization/select-organization");
     }
 
     @RequestMapping("/new")
@@ -48,7 +47,7 @@ public class OrganizationController {
         model.addAttribute("organization", new Organization());
         model.addAttribute("users", userService.listAll());
 
-        return("create-organization");
+        return("/organization/create-organization");
     }
 
     public static String generateRandomAccessKey(int len) {
@@ -88,7 +87,7 @@ public class OrganizationController {
     public String joinOrganization(Model model) {
         model.addAttribute("organization", organizationRepository.findAll());
 
-        return("join-organization");
+        return("/organization/join-organization");
     }
 
     // this returns the json of all the organizations

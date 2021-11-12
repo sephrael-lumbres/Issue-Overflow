@@ -6,10 +6,10 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>Projects List - Issue Tracking System</title>
-        <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
-        <link href="css/styles.css" rel="stylesheet" />
-        <link rel="icon" type="image/x-icon" href="assets/img/favicon.png" />
+        <title th:text="${issue.title} + ' | View issue |'"></title>
+        <link href="../../../css/styles.css" rel="stylesheet" />
+        <link href="https://unpkg.com/easymde/dist/easymde.min.css" rel="stylesheet" />
+        <link rel="icon" type="image/x-icon" href="../../../assets/img/favicon.png" />
         <script data-search-pseudo-elements defer src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.28.0/feather.min.js" crossorigin="anonymous"></script>
     </head>
@@ -21,7 +21,7 @@
             <!-- * * Tip * * You can use text or an image for your navbar brand.-->
             <!-- * * * * * * When using an image, we recommend the SVG format.-->
             <!-- * * * * * * Dimensions: Maximum height: 32px, maximum width: 240px-->
-            <a class="navbar-brand pe-3 ps-4 ps-lg-2" href="index.html">SB Admin Pro</a>
+            <a class="navbar-brand pe-3 ps-4 ps-lg-2" href="../index.html">SB Admin Pro</a>
             <!-- Navbar Search Input-->
             <!-- * * Note: * * Visible only on and above the lg breakpoint-->
             <form class="form-inline me-auto d-none d-lg-block me-3">
@@ -131,7 +131,7 @@
                         </h6>
                         <!-- Example Message 1  -->
                         <a class="dropdown-item dropdown-notifications-item" href="#!">
-                            <img class="dropdown-notifications-item-img" src="assets/img/illustrations/profiles/profile-2.png" />
+                            <img class="dropdown-notifications-item-img" src="../../../assets/img/illustrations/profiles/profile-2.png" />
                             <div class="dropdown-notifications-item-content">
                                 <div class="dropdown-notifications-item-content-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>
                                 <div class="dropdown-notifications-item-content-details">Thomas Wilcox · 58m</div>
@@ -139,7 +139,7 @@
                         </a>
                         <!-- Example Message 2-->
                         <a class="dropdown-item dropdown-notifications-item" href="#!">
-                            <img class="dropdown-notifications-item-img" src="assets/img/illustrations/profiles/profile-3.png" />
+                            <img class="dropdown-notifications-item-img" src="../../../assets/img/illustrations/profiles/profile-3.png" />
                             <div class="dropdown-notifications-item-content">
                                 <div class="dropdown-notifications-item-content-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>
                                 <div class="dropdown-notifications-item-content-details">Emily Fowler · 2d</div>
@@ -147,7 +147,7 @@
                         </a>
                         <!-- Example Message 3-->
                         <a class="dropdown-item dropdown-notifications-item" href="#!">
-                            <img class="dropdown-notifications-item-img" src="assets/img/illustrations/profiles/profile-4.png" />
+                            <img class="dropdown-notifications-item-img" src="../../../assets/img/illustrations/profiles/profile-4.png" />
                             <div class="dropdown-notifications-item-content">
                                 <div class="dropdown-notifications-item-content-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>
                                 <div class="dropdown-notifications-item-content-details">Marshall Rosencrantz · 3d</div>
@@ -155,7 +155,7 @@
                         </a>
                         <!-- Example Message 4-->
                         <a class="dropdown-item dropdown-notifications-item" href="#!">
-                            <img class="dropdown-notifications-item-img" src="assets/img/illustrations/profiles/profile-5.png" />
+                            <img class="dropdown-notifications-item-img" src="../../../assets/img/illustrations/profiles/profile-5.png" />
                             <div class="dropdown-notifications-item-content">
                                 <div class="dropdown-notifications-item-content-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>
                                 <div class="dropdown-notifications-item-content-details">Colby Newton · 3d</div>
@@ -167,13 +167,13 @@
                 </li>
                 <!-- User Dropdown-->
                 <li class="nav-item dropdown no-caret dropdown-user me-3 me-lg-4">
-                    <a class="btn btn-icon btn-transparent-dark dropdown-toggle" id="navbarDropdownUserImage" href="javascript:void(0);" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img class="img-fluid" src="assets/img/illustrations/profiles/profile-1.png" /></a>
+                    <a class="btn btn-icon btn-transparent-dark dropdown-toggle" id="navbarDropdownUserImage" href="javascript:void(0);" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img class="img-fluid" src="../../../assets/img/illustrations/profiles/profile-1.png" /></a>
                     <div class="dropdown-menu dropdown-menu-end border-0 shadow animated--fade-in-up" aria-labelledby="navbarDropdownUserImage">
                         <h6 class="dropdown-header d-flex align-items-center">
-                            <img class="dropdown-user-img" src="assets/img/illustrations/profiles/profile-1.png" />
+                            <img class="dropdown-user-img" src="../../../assets/img/illustrations/profiles/profile-1.png" />
                             <div class="dropdown-user-details">
-                                <div class="dropdown-user-details-name">Valerie Luna</div>
-                                <div class="dropdown-user-details-email">vluna@aol.com</div>
+                                <div th:text="${user.firstName} + ' ' + ${user.lastName}" class="dropdown-user-details-name"></div>
+                                <div th:text="${user.email}" class="dropdown-user-details-email"></div>
                             </div>
                         </h6>
                         <div class="dropdown-divider"></div>
@@ -181,10 +181,12 @@
                             <div class="dropdown-item-icon"><i data-feather="settings"></i></div>
                             Account
                         </a>
-                        <a class="dropdown-item" href="#!">
-                            <div class="dropdown-item-icon"><i data-feather="log-out"></i></div>
-                            Logout
-                        </a>
+                        <form th:action="@{/logout}" name="logoutButton" method="post">
+                            <a href="javascript: logoutButton.submit();" class="dropdown-item">
+                                <div class="dropdown-item-icon"><i data-feather="log-out"></i></div>
+                                Logout
+                            </a>
+                        </form>
                     </div>
                 </li>
             </ul>
@@ -232,16 +234,17 @@
                                     </a>
                                 </nav>
                             </div>
+
                             <!-- Sidenav Link (Issues List)-->
-                            <a class="nav-link collapsed" href="javascript:void(0);" data-bs-toggle="collapse"
-                               data-bs-target="#collapseDashboards" aria-expanded="false" aria-controls="collapseDashboards">
+                            <a class="nav-link active" href="javascript:void(0);" data-bs-toggle="collapse"
+                               data-bs-target="#collapseIssues" aria-expanded="false" aria-controls="collapseIssues">
                                 <div class="nav-link-icon"><i data-feather="list"></i></div>
                                 Issues
                                 <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                             </a>
-                            <div class="collapse" id="collapseDashboards" data-bs-parent="#accordionSidenav">
-                                <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavPages">
-                                    <a class="nav-link" th:href="@{'/issues/' + ${project.accessKey}}" th:each="project : ${currentUserProjects}" th:value="${project.id}" th:text="${project.name}"></a>
+                            <div class="collapse show" id="collapseIssues" data-bs-parent="#accordionSidenav">
+                                <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavIssues">
+                                    <a class="nav-link" th:classappend="${project.id==currentProject.id} ? active" th:href="@{'/issues/' + ${project.accessKey}}" th:each="project : ${currentUserProjects}" th:value="${project.id}" th:text="${project.name}"></a>
                                 </nav>
                             </div>
                             <!-- Sidenav Link (Organization)-->
@@ -250,7 +253,7 @@
                                 Organization
                             </a>
                             <!-- Sidenav Link (Projects)-->
-                            <a class="nav-link active" href="/projects">
+                            <a class="nav-link" href="/projects">
                                 <div class="nav-link-icon"><i data-feather="grid"></i></div>
                                 Projects
                             </a>
@@ -266,7 +269,7 @@
                     <div class="sidenav-footer">
                         <div class="sidenav-footer-content">
                             <div class="sidenav-footer-subtitle">Logged in as:</div>
-                            <div class="sidenav-footer-title">Valerie Luna</div>
+                            <div th:text="${user.firstName} + ' ' + ${user.lastName}" class="sidenav-footer-title"></div>
                         </div>
                     </div>
                 </nav>
@@ -274,152 +277,154 @@
             <div id="layoutSidenav_content">
                 <main>
                     <header class="page-header page-header-compact page-header-light border-bottom bg-white mb-4">
-                        <div class="container-fluid px-4">
+                        <div class="container-xl px-4">
                             <div class="page-header-content">
                                 <div class="row align-items-center justify-content-between pt-3">
                                     <div class="col-auto mb-3">
                                         <h1 class="page-header-title">
-                                            <div class="page-header-icon"><i data-feather="users"></i></div>
-                                            Projects List
+                                            <div class="page-header-icon"><i data-feather="file"></i></div>
+                                            Issue Details
                                         </h1>
-                                    </div>
-                                    <div class="col-12 col-xl-auto mb-3">
-                                        <a class="btn btn-sm btn-light text-primary" href="users.html">
-                                            <i class="me-1" data-feather="user"></i>
-                                            Manage Users
-                                        </a>
-                                        <button class="btn btn-sm btn-light text-primary" type="button" data-bs-toggle="modal" data-bs-target="#createProjectModal">
-                                            <i class="me-1" data-feather="plus"></i>
-                                            Create New Project
-                                        </button>
-
-                                        <button class="btn btn-sm btn-light text-primary" type="button" data-bs-toggle="modal" data-bs-target="#joinProjectModal">
-                                            <i class="me-1" data-feather="users"></i>
-                                            Join Project
-                                        </button>
-
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </header>
-                    <!-- Main page content-->
-                    <div class="container-fluid px-4">
-                        <div class="card">
-                            <div class="card-body">
-                                <table id="datatablesSimple">
-                                    <thead>
-                                        <tr>
-                                            <th>Project Name</th>
-                                            <th>Total Members</th>
-                                            <th>Created</th>
-                                            <th>Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tfoot>
-                                        <tr>
-                                            <th>Project Name</th>
-                                            <th>Total Members</th>
-                                            <th>Created</th>
-                                            <th>Actions</th>
-                                        </tr>
-                                    </tfoot>
-                                    <tbody>
-                                        <tr th:each="currentProject : ${user.projects}">
-                                            <td th:text="${currentProject.name}"></td>
-                                            <td th:text="${currentProject.getUsers().size()}"></td>
-                                            <td th:text="${currentProject.dateCreated}"></td>
-                                            <td>
-                                                <button class="btn btn-datatable btn-icon btn-transparent-dark me-2" type="button" data-bs-toggle="modal" data-bs-target="#editGroupModal"><i data-feather="edit"></i></button>
-                                                <a class="btn btn-datatable btn-icon btn-transparent-dark" href="#!"><i data-feather="trash-2"></i></a>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
+                    <!-- Main page content -->
+                    <div class="container-xl px-4 mt-4">
+                        <div class="card mb-4">
+                            <div th:text="${issue.title}" class="card-header"></div>
+
+                            <label for="descriptionViewer"></label>
+                            <div th:text="${issue.description}" id="descriptionViewer" class="card-body mt-3 mb-1"></div>
+
+                            <hr class="ms-auto me-auto mb-3" style="width: 98%;">
+
+                            <ul class="row mb-2">
+                                <li class="col d-flex justify-content-between align-items-start">
+                                    <div class="ms-2 me-auto">
+                                    <div class="fw-bold mb-2">Project</div>
+                                        <span th:text="${issue.project.name}"></span>
+                                    </div>
+                                </li>
+                                <li th:switch="${issue.type}" class="col d-flex justify-content-between align-items-start">
+                                    <div class="ms-2 me-auto">
+                                    <div class="fw-bold mb-2">Type</div>
+                                        <h5>
+                                            <span class="badge bg-red-soft text-red" th:case="Bug">Bug</span>
+                                            <span class="badge bg-purple-soft text-purple" th:case="Task">Task</span>
+                                            <span class="badge bg-green-soft text-green" th:case="Request">Request</span>
+                                            <span class="badge bg-gray-200 text-dark" th:case="Other">Other</span>
+                                        </h5>
+                                    </div>
+                                </li>
+                            </ul>
+
+                            <hr class="ms-auto me-auto mt-1" style="width: 95%;">
+
+                            <ul class="row mb-2">
+                                <li th:switch="${issue.priority}" class="col d-flex justify-content-between align-items-start">
+                                    <div class="ms-2 me-auto">
+                                    <div class="fw-bold mb-2">Priority</div>
+                                        <h5>
+                                            <span th:case="Low" class="badge bg-green-soft text-green">Low</span>
+                                            <span th:case="Normal"
+                                                  class="badge bg-yellow-soft text-yellow">Normal</span>
+                                            <span th:case="High" class="badge bg-red-soft text-red">High</span>
+                                        </h5>
+                                    </div>
+                                </li>
+                                <li th:switch="${issue.status}" class="col d-flex justify-content-between align-items-start">
+                                    <div class="ms-2 me-auto">
+                                    <div class="fw-bold mb-2">Status</div>
+                                        <h5>
+                                            <span th:case="Open" class="badge bg-red-soft text-red">Open</span>
+                                            <span th:case="In-Progress"
+                                                  class="badge bg-blue-soft text-blue">In Progress</span>
+                                            <span th:case="Closed" class="badge bg-green-soft text-green">Closed</span>
+                                        </h5>
+                                    </div>
+                                </li>
+
+                            </ul>
+
+                            <hr class="ms-auto me-auto mt-1" style="width: 95%;">
+
+                            <ul class="row mb-4">
+                                <li class="col d-flex justify-content-between align-items-start">
+                                    <div class="ms-2 me-auto">
+                                    <div class="fw-bold mb-2">Created</div>
+                                        <span th:text="${issue.dateCreated}"></span>
+                                    </div>
+                                </li>
+
+                                <li class="col d-flex justify-content-between align-items-start">
+                                    <div class="ms-2 me-auto">
+                                    <div class="fw-bold mb-2">Updated</div>
+                                        <span th:text="${issue.dateUpdated}"></span>
+                                    </div>
+                                </li>
+                            </ul>
                         </div>
-                    </div>
-                    <!-- Create project modal-->
-                    <div class="modal fade" id="createProjectModal" tabindex="-1" role="dialog" aria-labelledby="createProjectModalLabel" aria-hidden="true">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="createProjectModalLabel">Create New Project</h5>
-                                    <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
 
-
-                                <form action="#" th:action="@{/projects/new}" th:object="${project}" method="post">
-                                    <div class="modal-body">
-    <!--                                    <form action="#" th:action="@{/projects/new}" th:object="${project}" method="post" name="createNewProjectForm">-->
-                                            <div class="mb-0">
-                                                <label class="mb-1 small text-muted" for="createFormProjectName">Project Name</label>
-                                                <input th:field="*{name}" class="form-control" id="createFormProjectName" type="text" placeholder="Enter project name..." />
-                                                <label class="mb-1 small text-muted" for="createFormProjectAccessKey">Project Access Key</label>
-                                                <input th:field="*{accessKey}" class="form-control" id="createFormProjectAccessKey" type="text" placeholder="Enter project access key..." />
-                                            </div>
-    <!--                                        <button class="btn btn-primary-soft text-primary" type="submit">Create New Project</button>-->
-    <!--                                    </form>-->
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button class="btn btn-danger-soft text-danger" type="button" data-bs-dismiss="modal">Cancel</button>
-                                        <button class="btn btn-primary-soft text-primary" type="submit">Create New Project</button>
-                                    </div>
-                                </form>
-
-
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Join project modal-->
-                    <div class="modal fade" id="joinProjectModal" tabindex="-1" role="dialog" aria-labelledby="joinProjectModalLabel" aria-hidden="true">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="joinProjectModalLabel">Join Project</h5>
-                                    <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                                <form action="#" th:action="@{/projects/join}" th:object="${project}" method="post">
-                                    <div class="modal-body">
-                                            <div class="mb-0">
-                                                <label class="mb-1 small text-muted" for="joinFormProjectName">Project Access Key</label>
-                                                <input th:name="accessKey" class="form-control" id="joinFormProjectName" type="text" placeholder="Enter project access key..." />
-                                            </div>
-
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button class="btn btn-danger-soft text-danger" type="button" data-bs-dismiss="modal">Cancel</button>
-                                        <button class="btn btn-primary-soft text-primary" type="submit">Join Project</button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Edit group modal-->
-                    <!-- HAVE NOT TOUCH THIS YET -->
-                    <div class="modal fade" id="editGroupModal" tabindex="-1" role="dialog" aria-labelledby="editGroupModalLabel" aria-hidden="true">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="editGroupModalLabel">Edit Group</h5>
-                                    <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <form>
-                                        <div class="mb-0">
-                                            <label class="mb-1 small text-muted" for="formGroupName">Group Name</label>
-                                            <input class="form-control" id="formGroupName" type="text" placeholder="Enter group name..." value="Sales" />
+                        <!-- LIST OF THE COMMENTS -->
+                        <div class="card mb-4">
+                            <!-- BE ABLE TO SHOW THE CORRECT NUMBER OF COMMENTS -->
+                            <div class="card-header">Comments (<span th:text="${issue.getComments().size()}"></span>)</div>
+                            <div class="card-body ms-n3">
+                                <!-- THE "list" IS TO GAIN ACCESS TO THE "comments" array's: "size," "count," "last," etc. -->
+                                <ul th:each="comment, list : ${comments}" class="row">
+                                    <li class="col d-flex">
+                                        <div class="me-auto">
+                                            <div th:text="${comment.user.firstName} + ' ' + ${comment.user.lastName}" class="fw-bold mb-n2"></div>
+                                                <div style="position: absolute; left: 91.5%;">
+                                                    <a class="btn-lg btn-icon btn-transparent-dark me-2" href="#"><i data-feather="edit"></i></a>
+                                                    <a class="btn-lg btn-icon btn-transparent-dark"
+                                                       th:href="@{'/issues/' + ${currentProject.accessKey} + '/view/' + ${issue.id} + '/comment/' + ${comment.id} + '/delete'}">
+                                                        <i data-feather="trash-2"></i>
+                                                    </a>
+                                                </div>
+                                            <span th:text="${comment.dateCreated}" style="font-size: 12px;"></span>
                                         </div>
-                                    </form>
-                                </div>
-                                <div class="modal-footer">
-                                    <button class="btn btn-danger-soft text-danger" type="button" data-bs-dismiss="modal">Cancel</button>
-                                    <button class="btn btn-primary-soft text-primary" type="button">Save Changes</button>
-                                </div>
+                                    </li>
+
+                                    <!-- THIS IS TO ADD SEPARATION BETWEEN dateCreated and messge -->
+                                    <p></p>
+
+                                    <li class="d-flex mt-n1">
+                                        <div th:text="${comment.message}"></div>
+                                    </li>
+
+                                    <!-- THIS IS TO STOP PRINTING THE HORIZONTAL LINE AFTER THE LAST COMMENT -->
+                                    <div th:if="${!list.last}">
+                                        <hr class="ms-n2 me-1 mt-6 mb-2">
+                                    </div>
+
+                                </ul>
+
                             </div>
                         </div>
+
+                        <!-- ADD A COMMENT SECTION -->
+                        <form action="#" th:action="@{'/issues/' + ${currentProject.accessKey} + '/view/' + ${issue.id} + '/comment/save'}" th:object="${comment}" method="post">
+                            <div class="card">
+                                <div class="card-header">Add Comment</div>
+                                    <div class="card-body mt-n3">
+                                        <label for="commentEditor"></label>
+                                        <textarea th:field="*{message}" id="commentEditor" class="form-control" placeholder="Write a comment..."></textarea>
+                                    <button type="submit" class="btn btn-primary btn me-2 mt-n4">Add Comment</button>
+                                    <button class="btn btn-light btn me-2 mt-n4" disabled>
+                                        <i class="fas fa-paperclip me-2"></i>
+                                        Attach a File
+                                    </button>
+                                    <button class="btn btn-light btn mt-n4" disabled>
+                                        <i class="fas fa-archive me-2"></i>
+                                        Mark as Resolved
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+
                     </div>
                 </main>
                 <footer class="footer-admin mt-auto footer-light">
@@ -437,8 +442,8 @@
             </div>
         </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-        <script src="js/scripts.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" crossorigin="anonymous"></script>
-        <script src="js/datatables/datatables-simple-demo.js"></script>
+        <script src="../../../js/scripts.js"></script>
+        <script src="https://unpkg.com/easymde/dist/easymde.min.js" crossorigin="anonymous"></script>
+        <script src="../../../js/markdown.js"></script>
     </body>
 </html>

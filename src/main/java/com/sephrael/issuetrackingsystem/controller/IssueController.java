@@ -37,7 +37,7 @@ public class IssueController {
         model.addAttribute("currentProject", projectRepository.findByAccessKey(accessKey));
         model.addAttribute("currentUserProjects", userRepository.findByEmail(principal.getName()).getProjects());
 
-        return("issues");
+        return("/issues/issues");
     }
 
     @RequestMapping("/{accessKey}/new")
@@ -51,7 +51,7 @@ public class IssueController {
         // THIS ALLOWS ME TO ASSIGN EMAIL TO ISSUE TABLE (create-issue.html)
 //        issue.setUserEmail(principal.getName());
 
-        return("create-issue");
+        return("/issues/create-issue");
     }
 
     @PostMapping(value = "/save")
@@ -75,7 +75,7 @@ public class IssueController {
         model.addAttribute("currentProject", projectRepository.findByAccessKey(accessKey));
         model.addAttribute("currentUserProjects", userRepository.findByEmail(principal.getName()).getProjects());
 
-        return "view-issue";
+        return "/issues/view-issue";
     }
 
     @GetMapping("/{accessKey}/edit/{id}")
@@ -85,7 +85,7 @@ public class IssueController {
         model.addAttribute("currentProject", projectRepository.findByAccessKey(accessKey));
         model.addAttribute("currentUserProjects", userRepository.findByEmail(principal.getName()).getProjects());
 
-        return "edit-issue";
+        return "/issues/edit-issue";
     }
 
     @RequestMapping("/{accessKey}/delete/{id}")

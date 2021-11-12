@@ -31,8 +31,9 @@ public class WebController {
     public String multiTenantAddUsers() {return "multi-tenant-add-users";}
 
     @RequestMapping(value = "/user-management-add-user.html", method = RequestMethod.GET)
-    public String userManagementAddUser() {return "user-management-add-user";}
+    public String userManagementAddUser(Model model, Principal principal) {
+        model.addAttribute("currentUserProjects", userRepository.findByEmail(principal.getName()).getProjects());
 
-    @RequestMapping(value = "/user-management-edit-user.html", method = RequestMethod.GET)
-    public String userManagementEditUser() {return "user-management-edit-user";}
+        return "user-management-add-user";
+    }
 }

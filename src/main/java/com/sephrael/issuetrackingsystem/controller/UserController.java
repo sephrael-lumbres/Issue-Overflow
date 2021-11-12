@@ -3,6 +3,7 @@
 package com.sephrael.issuetrackingsystem.controller;
 
 import com.sephrael.issuetrackingsystem.entity.User;
+import com.sephrael.issuetrackingsystem.repository.ProjectRepository;
 import com.sephrael.issuetrackingsystem.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -19,6 +20,8 @@ public class UserController {
 
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private ProjectRepository projectRepository;
 
     @GetMapping("/register")
     public String showRegistrationForm(Model model) {
@@ -53,16 +56,19 @@ public class UserController {
         model.addAttribute("user", userRepository.findByEmail(principal.getName()));
         model.addAttribute("currentUserProjects", userRepository.findByEmail(principal.getName()).getProjects());
 
-        return "users";
+        return "/users/users";
     }
 
     // DOES NOT WORK DUE TO USER PASSWORD
     @GetMapping("/edit/user/{id}")
-    public String showEditUserPage(@PathVariable("id") long id, Model model) {
+    public String showEditUserPage(@PathVariable("id") long id, Model model, Principal principal) {
         User user = userRepository.getById(id);
         model.addAttribute("user", user);
+        model.addAttribute("currentUserProjects", userRepository.findByEmail(principal.getName()).getProjects());
+        model.addAttribute("editUser", userRepository.findUserById(id));
+        model.addAttribute("allProjectsInOrganization", projectRepository.findAllProjectsByOrganizationId(userRepository.findUserById(id).getOrganization().getId()));
 
-        return "user-management-edit-user";
+        return "/users/edit-user";
     }
 
     // DOES NOT WORK DUE TO USER PASSWORD

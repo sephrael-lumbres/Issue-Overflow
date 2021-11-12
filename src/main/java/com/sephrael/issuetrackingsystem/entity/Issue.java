@@ -64,7 +64,7 @@ public class Issue {
         this.project = project;
     }
 
-    @OneToMany(mappedBy = "issue")
+    @OneToMany(mappedBy = "issue", cascade = CascadeType.ALL)
     private List<Comment> comments;
 
     public List<Comment> getComments() {
