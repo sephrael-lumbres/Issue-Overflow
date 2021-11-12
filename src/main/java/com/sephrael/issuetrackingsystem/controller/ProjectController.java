@@ -27,7 +27,7 @@ public class ProjectController {
     @RequestMapping("")
     public String viewProjects(Model model, Principal principal) {
         model.addAttribute("project", new Project());
-        model.addAttribute("user", userRepository.findByEmail(principal.getName()));
+        model.addAttribute("currentUser", userRepository.findByEmail(principal.getName()));
         model.addAttribute("currentUserProjects", userRepository.findByEmail(principal.getName()).getProjects());
 
         return "/projects/projects";

@@ -16,6 +16,7 @@ public class HomeController {
 
     @RequestMapping(value = "/dashboard", method = RequestMethod.GET)
     public String dashboard(Model model, Principal principal) {
+        model.addAttribute("currentUser", userRepository.findByEmail(principal.getName()));
         model.addAttribute("currentUserProjects", userRepository.findByEmail(principal.getName()).getProjects());
 
         return "index";

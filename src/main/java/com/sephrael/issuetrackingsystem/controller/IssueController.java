@@ -33,6 +33,7 @@ public class IssueController {
     @GetMapping("/{accessKey}")
     public String showIssuesByProject(@PathVariable("accessKey") String accessKey, Model model, Principal principal) {
         List<Issue> issuesByProject = issueService.findProjectByAccessKey(accessKey);
+        model.addAttribute("currentUser", userRepository.findByEmail(principal.getName()));
         model.addAttribute("issuesByProject", issuesByProject);
         model.addAttribute("currentProject", projectRepository.findByAccessKey(accessKey));
         model.addAttribute("currentUserProjects", userRepository.findByEmail(principal.getName()).getProjects());
@@ -44,6 +45,7 @@ public class IssueController {
     public String showNewIssuePage(@PathVariable(name = "accessKey") String accessKey, Model model, Principal principal) {
         Issue issue = new Issue();
         model.addAttribute("issue", issue);
+        model.addAttribute("currentUser", userRepository.findByEmail(principal.getName()));
         model.addAttribute("users", userService.listAll());
         model.addAttribute("currentProject", projectRepository.findByAccessKey(accessKey));
         model.addAttribute("currentUserProjects", userRepository.findByEmail(principal.getName()).getProjects());
@@ -71,7 +73,7 @@ public class IssueController {
         model.addAttribute("comment", new Comment());
         model.addAttribute("comments", issue.getComments());
         model.addAttribute("issue", issue);
-        model.addAttribute("user", userRepository.findByEmail(principal.getName()));
+        model.addAttribute("currentUser", userRepository.findByEmail(principal.getName()));
         model.addAttribute("currentProject", projectRepository.findByAccessKey(accessKey));
         model.addAttribute("currentUserProjects", userRepository.findByEmail(principal.getName()).getProjects());
 
@@ -82,6 +84,7 @@ public class IssueController {
     public String showEditIssuePage(@PathVariable("id") long id, @PathVariable(name = "accessKey") String accessKey, Model model, Principal principal) {
         Issue issue = issueService.find(id);
         model.addAttribute("issue", issue);
+        model.addAttribute("currentUser", userRepository.findByEmail(principal.getName()));
         model.addAttribute("currentProject", projectRepository.findByAccessKey(accessKey));
         model.addAttribute("currentUserProjects", userRepository.findByEmail(principal.getName()).getProjects());
 

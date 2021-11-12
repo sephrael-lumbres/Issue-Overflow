@@ -53,7 +53,7 @@ public class UserController {
     public String listUsers(Model model, Principal principal) {
         List<User> listUsers = userRepository.findAll();
         model.addAttribute("listUsers", listUsers);
-        model.addAttribute("user", userRepository.findByEmail(principal.getName()));
+        model.addAttribute("currentUser", userRepository.findByEmail(principal.getName()));
         model.addAttribute("currentUserProjects", userRepository.findByEmail(principal.getName()).getProjects());
 
         return "/users/users";
@@ -65,6 +65,7 @@ public class UserController {
         User user = userRepository.getById(id);
         model.addAttribute("user", user);
         model.addAttribute("currentUserProjects", userRepository.findByEmail(principal.getName()).getProjects());
+        model.addAttribute("currentUser", userRepository.findByEmail(principal.getName()));
         model.addAttribute("editUser", userRepository.findUserById(id));
         model.addAttribute("allProjectsInOrganization", projectRepository.findAllProjectsByOrganizationId(userRepository.findUserById(id).getOrganization().getId()));
 
