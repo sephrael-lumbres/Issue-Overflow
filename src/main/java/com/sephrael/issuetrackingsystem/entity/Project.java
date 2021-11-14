@@ -38,7 +38,7 @@ public class Project {
     @ManyToOne
     private Organization organization;
 
-    @OneToMany(mappedBy = "project")
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
     private List<Issue> issues;
 
     public List<Issue> getIssues() {

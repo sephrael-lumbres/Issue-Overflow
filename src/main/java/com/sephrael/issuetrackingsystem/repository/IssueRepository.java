@@ -13,6 +13,7 @@ public interface IssueRepository extends CrudRepository<Issue, Long> {
 
     List<Issue> findByUser(User user);
     List<Issue> findByProject(Project project);
+    Issue findIssueByTitle(String title);
 //    @Query("select a from Issue a where a.issueId = ?1")
 //    public Issue findIssue(Long issueId);
 
