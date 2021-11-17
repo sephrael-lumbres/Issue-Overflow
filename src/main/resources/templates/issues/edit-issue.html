@@ -364,7 +364,10 @@
                                                 <select th:field="*{status}" class="form-control" id="statusInput">
                                                     <option value="Open">Open</option>
                                                     <option value="In-Progress">In Progress</option>
-                                                    <option value="Closed">Closed</option>
+                                                    <option th:if="${currentUser.getRole().name == 'Project Manager' ||
+                                                        currentUser.getRole().name == 'Admin'}" value="Resolved">Resolved</option>
+                                                    <option th:if="${currentUser.getRole().name == 'Project Manager' ||
+                                                        currentUser.getRole().name == 'Admin'}" value="Closed">Closed</option>
                                                 </select>
                                             </div>
                                         </div>

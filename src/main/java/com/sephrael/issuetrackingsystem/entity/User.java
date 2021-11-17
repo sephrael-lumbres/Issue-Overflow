@@ -26,6 +26,27 @@ public class User {
     @Column(nullable = false, length = 20)
     private String lastName;
 
+    private boolean enabled;
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    @ManyToOne
+    private Role role;
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
     @ManyToMany(mappedBy = "users")
     private List<Project> projects = new ArrayList<>();
 

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
     <head>
         <meta charset="utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -257,7 +257,7 @@
                                 Projects
                             </a>
                             <!-- Sidenav Link (Users)-->
-                            <a class="nav-link active" href="/users">
+                            <a sec:authorize="hasAnyAuthority('Project Manager')" class="nav-link active" href="/users">
                                 <div class="nav-link-icon"><i data-feather="users"></i></div>
                                 Users
                             </a>
@@ -310,6 +310,7 @@
                                         <th>First Name</th>
                                         <th>Last Name</th>
                                         <th>Email</th>
+                                        <th>Role</th>
                                         <th>Actions</th>
                                     </tr>
                                     </thead>
@@ -319,6 +320,7 @@
                                         <th>First Name</th>
                                         <th>Last Name</th>
                                         <th>Email</th>
+                                        <th>Role</th>
                                         <th>Actions</th>
                                     </tr>
                                     </tfoot>
@@ -328,9 +330,10 @@
                                         <td th:text="${user.firstName}"></td>
                                         <td th:text="${user.lastName}"></td>
                                         <td th:text="${user.email}"></td>
+                                        <td th:text="${user.role.name}"></td>
                                         <td>
-                                            <a class="btn btn-datatable btn-icon btn-transparent-dark me-2" th:href="@{'/edit/user/' + ${user.id}}"><i data-feather="edit"></i></a>
-                                            <a class="btn btn-datatable btn-icon btn-transparent-dark" th:href="@{'/delete/user/' + ${user.id}}"><i data-feather="trash-2"></i></a>
+                                            <a class="btn btn-datatable btn-icon btn-transparent-dark me-2" th:href="@{'/users/edit/' + ${user.id}}"><i data-feather="edit"></i></a>
+                                            <a class="btn btn-datatable btn-icon btn-transparent-dark" th:href="@{'/users/delete/' + ${user.id}}"><i data-feather="trash-2"></i></a>
                                         </td>
                                     </tr>
                                     </tbody>

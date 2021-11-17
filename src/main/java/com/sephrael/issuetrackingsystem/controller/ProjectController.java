@@ -30,6 +30,9 @@ public class ProjectController {
         model.addAttribute("currentUser", userRepository.findByEmail(principal.getName()));
         model.addAttribute("currentUserProjects", userRepository.findByEmail(principal.getName()).getProjects());
 
+        if(userRepository.findByEmail(principal.getName()).getOrganization() == null) {
+            return "/organization/select-organization";
+        }
         return "/projects/projects";
     }
 
@@ -45,6 +48,9 @@ public class ProjectController {
 
         projectRepository.save(project);
 
+        if(userRepository.findByEmail(principal.getName()).getOrganization() == null) {
+            return "/organization/select-organization";
+        }
         return "redirect:/projects";
     }
 
@@ -75,6 +81,9 @@ public class ProjectController {
         // after adding the current user to the desired Organization, this saves the Organization
         projectRepository.save(projectRepository.findByAccessKey(accessKey));
 
+        if(userRepository.findByEmail(principal.getName()).getOrganization() == null) {
+            return "/organization/select-organization";
+        }
         return "redirect:/projects";
     }
 

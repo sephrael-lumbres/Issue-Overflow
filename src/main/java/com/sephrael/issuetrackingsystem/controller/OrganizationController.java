@@ -1,7 +1,9 @@
 package com.sephrael.issuetrackingsystem.controller;
 
 import com.sephrael.issuetrackingsystem.entity.Organization;
+import com.sephrael.issuetrackingsystem.entity.User;
 import com.sephrael.issuetrackingsystem.repository.OrganizationRepository;
+import com.sephrael.issuetrackingsystem.repository.RoleRepository;
 import com.sephrael.issuetrackingsystem.repository.UserRepository;
 import com.sephrael.issuetrackingsystem.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,8 @@ public class OrganizationController {
     private UserRepository userRepository;
     @Autowired
     private UserService userService;
+    @Autowired
+    private RoleRepository roleRepository;
 
     @RequestMapping("")
     public ModelAndView viewOrganizationDetails(Model model, Principal principal) {
@@ -34,6 +38,9 @@ public class OrganizationController {
 
         model.addAttribute("currentUserProjects", userRepository.findByEmail(principal.getName()).getProjects());
 
+        if(userRepository.findByEmail(principal.getName()).getOrganization() == null) {
+            modelAndView.setViewName("/organization/select-organization");
+        }
         return modelAndView;
     }
 
@@ -67,6 +74,11 @@ public class OrganizationController {
         // this connects the current user to the newly created Organization
         organization.addToUser(userRepository.findByEmail(principal.getName()));
         organizationRepository.save(organization);
+
+        User currentUser = userRepository.findByEmail(principal.getName());
+
+        roleRepository.findByName("Project Manager").addToUser(currentUser);
+        userRepository.save(currentUser);
 
         return "redirect:/organization";
     }

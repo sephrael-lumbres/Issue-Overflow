@@ -2,9 +2,12 @@
 
 package com.sephrael.issuetrackingsystem.controller;
 
+import com.sephrael.issuetrackingsystem.entity.Role;
 import com.sephrael.issuetrackingsystem.entity.User;
 import com.sephrael.issuetrackingsystem.repository.ProjectRepository;
+import com.sephrael.issuetrackingsystem.repository.RoleRepository;
 import com.sephrael.issuetrackingsystem.repository.UserRepository;
+import com.sephrael.issuetrackingsystem.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -21,7 +24,11 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
     @Autowired
+    private UserService userService;
+    @Autowired
     private ProjectRepository projectRepository;
+    @Autowired
+    private RoleRepository roleRepository;
 
     @GetMapping("/register")
     public String showRegistrationForm(Model model) {
@@ -36,7 +43,9 @@ public class UserController {
         String encodedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(encodedPassword);
 
-        userRepository.save(user);
+        userService.registerDefaultUser(user);
+
+//        userRepository.save(user);
 
         return "redirect:/login";
     }
@@ -56,34 +65,44 @@ public class UserController {
         model.addAttribute("currentUser", userRepository.findByEmail(principal.getName()));
         model.addAttribute("currentUserProjects", userRepository.findByEmail(principal.getName()).getProjects());
 
+        if(userRepository.findByEmail(principal.getName()).getOrganization() == null) {
+            return "/organization/select-organization";
+        }
         return "/users/users";
     }
 
     // DOES NOT WORK DUE TO USER PASSWORD
-    @GetMapping("/edit/user/{id}")
+    @GetMapping("/users/edit/{id}")
     public String showEditUserPage(@PathVariable("id") long id, Model model, Principal principal) {
         User user = userRepository.getById(id);
         model.addAttribute("user", user);
+        model.addAttribute("listRoles", userService.listRoles());
         model.addAttribute("currentUserProjects", userRepository.findByEmail(principal.getName()).getProjects());
         model.addAttribute("currentUser", userRepository.findByEmail(principal.getName()));
         model.addAttribute("editUser", userRepository.findUserById(id));
         model.addAttribute("allProjectsInOrganization", projectRepository.findAllProjectsByOrganizationId(userRepository.findUserById(id).getOrganization().getId()));
 
+        if(userRepository.findByEmail(principal.getName()).getOrganization() == null) {
+            return "/organization/select-organization";
+        }
         return "/users/edit-user";
     }
 
     // DOES NOT WORK DUE TO USER PASSWORD
-//    @RequestMapping(value = "/save_user_changes", method = RequestMethod.POST)
-//    public String saveUserChanges(@ModelAttribute("user") User user) {
+//    @PostMapping(value = "/users/save")
+//    public String saveUserChanges(User user) {
 //        userRepository.save(user);
 //
 //        return "redirect:/users";
 //    }
 
-    @RequestMapping("/delete/user/{id}")
-    public String deleteUser(@PathVariable(name = "id") long id) {
+    @RequestMapping("/users/delete/{id}")
+    public String deleteUser(@PathVariable(name = "id") long id, Principal principal) {
         userRepository.deleteById(id);
 
+        if(userRepository.findByEmail(principal.getName()).getOrganization() == null) {
+            return "/organization/select-organization";
+        }
         return "redirect:/users";
     }
 

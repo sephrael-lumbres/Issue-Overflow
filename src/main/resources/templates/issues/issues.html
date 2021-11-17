@@ -352,7 +352,8 @@
                                             <td th:switch="${issue.status}">
                                                 <span th:case="Open" class="badge bg-red-soft text-red">Open</span>
                                                 <span th:case="In-Progress" class="badge bg-blue-soft text-blue">In Progress</span>
-                                                <span th:case="Closed" class="badge bg-green-soft text-green">Closed</span>
+                                                <span th:case="Resolved" class="badge bg-green-soft text-green">Resolved</span>
+                                                <span th:case="Closed" class="badge bg-yellow-soft text-yellow">Closed</span>
                                             </td>
                                             <td>
                                                 <a class="btn btn-datatable btn-icon btn-transparent-dark me-2" th:href="@{'/issues/' + ${currentProject.accessKey} + '/edit/' + ${issue.id}}"><i data-feather="edit"></i></a>

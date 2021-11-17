@@ -2,6 +2,7 @@ package com.sephrael.issuetrackingsystem.controller;
 
 import com.sephrael.issuetrackingsystem.entity.Comment;
 import com.sephrael.issuetrackingsystem.entity.Issue;
+import com.sephrael.issuetrackingsystem.entity.User;
 import com.sephrael.issuetrackingsystem.repository.CommentRepository;
 import com.sephrael.issuetrackingsystem.repository.ProjectRepository;
 import com.sephrael.issuetrackingsystem.repository.UserRepository;
@@ -38,6 +39,9 @@ public class IssueController {
         model.addAttribute("currentProject", projectRepository.findByAccessKey(accessKey));
         model.addAttribute("currentUserProjects", userRepository.findByEmail(principal.getName()).getProjects());
 
+        if(userRepository.findByEmail(principal.getName()).getOrganization() == null) {
+            return "/organization/select-organization";
+        }
         return("/issues/issues");
     }
 
@@ -53,6 +57,9 @@ public class IssueController {
         // THIS ALLOWS ME TO ASSIGN EMAIL TO ISSUE TABLE (create-issue.html)
 //        issue.setUserEmail(principal.getName());
 
+        if(userRepository.findByEmail(principal.getName()).getOrganization() == null) {
+            return "/organization/select-organization";
+        }
         return("/issues/create-issue");
     }
 
@@ -60,10 +67,14 @@ public class IssueController {
     public String saveIssue(@RequestParam("project") Long id, @ModelAttribute("issue") Issue issue, Principal principal) {
         // this connects the newly created Issue to the current User that created the Issue
         userRepository.findByEmail(principal.getName()).addToIssue(issue);
+
         String accessKey = projectRepository.findProjectById(id).getAccessKey();
 
         issueService.save(issue);
 
+        if(userRepository.findByEmail(principal.getName()).getOrganization() == null) {
+            return "/organization/select-organization";
+        }
         return "redirect:/issues/" + accessKey;
     }
 
@@ -77,6 +88,9 @@ public class IssueController {
         model.addAttribute("currentProject", projectRepository.findByAccessKey(accessKey));
         model.addAttribute("currentUserProjects", userRepository.findByEmail(principal.getName()).getProjects());
 
+        if(userRepository.findByEmail(principal.getName()).getOrganization() == null) {
+            return "/organization/select-organization";
+        }
         return "/issues/view-issue";
     }
 
@@ -88,13 +102,19 @@ public class IssueController {
         model.addAttribute("currentProject", projectRepository.findByAccessKey(accessKey));
         model.addAttribute("currentUserProjects", userRepository.findByEmail(principal.getName()).getProjects());
 
+        if(userRepository.findByEmail(principal.getName()).getOrganization() == null) {
+            return "/organization/select-organization";
+        }
         return "/issues/edit-issue";
     }
 
     @RequestMapping("/{accessKey}/delete/{id}")
-    public String deleteIssue(@PathVariable(name = "id") int id, @PathVariable(name = "accessKey") String accessKey) {
+    public String deleteIssue(@PathVariable(name = "id") int id, @PathVariable(name = "accessKey") String accessKey, Principal principal) {
         issueService.delete(id);
 
+        if(userRepository.findByEmail(principal.getName()).getOrganization() == null) {
+            return "/organization/select-organization";
+        }
         return "redirect:/issues/" + accessKey;
     }
 
