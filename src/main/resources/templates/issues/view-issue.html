@@ -312,7 +312,9 @@
                             <div th:text="${issue.title}" class="card-header"></div>
 
                             <label for="descriptionViewer"></label>
-                            <div th:text="${issue.description}" id="descriptionViewer" class="card-body mt-3 mb-1"></div>
+                            <textarea th:text="${issue.description}" id="descriptionViewer" hidden></textarea>
+                            <!-- THIS CONVERTS THE DESCRIPTION TO MARKDOWN FORMAT -->
+                            <div id="targetDiv" class="card-body mt-3 mb-1"></div>
 
                             <hr class="ms-auto me-auto mb-3" style="width: 98%;">
 
@@ -408,7 +410,10 @@
                                     <p></p>
 
                                     <li class="d-flex mt-n1">
-                                        <div th:text="${comment.message}"></div>
+                                        <label for="commentMessage"></label>
+                                        <textarea th:text="${comment.message}" id="commentMessage" hidden></textarea>
+                                        <!-- THIS CONVERTS THE COMMENTS TO MARKDOWN FORMAT -->
+                                        <div id="commentDiv"></div>
                                     </li>
 
                                     <!-- THIS IS TO STOP PRINTING THE HORIZONTAL LINE AFTER THE LAST COMMENT -->
@@ -460,6 +465,25 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
         <script src="../../../js/scripts.js"></script>
         <script src="https://unpkg.com/easymde/dist/easymde.min.js" crossorigin="anonymous"></script>
+<!--        <script src="https://cdn.jsdelivr.net/npm/showdown@1.9.1/dist/showdown.min.js" crossorigin="anonymous"></script>-->
         <script src="../../../js/markdown.js"></script>
+        <script src="../../../js/showdown.min.js"></script>
+
+        <script>
+            var converter1 = new showdown.Converter(),
+                text1 = document.getElementById("descriptionViewer").value,
+                target1 = document.getElementById("targetDiv"),
+                html1 = converter1.makeHtml(text1);
+            showdown.setOption('optionKey', 'value');
+
+            target1.innerHTML = html1;
+
+            var converter2 = new showdown.Converter(),
+                text2 = document.getElementById("commentMessage").value,
+                target2 = document.getElementById("commentDiv"),
+                html2 = converter2.makeHtml(text2);
+
+            target2.innerHTML = html2;
+        </script>
     </body>
 </html>

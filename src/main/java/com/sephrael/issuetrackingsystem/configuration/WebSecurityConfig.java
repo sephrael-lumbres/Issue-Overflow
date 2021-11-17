@@ -49,7 +49,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 // the line below is the paths that require authentication to access
-                .antMatchers("/register", "/login", "/").permitAll()
+                .antMatchers("/register", "/login", "/process_register", "/").permitAll()
                 .antMatchers("/error", "/js/**", "/assets/**", "/css/**", "/webjars/**").permitAll()
                 .antMatchers("/**").authenticated()
                 .anyRequest().permitAll()
