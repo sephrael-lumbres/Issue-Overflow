@@ -318,6 +318,16 @@
                                     </div>
                                 </div>
 
+                                <div class="card mb-4">
+                                    <label for="assignedTo" class="card-header">Assign To</label>
+                                    <div class="card-body">
+                                        <select class="form-control" name="assignedTo" id="assignedTo" required>
+                                            <option th:each="assignedTo : ${currentProject.getUsers()}" th:value="${assignedTo.id}"
+                                                    th:text="${assignedTo.firstName} + ' ' + ${assignedTo.lastName}"></option>
+                                        </select>
+                                    </div>
+                                </div>
+
                                 <!--  THIS MAKES A GRID FOR THE DROPDOWN MENUS  -->
                                 <div class="row row-cols-1 row-cols-md-2 g-4 text-center">
                                     <!--  This connects each newly created issue to the project of the current user's choosing  -->

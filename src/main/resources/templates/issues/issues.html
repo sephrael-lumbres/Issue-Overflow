@@ -305,6 +305,7 @@
                                         <tr>
                                             <th>Opened By</th>
                                             <th>Title</th>
+                                            <th>Assigned To</th>
                                             <th>Created</th>
                                             <th>Updated</th>
                                             <th>Description</th>
@@ -318,6 +319,7 @@
                                         <tr>
                                             <th>Opened By</th>
                                             <th>Title</th>
+                                            <th>Assigned To</th>
                                             <th>Created</th>
                                             <th>Updated</th>
                                             <th>Description</th>
@@ -335,6 +337,7 @@
                                             onclick="rowClicked(this.getAttribute('href'))">
                                             <td th:text="${issue.user.firstName} + ' ' + ${issue.user.lastName}"></td>
                                             <td th:text="${issue.title}"></td>
+                                            <td th:text="${issue.assignedTo.firstName} + ' ' + ${issue.assignedTo.lastName}"></td>
                                             <td th:text="${issue.dateCreated}"></td>
                                             <td th:text="${issue.dateUpdated}"></td>
                                             <td th:text="${issue.description}"></td>

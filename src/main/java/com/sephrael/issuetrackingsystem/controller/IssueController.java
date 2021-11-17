@@ -64,10 +64,11 @@ public class IssueController {
     }
 
     @PostMapping(value = "/save")
-    public String saveIssue(@RequestParam("project") Long id, @ModelAttribute("issue") Issue issue, Principal principal) {
+    public String saveIssue(@RequestParam("project") Long id, @RequestParam("assignedTo")User assignedTo, @ModelAttribute("issue") Issue issue, Principal principal) {
         // this connects the newly created Issue to the current User that created the Issue
         userRepository.findByEmail(principal.getName()).addToIssue(issue);
 
+        issue.setAssignedTo(assignedTo);
         String accessKey = projectRepository.findProjectById(id).getAccessKey();
 
         issueService.save(issue);

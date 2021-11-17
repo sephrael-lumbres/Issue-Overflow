@@ -51,6 +51,17 @@ public class Issue {
         this.user = user;
     }
 
+    @ManyToOne
+    private User assignedTo;
+
+    public User getAssignedTo() {
+        return assignedTo;
+    }
+
+    public void setAssignedTo(User assignedTo) {
+        this.assignedTo = assignedTo;
+    }
+
     @JsonIgnore
     @ManyToOne
     @NotNull
