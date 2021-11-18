@@ -328,6 +328,7 @@
                                     <label for="assignedTo" class="card-header">Assign To</label>
                                     <div class="card-body">
                                         <select class="form-control" name="assignedTo" id="assignedTo" required>
+                                            <option th:field="*{assignedTo}" value=" " selected> </option>
                                             <option th:each="assignedTo : ${currentProject.getUsers()}" th:value="${assignedTo.id}"
                                                     th:text="${assignedTo.firstName} + ' ' + ${assignedTo.lastName}"></option>
                                         </select>

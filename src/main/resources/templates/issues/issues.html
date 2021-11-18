@@ -337,7 +337,11 @@
                                             onclick="rowClicked(this.getAttribute('href'))">
                                             <td th:text="${issue.user.firstName} + ' ' + ${issue.user.lastName}"></td>
                                             <td th:text="${issue.title}"></td>
-                                            <td th:text="${issue.assignedTo.firstName} + ' ' + ${issue.assignedTo.lastName}"></td>
+                                            <td>
+                                                <span th:text="${issue.assignedTo.firstName} + ' ' + ${issue.assignedTo.lastName}"
+                                                      th:if="${issue ne null and issue.assignedTo ne null}">
+                                                </span>
+                                            </td>
                                             <td th:text="${issue.dateCreated}"></td>
                                             <td th:text="${issue.dateUpdated}"></td>
                                             <td th:text="${issue.description}"></td>
