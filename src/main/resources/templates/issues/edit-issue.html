@@ -322,9 +322,9 @@
                                     <label for="assignedTo" class="card-header">Assign To</label>
                                     <div class="card-body">
                                         <select class="form-control" name="assignedTo" id="assignedTo" required>
-                                            <option th:field="*{assignedTo}" value=" " selected> </option>
+                                            <option th:field="*{assignedTo}" value=" " th:selected="*{assignedTo == null}"> </option>
                                             <option th:each="assignedTo : ${currentProject.getUsers()}" th:value="${assignedTo.id}"
-                                                    th:text="${assignedTo.firstName} + ' ' + ${assignedTo.lastName}"></option>
+                                                    th:text="${assignedTo.firstName} + ' ' + ${assignedTo.lastName}" th:selected="${issue.assignedTo == assignedTo}"></option>
                                         </select>
                                     </div>
                                 </div>
