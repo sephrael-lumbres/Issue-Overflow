@@ -33,12 +33,21 @@ public class OrganizationController {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("/organization/organization");
 
+        User currentUser = userRepository.findByEmail(principal.getName());
+        String organizationName = currentUser.getOrganization().getName();
+
         // this allowed me to print the Organization that the currently logged-in user belongs to
-        model.addAttribute("currentUser", userRepository.findByEmail(principal.getName()));
+        model.addAttribute("currentUser", currentUser);
 
-        model.addAttribute("currentUserProjects", userRepository.findByEmail(principal.getName()).getProjects());
+        // this allowed me to access the Users of an Organization by User Roles
+        model.addAttribute("projectManagers", userRepository.findByRoleNameAndOrganizationName("Project Manager", organizationName));
+        model.addAttribute("admins", userRepository.findByRoleNameAndOrganizationName("Admin", organizationName));
+        model.addAttribute("developers", userRepository.findByRoleNameAndOrganizationName("Developer", organizationName));
+        model.addAttribute("members", userRepository.findByRoleNameAndOrganizationName("Member", organizationName));
 
-        if(userRepository.findByEmail(principal.getName()).getOrganization() == null) {
+        model.addAttribute("currentUserProjects", currentUser.getProjects());
+
+        if(currentUser.getOrganization() == null) {
             modelAndView.setViewName("/organization/select-organization");
         }
         return modelAndView;
