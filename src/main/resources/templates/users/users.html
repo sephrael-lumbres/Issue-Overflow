@@ -16,12 +16,12 @@
     <body class="nav-fixed">
         <nav class="topnav navbar navbar-expand shadow justify-content-between justify-content-sm-start navbar-light bg-white" id="sidenavAccordion">
             <!-- Sidenav Toggle Button-->
-            <button class="btn btn-icon btn-transparent-dark order-1 order-lg-0 me-2 ms-lg-2 me-lg-0" id="sidebarToggle"><i data-feather="menu"></i></button>
+            <button class="btn btn-icon btn-transparent-dark order-0 ms-2 me-0" id="sidebarToggle"><i data-feather="menu"></i></button>
             <!-- Navbar Brand-->
             <!-- * * Tip * * You can use text or an image for your navbar brand.-->
             <!-- * * * * * * When using an image, we recommend the SVG format.-->
             <!-- * * * * * * Dimensions: Maximum height: 32px, maximum width: 240px-->
-            <a class="navbar-brand pe-3 ps-4 ps-lg-2" href="../index.html">SB Admin Pro</a>
+            <a class="navbar-brand pe-3 ps-0 ps-lg-2" href="/index.html">Issue Tracking System</a>
             <!-- Navbar Search Input-->
             <!-- * * Note: * * Visible only on and above the lg breakpoint-->
             <form class="form-inline me-auto d-none d-lg-block me-3">
@@ -257,7 +257,7 @@
                                 Projects
                             </a>
                             <!-- Sidenav Link (Users)-->
-                            <a sec:authorize="hasAnyAuthority('Project Manager')" class="nav-link active" href="/users">
+                            <a class="nav-link active" href="/users">
                                 <div class="nav-link-icon"><i data-feather="users"></i></div>
                                 Users
                             </a>
@@ -311,7 +311,7 @@
                                         <th>Last Name</th>
                                         <th>Email</th>
                                         <th>Role</th>
-                                        <th>Actions</th>
+                                        <th th:if="${currentUser.getRole().name == 'Project Manager'}">Actions</th>
                                     </tr>
                                     </thead>
                                     <tfoot>
@@ -321,7 +321,7 @@
                                         <th>Last Name</th>
                                         <th>Email</th>
                                         <th>Role</th>
-                                        <th>Actions</th>
+                                        <th th:if="${currentUser.getRole().name == 'Project Manager'}">Actions</th>
                                     </tr>
                                     </tfoot>
                                     <tbody>
@@ -331,7 +331,7 @@
                                         <td th:text="${user.lastName}"></td>
                                         <td th:text="${user.email}"></td>
                                         <td th:text="${user.role.name}"></td>
-                                        <td>
+                                        <td th:if="${currentUser.getRole().name == 'Project Manager'}">
                                             <a class="btn btn-datatable btn-icon btn-transparent-dark me-2" th:href="@{'/users/edit/' + ${user.id}}"><i data-feather="edit"></i></a>
                                             <a class="btn btn-datatable btn-icon btn-transparent-dark" th:href="@{'/users/delete/' + ${user.id}}"><i data-feather="trash-2"></i></a>
                                         </td>
