@@ -24,8 +24,11 @@ public class Project {
     @Column(updatable = false)
     private Date dateCreated;
 
-    @Column(unique = true, updatable = false)
+    @Column(unique = true)
     private String accessKey;
+
+    @Column(unique = true)
+    private String identifier;
 
     @JsonIgnore
     @ManyToMany
@@ -88,6 +91,14 @@ public class Project {
 
     public void setAccessKey(String accessKey) {
         this.accessKey = accessKey;
+    }
+
+    public String getIdentifier() {
+        return identifier;
+    }
+
+    public void setIdentifier(String identifier) {
+        this.identifier = identifier;
     }
 
     public List<User> getUsers() {

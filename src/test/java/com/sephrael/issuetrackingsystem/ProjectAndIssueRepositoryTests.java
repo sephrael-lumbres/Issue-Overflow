@@ -40,13 +40,13 @@ public class ProjectAndIssueRepositoryTests {
     public void testCreateTwoProjects() {
         Project project1 = new Project();
         project1.setName("NBA 2K");
-        project1.setAccessKey("NBA");
+        project1.setIdentifier("NBA");
         Project savedProject1 = projectRepository.save(project1);
         Project existingProject1 = entityManager.find(Project.class, savedProject1.getId());
 
         Project project2 = new Project();
         project2.setName("WWE 2K");
-        project2.setAccessKey("WWE");
+        project2.setIdentifier("WWE");
         Project savedProject2 = projectRepository.save(project2);
         Project existingProject2 = entityManager.find(Project.class, savedProject2.getId());
 
@@ -56,12 +56,12 @@ public class ProjectAndIssueRepositoryTests {
 
     @Test
     @Order(2)
-    public void testFindProjectsByAccessKey() {
-        Project project1 = projectRepository.findByAccessKey("NBA");
-        assertThat(project1.getAccessKey()).isEqualTo("NBA");
+    public void testFindProjectsByIdentifier() {
+        Project project1 = projectRepository.findByIdentifier("NBA");
+        assertThat(project1.getIdentifier()).isEqualTo("NBA");
 
-        Project project2 = projectRepository.findByAccessKey("WWE");
-        assertThat(project2.getAccessKey()).isEqualTo("WWE");
+        Project project2 = projectRepository.findByIdentifier("WWE");
+        assertThat(project2.getIdentifier()).isEqualTo("WWE");
     }
 
     @Test
@@ -74,15 +74,15 @@ public class ProjectAndIssueRepositoryTests {
     @Test
     @Order(4)
     public void testUpdateProjects() {
-        Project project1 = projectRepository.findByAccessKey("NBA");
+        Project project1 = projectRepository.findByIdentifier("NBA");
         project1.setName("NBA 2K22");
         projectRepository.save(project1);
-        Project updatedProject1 = projectRepository.findByAccessKey("NBA");
+        Project updatedProject1 = projectRepository.findByIdentifier("NBA");
 
-        Project project2 = projectRepository.findByAccessKey("WWE");
+        Project project2 = projectRepository.findByIdentifier("WWE");
         project2.setName("WWE 2K22");
         projectRepository.save(project2);
-        Project updatedProject2 = projectRepository.findByAccessKey("WWE");
+        Project updatedProject2 = projectRepository.findByIdentifier("WWE");
 
         assertThat(updatedProject1.getName()).isEqualTo("NBA 2K22");
         assertThat(updatedProject2.getName()).isEqualTo("WWE 2K22");
@@ -136,7 +136,7 @@ public class ProjectAndIssueRepositoryTests {
     @Order(8)
     public void testAddIssueToProject() {
         Issue issue = issueRepository.findIssueByTitle("Wonky Dunk Animations");
-        issue.setProject(projectRepository.findByAccessKey("NBA"));
+        issue.setProject(projectRepository.findByIdentifier("NBA"));
 
         issueRepository.save(issue);
 
@@ -149,7 +149,7 @@ public class ProjectAndIssueRepositoryTests {
     @Order(12)
     public void testSwitchIssueWithCommentToDifferentProject() {
         Issue issue = issueRepository.findIssueByTitle("Wonky Dunk Animations");
-        issue.setProject(projectRepository.findByAccessKey("WWE"));
+        issue.setProject(projectRepository.findByIdentifier("WWE"));
         Comment comment = commentRepository.findCommentByMessage("This bug is very hard to recreate");
 
         issueRepository.save(issue);
@@ -178,14 +178,14 @@ public class ProjectAndIssueRepositoryTests {
     @Test
     @Order(14)
     public void testDeleteProjects() {
-        Project project1 = projectRepository.findByAccessKey("WWE");
-        Project project2 = projectRepository.findByAccessKey("NBA");
+        Project project1 = projectRepository.findByIdentifier("WWE");
+        Project project2 = projectRepository.findByIdentifier("NBA");
 
         projectRepository.deleteById(project1.getId());
         projectRepository.deleteById(project2.getId());
 
-        Project deletedProject1 = projectRepository.findByAccessKey("WWE");
-        Project deletedProject2 = projectRepository.findByAccessKey("NBA");
+        Project deletedProject1 = projectRepository.findByIdentifier("WWE");
+        Project deletedProject2 = projectRepository.findByIdentifier("NBA");
 
         assertThat(deletedProject1).isNull();
         assertThat(deletedProject2).isNull();
@@ -208,7 +208,7 @@ public class ProjectAndIssueRepositoryTests {
         // creates a new project
         Project project = new Project();
         project.setName("MLB 2K");
-        project.setAccessKey("MLB");
+        project.setIdentifier("MLB");
         projectRepository.save(project);
 
         // creates a new issue
@@ -230,20 +230,20 @@ public class ProjectAndIssueRepositoryTests {
         commentRepository.save(comment);
 
         // adds issue to project
-        issue.setProject(projectRepository.findByAccessKey("MLB"));
+        issue.setProject(projectRepository.findByIdentifier("MLB"));
         issueRepository.save(issue);
 
-        assertThat(issue.getProject()).isEqualTo(projectRepository.findByAccessKey("MLB"));
+        assertThat(issue.getProject()).isEqualTo(projectRepository.findByIdentifier("MLB"));
     }
 
     @Test
     @Order(17)
     public void testDeleteProjectWithoutSwitchingIssueToDifferentProject() {
-        Project project = projectRepository.findByAccessKey("MLB");
+        Project project = projectRepository.findByIdentifier("MLB");
 
         // deletes the project with the issue and comment
         projectRepository.deleteById(project.getId());
-        Project deletedProject = projectRepository.findByAccessKey("MLB");
+        Project deletedProject = projectRepository.findByIdentifier("MLB");
         Issue deletedIssue = issueRepository.findIssueByTitle("Incorrect Baseball Bat Sprite");
         Comment deletedComment = commentRepository.findCommentByMessage("I wonder who drew the dildo");
 

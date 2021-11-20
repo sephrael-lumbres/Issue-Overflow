@@ -13,7 +13,7 @@ import java.security.Principal;
 import java.util.List;
 
 @Controller
-@RequestMapping("/issues/{accessKey}/view/{issueId}/comment")
+@RequestMapping("/issues/{identifier}/view/{issueId}/comment")
 public class CommentController {
     @Autowired
     private CommentRepository commentRepository;
@@ -23,7 +23,7 @@ public class CommentController {
     private UserRepository userRepository;
 
     @PostMapping("/save")
-    public String addComment(@PathVariable(value = "issueId") Long issueId, @PathVariable(name = "accessKey") String accessKey, Comment comment, Principal principal) {
+    public String addComment(@PathVariable(value = "issueId") Long issueId, @PathVariable(name = "identifier") String identifier, Comment comment, Principal principal) {
         userRepository.findByEmail(principal.getName()).addToComment(comment);
         issueService.find(issueId).addToComment(comment);
 
@@ -32,23 +32,23 @@ public class CommentController {
         if(userRepository.findByEmail(principal.getName()).getOrganization() == null) {
             return "/organization/select-organization";
         }
-        return "redirect:/issues/{accessKey}/view/" + issueId;
+        return "redirect:/issues/{identifier}/view/" + issueId;
     }
 
     @RequestMapping("/{commentId}/delete")
     public String deleteComment(@PathVariable(value = "issueId") Long issueId, @PathVariable(value = "commentId") Long commentId,
-                                @PathVariable(name = "accessKey") String accessKey, Principal principal) {
+                                @PathVariable(name = "identifier") String identifier, Principal principal) {
         commentRepository.deleteById(commentId);
 
         if(userRepository.findByEmail(principal.getName()).getOrganization() == null) {
             return "/organization/select-organization";
         }
-        return "redirect:/issues/{accessKey}/view/" + issueId;
+        return "redirect:/issues/{identifier}/view/" + issueId;
     }
 
     // this shows the json format of all the Comments of an Issue
     @GetMapping(path = "/all")
-    public @ResponseBody Iterable<Comment> getAllCommentsByIssueId(@PathVariable(value = "issueId") Long issueId, @PathVariable(name = "accessKey") String accessKey) {
+    public @ResponseBody Iterable<Comment> getAllCommentsByIssueId(@PathVariable(value = "issueId") Long issueId, @PathVariable(name = "identifier") String identifier) {
         return issueService.find(issueId).getComments();
     }
 }

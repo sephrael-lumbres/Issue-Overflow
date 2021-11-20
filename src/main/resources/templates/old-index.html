@@ -233,7 +233,7 @@
                             </a>
                             <div class="collapse" id="collapseAddIssue" data-bs-parent="#accordionSidenav">
                                 <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavAddIssue">
-                                    <a class="nav-link" th:href="@{'/issues/' + ${project.accessKey} +'/new'}"
+                                    <a class="nav-link" th:href="@{'/issues/' + ${project.identifier} +'/new'}"
                                        th:each="project : ${currentUserProjects}" th:value="${project.id}" th:text="${project.name}">
                                     </a>
                                 </nav>
@@ -247,7 +247,7 @@
                             </a>
                             <div class="collapse" id="collapseDashboards" data-bs-parent="#accordionSidenav">
                                 <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavPages">
-                                    <a class="nav-link" th:href="@{'/issues/' + ${project.accessKey}}" th:each="project : ${currentUserProjects}" th:value="${project.id}" th:text="${project.name}"></a>
+                                    <a class="nav-link" th:href="@{'/issues/' + ${project.identifier}}" th:each="project : ${currentUserProjects}" th:value="${project.id}" th:text="${project.name}"></a>
                                 </nav>
                             </div>
                             <!-- Sidenav Link (Organization)-->

@@ -11,6 +11,9 @@ import java.util.List;
 public interface ProjectRepository extends JpaRepository<Project, Long> {
     @Query("SELECT p FROM Project p WHERE p.accessKey = ?1")
     Project findByAccessKey(String accessKey);
+
+    @Query("SELECT p FROM Project p WHERE p.identifier = ?1")
+    Project findByIdentifier(String identifier);
     Project findProjectById(Long id);
     List<Project> findAllProjectsByOrganizationId(Long id);
 }

@@ -26,7 +26,7 @@ public class ProjectController {
 
     @RequestMapping("")
     public String viewProjects(Model model, Principal principal) {
-        model.addAttribute("project", new Project());
+        model.addAttribute("newProject", new Project());
         model.addAttribute("currentUser", userRepository.findByEmail(principal.getName()));
         model.addAttribute("currentUserProjects", userRepository.findByEmail(principal.getName()).getProjects());
 
@@ -75,11 +75,41 @@ public class ProjectController {
         }
 
         // OLD this adds the project to the current user's Organization without CHECKING
-        //userRepository.findByEmail(principal.getName()).getOrganization().addToProject(projectRepository.findByAccessKey(accessKey));
+        //userRepository.findByEmail(principal.getName()).getOrganization().addToProject(projectRepository.findByIdentifier(identifier));
 
 
         // after adding the current user to the desired Organization, this saves the Organization
         projectRepository.save(projectRepository.findByAccessKey(accessKey));
+
+        if(userRepository.findByEmail(principal.getName()).getOrganization() == null) {
+            return "/organization/select-organization";
+        }
+        return "redirect:/projects";
+    }
+
+    @PostMapping("/save")
+    public String editProject(@RequestParam(value = "id") Long id, Project project, Principal principal) {
+
+        Project currentProject = projectRepository.findProjectById(id);
+
+        // fixes bug that when updating a Project removed all the Users in an updated Project except for the User that
+        // performed the update
+        // had to use 'currentProject' because I needed to access a Project's Users before the update was performed
+        for (User user : currentProject.getUsers()) {
+            project.addUser(user);
+        }
+
+        projectRepository.save(project);
+
+        if(userRepository.findByEmail(principal.getName()).getOrganization() == null) {
+            return "/organization/select-organization";
+        }
+        return "redirect:/projects";
+    }
+
+    @RequestMapping("/delete/{id}")
+    public String deleteProject(@PathVariable(name = "id") Long id, Principal principal) {
+        projectRepository.deleteById(id);
 
         if(userRepository.findByEmail(principal.getName()).getOrganization() == null) {
             return "/organization/select-organization";

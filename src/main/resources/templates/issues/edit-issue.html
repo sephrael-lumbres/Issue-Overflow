@@ -229,7 +229,7 @@
                             </a>
                             <div class="collapse" id="collapseAddIssue" data-bs-parent="#accordionSidenav">
                                 <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavAddIssue">
-                                    <a class="nav-link" th:href="@{'/issues/' + ${project.accessKey} +'/new'}"
+                                    <a class="nav-link" th:href="@{'/issues/' + ${project.identifier} +'/new'}"
                                        th:each="project : ${currentUserProjects}" th:value="${project.id}" th:text="${project.name}">
                                     </a>
                                 </nav>
@@ -243,7 +243,7 @@
                             </a>
                             <div class="collapse show" id="collapseIssues" data-bs-parent="#accordionSidenav">
                                 <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavIssues">
-                                    <a class="nav-link" th:classappend="${project.id==currentProject.id} ? active" th:href="@{'/issues/' + ${project.accessKey}}" th:each="project : ${currentUserProjects}" th:value="${project.id}" th:text="${project.name}"></a>
+                                    <a class="nav-link" th:classappend="${project.id==currentProject.id} ? active" th:href="@{'/issues/' + ${project.identifier}}" th:each="project : ${currentUserProjects}" th:value="${project.id}" th:text="${project.name}"></a>
                                 </nav>
                             </div>
                             <!-- Sidenav Link (Organization)-->
@@ -286,7 +286,7 @@
                                         </h1>
                                     </div>
                                     <div class="col-12 col-xl-auto mb-3">
-                                        <a class="btn btn-sm btn-light text-primary" th:href="@{'/issues/' + ${currentProject.accessKey}}">
+                                        <a class="btn btn-sm btn-light text-primary" th:href="@{'/issues/' + ${currentProject.identifier}}">
                                             <i class="me-1" data-feather="arrow-left"></i>
                                             Back to All Issues
                                         </a>
@@ -337,7 +337,7 @@
                                             <label for="chooseProject" class="card-header">Project</label>
                                             <div class="card-body">
                                                 <select class="form-control" name="project" id="chooseProject" required>
-                                                    <option th:each="project : ${currentUserProjects}" th:value="${project.id}"
+                                                    <option th:each="project : ${currentProject}" th:value="${project.id}"
                                                             th:text="${project.name}" th:selected="${project.id==currentProject.id}"></option>
                                                 </select>
                                             </div>

@@ -37,6 +37,18 @@ public class IssueService {
         return issueRepository.findByProject(project);
     }
 
+    public List<Issue> findProjectByIdentifier(String identifier) {
+        Project project = projectRepository.findByAccessKey(identifier);
+
+        return issueRepository.findByProject(project);
+    }
+
+    public List<Issue> findProjectById(Long id) {
+        Project project = projectRepository.findProjectById(id);
+
+        return issueRepository.findByProject(project);
+    }
+
     public void save(Issue issue) {
         issueRepository.save(issue);
     }

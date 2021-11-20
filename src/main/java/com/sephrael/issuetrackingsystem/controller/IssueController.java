@@ -31,12 +31,12 @@ public class IssueController {
     @Autowired
     private ProjectRepository projectRepository;
 
-    @GetMapping("/{accessKey}")
-    public String showIssuesByProject(@PathVariable("accessKey") String accessKey, Model model, Principal principal) {
-        List<Issue> issuesByProject = issueService.findProjectByAccessKey(accessKey);
+    @GetMapping("/{identifier}")
+    public String showIssuesByProject(@PathVariable("identifier") String identifier, Model model, Principal principal) {
+        List<Issue> issuesByProject = issueService.findProjectById(projectRepository.findByIdentifier(identifier).getId());
         model.addAttribute("currentUser", userRepository.findByEmail(principal.getName()));
         model.addAttribute("issuesByProject", issuesByProject);
-        model.addAttribute("currentProject", projectRepository.findByAccessKey(accessKey));
+        model.addAttribute("currentProject", projectRepository.findByIdentifier(identifier));
         model.addAttribute("currentUserProjects", userRepository.findByEmail(principal.getName()).getProjects());
 
         if(userRepository.findByEmail(principal.getName()).getOrganization() == null) {
@@ -45,13 +45,13 @@ public class IssueController {
         return("/issues/issues");
     }
 
-    @RequestMapping("/{accessKey}/new")
-    public String showNewIssuePage(@PathVariable(name = "accessKey") String accessKey, Model model, Principal principal) {
+    @RequestMapping("/{identifier}/new")
+    public String showNewIssuePage(@PathVariable(name = "identifier") String identifier, Model model, Principal principal) {
         Issue issue = new Issue();
         model.addAttribute("issue", issue);
         model.addAttribute("currentUser", userRepository.findByEmail(principal.getName()));
         model.addAttribute("users", userService.listAll());
-        model.addAttribute("currentProject", projectRepository.findByAccessKey(accessKey));
+        model.addAttribute("currentProject", projectRepository.findByIdentifier(identifier));
         model.addAttribute("currentUserProjects", userRepository.findByEmail(principal.getName()).getProjects());
 
         // THIS ALLOWS ME TO ASSIGN EMAIL TO ISSUE TABLE (create-issue.html)
@@ -69,24 +69,24 @@ public class IssueController {
         userRepository.findByEmail(principal.getName()).addToIssue(issue);
 
         issue.setAssignedTo(assignedTo);
-        String accessKey = projectRepository.findProjectById(id).getAccessKey();
+        String identifier = projectRepository.findProjectById(id).getIdentifier();
 
         issueService.save(issue);
 
         if(userRepository.findByEmail(principal.getName()).getOrganization() == null) {
             return "/organization/select-organization";
         }
-        return "redirect:/issues/" + accessKey;
+        return "redirect:/issues/" + identifier;
     }
 
-    @RequestMapping("/{accessKey}/view/{id}")
-    public String showViewIssuePage(@PathVariable("id") long id, @PathVariable(name = "accessKey") String accessKey, Model model, Principal principal) {
+    @RequestMapping("/{identifier}/view/{id}")
+    public String showViewIssuePage(@PathVariable("id") long id, @PathVariable(name = "identifier") String identifier, Model model, Principal principal) {
         Issue issue = issueService.find(id);
         model.addAttribute("comment", new Comment());
         model.addAttribute("comments", issue.getComments());
         model.addAttribute("issue", issue);
         model.addAttribute("currentUser", userRepository.findByEmail(principal.getName()));
-        model.addAttribute("currentProject", projectRepository.findByAccessKey(accessKey));
+        model.addAttribute("currentProject", projectRepository.findByIdentifier(identifier));
         model.addAttribute("currentUserProjects", userRepository.findByEmail(principal.getName()).getProjects());
 
         if(userRepository.findByEmail(principal.getName()).getOrganization() == null) {
@@ -95,12 +95,12 @@ public class IssueController {
         return "/issues/view-issue";
     }
 
-    @GetMapping("/{accessKey}/edit/{id}")
-    public String showEditIssuePage(@PathVariable("id") long id, @PathVariable(name = "accessKey") String accessKey, Model model, Principal principal) {
+    @GetMapping("/{identifier}/edit/{id}")
+    public String showEditIssuePage(@PathVariable("id") long id, @PathVariable(name = "identifier") String identifier, Model model, Principal principal) {
         Issue issue = issueService.find(id);
         model.addAttribute("issue", issue);
         model.addAttribute("currentUser", userRepository.findByEmail(principal.getName()));
-        model.addAttribute("currentProject", projectRepository.findByAccessKey(accessKey));
+        model.addAttribute("currentProject", projectRepository.findByIdentifier(identifier));
         model.addAttribute("currentUserProjects", userRepository.findByEmail(principal.getName()).getProjects());
 
         if(userRepository.findByEmail(principal.getName()).getOrganization() == null) {
@@ -109,14 +109,14 @@ public class IssueController {
         return "/issues/edit-issue";
     }
 
-    @RequestMapping("/{accessKey}/delete/{id}")
-    public String deleteIssue(@PathVariable(name = "id") int id, @PathVariable(name = "accessKey") String accessKey, Principal principal) {
+    @RequestMapping("/{identifier}/delete/{id}")
+    public String deleteIssue(@PathVariable(name = "id") int id, @PathVariable(name = "identifier") String identifier, Principal principal) {
         issueService.delete(id);
 
         if(userRepository.findByEmail(principal.getName()).getOrganization() == null) {
             return "/organization/select-organization";
         }
-        return "redirect:/issues/" + accessKey;
+        return "redirect:/issues/" + identifier;
     }
 
     // this shows the json format of all the Issues
@@ -126,9 +126,9 @@ public class IssueController {
     }
 
     // this shows the json format of all the Issues by Project
-    @GetMapping(path = "/{accessKey}/all")
-    public @ResponseBody Iterable<Issue> getAllIssuesByProject(@PathVariable("accessKey") String accessKey) {
-        return issueService.findProjectByAccessKey(accessKey);
+    @GetMapping(path = "/{identifier}/all")
+    public @ResponseBody Iterable<Issue> getAllIssuesByProject(@PathVariable("identifier") String identifier) {
+        return issueService.findProjectByIdentifier(identifier);
     }
 
     // this shows the json format of all the Comments

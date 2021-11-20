@@ -230,7 +230,7 @@
                             </a>
                             <div class="collapse" id="collapseAddIssue" data-bs-parent="#accordionSidenav">
                                 <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavAddIssue">
-                                    <a class="nav-link" th:href="@{'/issues/' + ${project.accessKey} +'/new'}"
+                                    <a class="nav-link" th:href="@{'/issues/' + ${project.identifier} +'/new'}"
                                        th:each="project : ${currentUserProjects}" th:value="${project.id}" th:text="${project.name}">
                                     </a>
                                 </nav>
@@ -245,7 +245,7 @@
                             </a>
                             <div class="collapse show" id="collapseIssues" data-bs-parent="#accordionSidenav">
                                 <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavIssues">
-                                    <a class="nav-link" th:classappend="${project.id==currentProject.id} ? active" th:href="@{'/issues/' + ${project.accessKey}}" th:each="project : ${currentUserProjects}" th:value="${project.id}" th:text="${project.name}"></a>
+                                    <a class="nav-link" th:classappend="${project.id==currentProject.id} ? active" th:href="@{'/issues/' + ${project.identifier}}" th:each="project : ${currentUserProjects}" th:value="${project.id}" th:text="${project.name}"></a>
                                 </nav>
                             </div>
                             <!-- Sidenav Link (Organization)-->
@@ -287,7 +287,7 @@
                                         </div>
                                     </div>
                                     <div class="col-12 col-xl-auto mb-3">
-                                        <a class="btn btn-sm btn-light text-primary" th:href="@{'/issues/' + ${currentProject.accessKey} +'/new'}">
+                                        <a class="btn btn-sm btn-light text-primary" th:href="@{'/issues/' + ${currentProject.identifier} +'/new'}">
                                             <i class="me-1" data-feather="plus"></i>
                                             Create New Issue
                                         </a>
@@ -333,7 +333,7 @@
                                     <tbody>
                                         <!-- THIS MAKES EACH ROW CLICKABLE TO VIEW AN ISSUE -->
                                         <tr th:each="issue : ${issuesByProject}" style="cursor: pointer"
-                                            th:href="@{'/issues/' + ${currentProject.accessKey} + '/view/' + ${issue.id}}"
+                                            th:href="@{'/issues/' + ${currentProject.identifier} + '/view/' + ${issue.id}}"
                                             onclick="rowClicked(this.getAttribute('href'))">
                                             <td th:text="${issue.user.firstName} + ' ' + ${issue.user.lastName}"></td>
                                             <td th:text="${issue.title}"></td>
@@ -363,8 +363,12 @@
                                                 <span th:case="Closed" class="badge bg-yellow-soft text-yellow">Closed</span>
                                             </td>
                                             <td>
-                                                <a class="btn btn-datatable btn-icon btn-transparent-dark me-2" th:href="@{'/issues/' + ${currentProject.accessKey} + '/edit/' + ${issue.id}}"><i data-feather="edit"></i></a>
-                                                <a class="btn btn-datatable btn-icon btn-transparent-dark" th:href="@{'/issues/' + ${currentProject.accessKey} + '/delete/' + ${issue.id}}"><i data-feather="trash-2"></i></a>
+                                                <a class="btn btn-datatable btn-icon btn-transparent-dark me-2" th:href="@{'/issues/' + ${currentProject.identifier} + '/edit/' + ${issue.id}}"><i data-feather="edit"></i></a>
+                                                <a class="btn btn-datatable btn-icon btn-transparent-dark"
+                                                   th:href="@{'/issues/' + ${currentProject.identifier} + '/delete/' + ${issue.id}}"
+                                                   onclick="return confirm('Are you sure you want to delete this issue?');">
+                                                    <i data-feather="trash-2"></i>
+                                                </a>
                                             </td>
 
                                         </tr>
