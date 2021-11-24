@@ -49,9 +49,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 // the line below is the paths that require authentication and role permissions to access
-                .antMatchers("/register", "/login", "/organization/select", "/organization/new",
-                        "/organization/save", "/organization/joining", "/organization/join", "/process_register", "/").permitAll()
+                .antMatchers("/register", "/login", "/process_register", "/").permitAll()
                 .antMatchers("/error", "/js/**", "/assets/**", "/css/**", "/webjars/**").permitAll()
+                .antMatchers("/**", "/organization/select", "/organization/new", "/organization/save",
+                        "/organization/joining", "/organization/join").authenticated()
 
                 // update users allowed to Project Managers
                 .antMatchers("/users/edit/**", "/users/save").hasAnyAuthority("Project Manager")
@@ -69,7 +70,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
                 // create and delete comments allowed to all Roles
                 .antMatchers("/issues/**/view/**/comment/**").hasAnyAuthority("Project Manager", "Admin", "Developer", "Member")
-                .antMatchers("/**").authenticated()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()

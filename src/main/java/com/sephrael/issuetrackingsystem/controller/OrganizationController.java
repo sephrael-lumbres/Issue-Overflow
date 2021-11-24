@@ -54,16 +54,23 @@ public class OrganizationController {
     }
 
     @RequestMapping("/select")
-    public String showCreateOrJoinOrganizationPage() {
-        return ("/organization/select-organization");
+    public String showCreateOrJoinOrganizationPage(Principal principal) {
+
+        if(userRepository.findByEmail(principal.getName()).getOrganization() != null)
+            return("redirect:/organization");
+        else
+            return ("/organization/select-organization");
     }
 
     @RequestMapping("/new")
-    public String showCreateOrganizationPage(Model model) {
+    public String showCreateOrganizationPage(Model model, Principal principal) {
         model.addAttribute("organization", new Organization());
         model.addAttribute("users", userService.listAll());
 
-        return("/organization/create-organization");
+        if(userRepository.findByEmail(principal.getName()).getOrganization() != null)
+            return("redirect:/organization");
+        else
+            return("/organization/create-organization");
     }
 
     public static String generateRandomAccessKey(int len) {
@@ -105,10 +112,13 @@ public class OrganizationController {
     }
 
     @RequestMapping("/join")
-    public String joinOrganization(Model model) {
+    public String joinOrganization(Model model, Principal principal) {
         model.addAttribute("organization", organizationRepository.findAll());
 
-        return("/organization/join-organization");
+        if(userRepository.findByEmail(principal.getName()).getOrganization() != null)
+            return("redirect:/organization");
+        else
+            return("/organization/join-organization");
     }
 
     // this returns the json of all the organizations
