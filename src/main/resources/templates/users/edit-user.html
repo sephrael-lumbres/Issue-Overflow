@@ -220,18 +220,21 @@
                                 Dashboard
                             </a>
                             <!-- Sidenav Link (Add Issue)-->
-                            <a class="nav-link collapsed" href="javascript:void(0);" data-bs-toggle="collapse"
-                               data-bs-target="#collapseAddIssue" aria-expanded="false" aria-controls="collapseAddIssue">
-                                <div class="nav-link-icon"><i data-feather="plus"></i></div>
-                                Add Issue
-                                <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                            </a>
-                            <div class="collapse" id="collapseAddIssue" data-bs-parent="#accordionSidenav">
-                                <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavAddIssue">
-                                    <a class="nav-link" th:href="@{'/issues/' + ${project.identifier} +'/new'}"
-                                       th:each="project : ${currentUserProjects}" th:value="${project.id}" th:text="${project.name}">
-                                    </a>
-                                </nav>
+                            <div th:if="${currentUser.getRole().name == 'Project Manager' ||
+                                        currentUser.getRole().name == 'Admin' || currentUser.getRole().name == 'Developer'}">
+                                <a class="nav-link collapsed" href="javascript:void(0);" data-bs-toggle="collapse"
+                                   data-bs-target="#collapseAddIssue" aria-expanded="false" aria-controls="collapseAddIssue">
+                                    <div class="nav-link-icon"><i data-feather="plus"></i></div>
+                                    Add Issue
+                                    <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                                </a>
+                                <div class="collapse" id="collapseAddIssue" data-bs-parent="#accordionSidenav">
+                                    <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavAddIssue">
+                                        <a class="nav-link" th:href="@{'/issues/' + ${project.identifier} +'/new'}"
+                                           th:each="project : ${currentUserProjects}" th:value="${project.id}" th:text="${project.name}">
+                                        </a>
+                                    </nav>
+                                </div>
                             </div>
                             <!-- Sidenav Link (Issues List)-->
                             <a class="nav-link collapsed" href="javascript:void(0);" data-bs-toggle="collapse"

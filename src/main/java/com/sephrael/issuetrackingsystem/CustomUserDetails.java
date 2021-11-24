@@ -1,18 +1,15 @@
 package com.sephrael.issuetrackingsystem;
 
-import com.sephrael.issuetrackingsystem.entity.Role;
 import com.sephrael.issuetrackingsystem.entity.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 public class CustomUserDetails implements UserDetails {
 
-    private final User user;
+    private User user;
 
     public CustomUserDetails(User user) {
         this.user = user;
@@ -20,14 +17,7 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        Role role = user.getRole();
-        List<SimpleGrantedAuthority> authorities = new ArrayList<>();
-
-//        for(Role role : roles) {
-        authorities.add(new SimpleGrantedAuthority(role.getClass().getName()));
-//        }
-
-        return authorities;
+        return Arrays.asList(new SimpleGrantedAuthority(user.getRole().getName()));
     }
 
     @Override

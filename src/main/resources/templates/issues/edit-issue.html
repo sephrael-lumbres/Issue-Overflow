@@ -221,18 +221,21 @@
                                 Dashboard
                             </a>
                             <!-- Sidenav Link (Add Issue)-->
-                            <a class="nav-link collapsed" href="javascript:void(0);" data-bs-toggle="collapse"
-                               data-bs-target="#collapseAddIssue" aria-expanded="false" aria-controls="collapseAddIssue">
-                                <div class="nav-link-icon"><i data-feather="plus"></i></div>
-                                Add Issue
-                                <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                            </a>
-                            <div class="collapse" id="collapseAddIssue" data-bs-parent="#accordionSidenav">
-                                <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavAddIssue">
-                                    <a class="nav-link" th:href="@{'/issues/' + ${project.identifier} +'/new'}"
-                                       th:each="project : ${currentUserProjects}" th:value="${project.id}" th:text="${project.name}">
-                                    </a>
-                                </nav>
+                            <div th:if="${currentUser.getRole().name == 'Project Manager' ||
+                                        currentUser.getRole().name == 'Admin' || currentUser.getRole().name == 'Developer'}">
+                                <a class="nav-link collapsed" href="javascript:void(0);" data-bs-toggle="collapse"
+                                   data-bs-target="#collapseAddIssue" aria-expanded="false" aria-controls="collapseAddIssue">
+                                    <div class="nav-link-icon"><i data-feather="plus"></i></div>
+                                    Add Issue
+                                    <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                                </a>
+                                <div class="collapse" id="collapseAddIssue" data-bs-parent="#accordionSidenav">
+                                    <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavAddIssue">
+                                        <a class="nav-link" th:href="@{'/issues/' + ${project.identifier} +'/new'}"
+                                           th:each="project : ${currentUserProjects}" th:value="${project.id}" th:text="${project.name}">
+                                        </a>
+                                    </nav>
+                                </div>
                             </div>
                             <!-- Sidenav Link (Issues List)-->
                             <a class="nav-link active" href="javascript:void(0);" data-bs-toggle="collapse"
@@ -322,9 +325,12 @@
                                     <label for="assignedTo" class="card-header">Assign To</label>
                                     <div class="card-body">
                                         <select class="form-control" name="assignedTo" id="assignedTo" required>
-                                            <option th:field="*{assignedTo}" value=" " th:selected="*{assignedTo == null}"> </option>
-                                            <option th:each="assignedTo : ${currentProject.getUsers()}" th:value="${assignedTo.id}"
-                                                    th:text="${assignedTo.firstName} + ' ' + ${assignedTo.lastName}" th:selected="${issue.assignedTo == assignedTo}"></option>
+                                            <option th:field="*{assignedTo}" value=" "> </option>
+                                            <option th:each="assignedUser : ${currentProject.getUsers()}" th:value="${assignedUser.id}"
+                                                    th:text="${assignedUser.firstName} + ' ' + ${assignedUser.lastName}"
+                                                    th:if="${assignedUser.getRole().name == 'Project Manager' ||
+                                                        assignedUser.getRole().name == 'Admin' || assignedUser.getRole().name == 'Developer'}"
+                                                    th:selected="${assignedUser==issue.assignedTo}"></option>
                                         </select>
                                     </div>
                                 </div>
@@ -362,7 +368,7 @@
                                             <div class="card-body">
                                                 <select th:field="*{priority}" class="form-control" id="priorityInput">
                                                     <option value="Low">Low</option>
-                                                    <option value="Normal" selected>Normal</option>
+                                                    <option value="Normal">Normal</option>
                                                     <option value="High">High</option>
                                                 </select>
                                             </div>

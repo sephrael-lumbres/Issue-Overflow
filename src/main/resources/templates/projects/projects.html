@@ -221,18 +221,21 @@
                                 Dashboard
                             </a>
                             <!-- Sidenav Link (Add Issue)-->
-                            <a class="nav-link collapsed" href="javascript:void(0);" data-bs-toggle="collapse"
-                               data-bs-target="#collapseAddIssue" aria-expanded="false" aria-controls="collapseAddIssue">
-                                <div class="nav-link-icon"><i data-feather="plus"></i></div>
-                                Add Issue
-                                <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                            </a>
-                            <div class="collapse" id="collapseAddIssue" data-bs-parent="#accordionSidenav">
-                                <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavAddIssue">
-                                    <a class="nav-link" th:href="@{'/issues/' + ${project.identifier} +'/new'}"
-                                       th:each="project : ${currentUserProjects}" th:value="${project.id}" th:text="${project.name}">
-                                    </a>
-                                </nav>
+                            <div th:if="${currentUser.getRole().name == 'Project Manager' ||
+                                        currentUser.getRole().name == 'Admin' || currentUser.getRole().name == 'Developer'}">
+                                <a class="nav-link collapsed" href="javascript:void(0);" data-bs-toggle="collapse"
+                                   data-bs-target="#collapseAddIssue" aria-expanded="false" aria-controls="collapseAddIssue">
+                                    <div class="nav-link-icon"><i data-feather="plus"></i></div>
+                                    Add Issue
+                                    <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                                </a>
+                                <div class="collapse" id="collapseAddIssue" data-bs-parent="#accordionSidenav">
+                                    <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavAddIssue">
+                                        <a class="nav-link" th:href="@{'/issues/' + ${project.identifier} +'/new'}"
+                                           th:each="project : ${currentUserProjects}" th:value="${project.id}" th:text="${project.name}">
+                                        </a>
+                                    </nav>
+                                </div>
                             </div>
                             <!-- Sidenav Link (Issues List)-->
                             <a class="nav-link collapsed" href="javascript:void(0);" data-bs-toggle="collapse"
@@ -286,11 +289,12 @@
                                         </h1>
                                     </div>
                                     <div class="col-12 col-xl-auto mb-3">
-                                        <a class="btn btn-sm btn-light text-primary" href="../users">
+                                        <a th:if="${currentUser.getRole().name == 'Project Manager'}" class="btn btn-sm btn-light text-primary" href="../users">
                                             <i class="me-1" data-feather="user"></i>
                                             Manage Users
                                         </a>
-                                        <button class="btn btn-sm btn-light text-primary" type="button" data-bs-toggle="modal" data-bs-target="#createProjectModal">
+                                        <button th:if="${currentUser.getRole().name == 'Project Manager' || currentUser.getRole().name == 'Admin'}"
+                                                class="btn btn-sm btn-light text-primary" type="button" data-bs-toggle="modal" data-bs-target="#createProjectModal">
                                             <i class="me-1" data-feather="plus"></i>
                                             Create New Project
                                         </button>
@@ -315,7 +319,7 @@
                                             <th>Project Name</th>
                                             <th>Total Members</th>
                                             <th>Created</th>
-                                            <th>Actions</th>
+                                            <th th:if="${currentUser.getRole().name == 'Project Manager' || currentUser.getRole().name == 'Admin'}">Actions</th>
                                         </tr>
                                     </thead>
                                     <tfoot>
@@ -323,7 +327,7 @@
                                             <th>Project Name</th>
                                             <th>Total Members</th>
                                             <th>Created</th>
-                                            <th>Actions</th>
+                                            <th th:if="${currentUser.getRole().name == 'Project Manager' || currentUser.getRole().name == 'Admin'}">Actions</th>
                                         </tr>
                                     </tfoot>
                                     <tbody>
@@ -331,7 +335,7 @@
                                             <td th:text="${project.name} + ' (' + ${project.identifier} + ')'"></td>
                                             <td th:text="${project.getUsers().size()}"></td>
                                             <td th:text="${project.dateCreated}"></td>
-                                            <td>
+                                            <td th:if="${currentUser.getRole().name == 'Project Manager' || currentUser.getRole().name == 'Admin'}">
                                                 <button class="btn btn-datatable btn-icon btn-transparent-dark me-2"
                                                         type="button" data-bs-toggle="modal" data-bs-target="#editProjectModal"
                                                         th:attrappend="data-bs-target=${project.id}">

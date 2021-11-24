@@ -48,12 +48,29 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                // the line below is the paths that require authentication to access
+                // the line below is the paths that require authentication and role permissions to access
                 .antMatchers("/register", "/login", "/organization/select", "/organization/new",
                         "/organization/save", "/organization/joining", "/organization/join", "/process_register", "/").permitAll()
                 .antMatchers("/error", "/js/**", "/assets/**", "/css/**", "/webjars/**").permitAll()
+
+                // update users allowed to Project Managers
+                .antMatchers("/users/edit/**", "/users/save").hasAnyAuthority("Project Manager")
+
+                // create, update, and delete projects allowed to Project Managers and Admins
+                .antMatchers("/projects/new", "/projects/save", "/projects/delete/**")
+                .hasAnyAuthority("Project Manager", "Admin")
+
+                // create, update, and delete issues allowed to Project Managers, Admins, and Developers
+                .antMatchers("/issues/**/new", "/issues/**/save", "/issues/**/edit/**", "/issues/**/delete/**")
+                .hasAnyAuthority("Project Manager", "Admin", "Developer")
+
+                // view issues allowed to all Roles
+                .antMatchers("/issues/**/view/**").hasAnyAuthority("Project Manager", "Admin", "Developer", "Member")
+
+                // create and delete comments allowed to all Roles
+                .antMatchers("/issues/**/view/**/comment/**").hasAnyAuthority("Project Manager", "Admin", "Developer", "Member")
                 .antMatchers("/**").authenticated()
-                .anyRequest().permitAll()
+                .anyRequest().authenticated()
                 .and()
                 .formLogin()
                 .loginPage("/login")

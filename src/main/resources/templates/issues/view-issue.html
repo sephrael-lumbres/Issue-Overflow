@@ -221,18 +221,21 @@
                                 Dashboard
                             </a>
                             <!-- Sidenav Link (Add Issue)-->
-                            <a class="nav-link collapsed" href="javascript:void(0);" data-bs-toggle="collapse"
-                               data-bs-target="#collapseAddIssue" aria-expanded="false" aria-controls="collapseAddIssue">
-                                <div class="nav-link-icon"><i data-feather="plus"></i></div>
-                                Add Issue
-                                <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                            </a>
-                            <div class="collapse" id="collapseAddIssue" data-bs-parent="#accordionSidenav">
-                                <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavAddIssue">
-                                    <a class="nav-link" th:href="@{'/issues/' + ${project.identifier} +'/new'}"
-                                       th:each="project : ${currentUserProjects}" th:value="${project.id}" th:text="${project.name}">
-                                    </a>
-                                </nav>
+                            <div th:if="${currentUser.getRole().name == 'Project Manager' ||
+                                        currentUser.getRole().name == 'Admin' || currentUser.getRole().name == 'Developer'}">
+                                <a class="nav-link collapsed" href="javascript:void(0);" data-bs-toggle="collapse"
+                                   data-bs-target="#collapseAddIssue" aria-expanded="false" aria-controls="collapseAddIssue">
+                                    <div class="nav-link-icon"><i data-feather="plus"></i></div>
+                                    Add Issue
+                                    <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                                </a>
+                                <div class="collapse" id="collapseAddIssue" data-bs-parent="#accordionSidenav">
+                                    <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavAddIssue">
+                                        <a class="nav-link" th:href="@{'/issues/' + ${project.identifier} +'/new'}"
+                                           th:each="project : ${currentUserProjects}" th:value="${project.id}" th:text="${project.name}">
+                                        </a>
+                                    </nav>
+                                </div>
                             </div>
 
                             <!-- Sidenav Link (Issues List)-->
@@ -292,11 +295,13 @@
                                             <i class="me-1" data-feather="arrow-left"></i>
                                             Back to All Issues
                                         </a>
-                                        <a class="btn btn-sm btn-light text-primary" th:href="@{'/issues/' + ${currentProject.identifier} +'/new'}">
+                                        <a th:if="${currentUser.getRole().name == 'Project Manager' || currentUser.getRole().name == 'Admin' || currentUser.getRole().name == 'Developer'}"
+                                           th:href="@{'/issues/' + ${currentProject.identifier} +'/new'}" class="btn btn-sm btn-light text-primary">
                                             <i class="me-1" data-feather="plus"></i>
                                             Create New Issue
                                         </a>
-                                        <a class="btn btn-sm btn-light text-primary" th:href="@{'/issues/' + ${currentProject.identifier} + '/edit/' + ${issue.id}}">
+                                        <a th:if="${issue.user==currentUser}" class="btn btn-sm btn-light text-primary"
+                                           th:href="@{'/issues/' + ${currentProject.identifier} + '/edit/' + ${issue.id}}">
                                             <i class="me-1" data-feather="edit"></i>
                                             Edit Issue
                                         </a>
@@ -395,7 +400,7 @@
                                     <li class="col d-flex">
                                         <div class="me-auto">
                                             <div th:text="${comment.user.firstName} + ' ' + ${comment.user.lastName}" class="fw-bold mb-n2"></div>
-                                                <div style="position: absolute; left: 91.5%;">
+                                                <div th:if="${comment.user==currentUser}" style="position: absolute; left: 91.5%;">
                                                     <a class="btn-lg btn-icon btn-transparent-dark me-2" href="#"><i data-feather="edit"></i></a>
                                                     <a class="btn-lg btn-icon btn-transparent-dark"
                                                        th:href="@{'/issues/' + ${currentProject.identifier} + '/view/' + ${issue.id} + '/comment/' + ${comment.id} + '/delete'}">

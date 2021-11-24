@@ -329,8 +329,10 @@
                                     <div class="card-body">
                                         <select class="form-control" name="assignedTo" id="assignedTo" required>
                                             <option th:field="*{assignedTo}" value=" " selected> </option>
-                                            <option th:each="assignedTo : ${currentProject.getUsers()}" th:value="${assignedTo.id}"
-                                                    th:text="${assignedTo.firstName} + ' ' + ${assignedTo.lastName}"></option>
+                                            <option th:each="assignedUser : ${currentProject.getUsers()}" th:value="${assignedUser.id}"
+                                                    th:text="${assignedUser.firstName} + ' ' + ${assignedUser.lastName}"
+                                                    th:if="${assignedUser.getRole().name == 'Project Manager' ||
+                                                        assignedUser.getRole().name == 'Admin' || assignedUser.getRole().name == 'Developer'}"></option>
                                         </select>
                                     </div>
                                 </div>
