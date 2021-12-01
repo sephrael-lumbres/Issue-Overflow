@@ -6,7 +6,8 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 @Entity
@@ -25,15 +26,19 @@ public class Issue {
 
     private String status;
 
-    // change the format of the date
     @CreationTimestamp
-    @Temporal(TemporalType.DATE)
     @Column(updatable = false)
-    private Date dateCreated;
+    private LocalDate dateCreated;
+
+    @CreationTimestamp
+    @Column(updatable = false)
+    private LocalTime timeCreated;
 
     @UpdateTimestamp
-    @Temporal(TemporalType.DATE)
-    private Date dateUpdated;
+    private LocalDate dateUpdated;
+
+    @UpdateTimestamp
+    private LocalTime timeUpdated;
 
 //    @Enumerated(EnumType.STRING)
 //    private IssueStatus issueStatus;
@@ -51,6 +56,7 @@ public class Issue {
         this.user = user;
     }
 
+    @JsonIgnore
     @ManyToOne
     private User assignedTo;
 
@@ -139,20 +145,36 @@ public class Issue {
         this.status = status;
     }
 
-    public Date getDateCreated() {
+    public LocalDate getDateCreated() {
         return dateCreated;
     }
 
-    public void setDateCreated(Date dateCreated) {
+    public void setDateCreated(LocalDate dateCreated) {
         this.dateCreated = dateCreated;
     }
 
-    public Date getDateUpdated() {
+    public LocalTime getTimeCreated() {
+        return timeCreated;
+    }
+
+    public void setTimeCreated(LocalTime timeCreated) {
+        this.timeCreated = timeCreated;
+    }
+
+    public LocalDate getDateUpdated() {
         return dateUpdated;
     }
 
-    public void setDateUpdated(Date dateUpdated) {
+    public void setDateUpdated(LocalDate dateUpdated) {
         this.dateUpdated = dateUpdated;
+    }
+
+    public LocalTime getTimeUpdated() {
+        return timeUpdated;
+    }
+
+    public void setTimeUpdated(LocalTime timeUpdated) {
+        this.timeUpdated = timeUpdated;
     }
 
     //    public IssueStatus getIssueStatus() {

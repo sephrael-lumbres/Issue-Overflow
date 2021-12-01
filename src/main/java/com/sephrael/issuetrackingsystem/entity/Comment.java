@@ -5,6 +5,8 @@ import com.sun.istack.NotNull;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Date;
 
 @Entity
@@ -19,9 +21,12 @@ public class Comment {
 
     // change the format of the date and include time
     @CreationTimestamp
-    @Temporal(TemporalType.DATE)
     @Column(updatable = false)
-    private Date dateCreated;
+    private LocalDate dateCreated;
+
+    @CreationTimestamp
+    @Column(updatable = false)
+    private LocalTime timeCreated;
 
     // add variable for author
     @JsonIgnore
@@ -79,11 +84,19 @@ public class Comment {
         isEdited = edited;
     }
 
-    public Date getDateCreated() {
+    public LocalDate getDateCreated() {
         return dateCreated;
     }
 
-    public void setDateCreated(Date dateCreated) {
+    public void setDateCreated(LocalDate dateCreated) {
         this.dateCreated = dateCreated;
+    }
+
+    public LocalTime getTimeCreated() {
+        return timeCreated;
+    }
+
+    public void setTimeCreated(LocalTime timeCreated) {
+        this.timeCreated = timeCreated;
     }
 }

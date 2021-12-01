@@ -377,14 +377,16 @@
                                 <li class="col d-flex justify-content-between align-items-start">
                                     <div class="ms-2 me-auto">
                                     <div class="fw-bold mb-2">Created</div>
-                                        <span th:text="${issue.dateCreated}"></span>
+                                        <span th:text="${#temporals.format(issue.dateCreated, 'dd MMM yyyy')}"></span>
+                                        <span th:text="${issue.timeCreated}"></span>
                                     </div>
                                 </li>
 
                                 <li class="col d-flex justify-content-between align-items-start">
                                     <div class="ms-2 me-auto">
                                     <div class="fw-bold mb-2">Updated</div>
-                                        <span th:text="${issue.dateUpdated}"></span>
+                                        <span th:text="${#temporals.format(issue.dateUpdated, 'dd MMM yyyy')}"></span>
+                                        <span th:text="${issue.timeUpdated}"></span>
                                     </div>
                                 </li>
                             </ul>
@@ -407,7 +409,7 @@
                                                         <i data-feather="trash-2"></i>
                                                     </a>
                                                 </div>
-                                            <span th:text="${comment.dateCreated}" style="font-size: 12px;"></span>
+                                            <span th:text="${#temporals.format(comment.dateCreated, 'dd MMM yyyy')} + ' ' + ${comment.timeCreated}" style="font-size: 12px;"></span>
                                         </div>
                                     </li>
 

@@ -2,8 +2,10 @@ package com.sephrael.issuetrackingsystem.controller;
 
 import com.sephrael.issuetrackingsystem.entity.Comment;
 import com.sephrael.issuetrackingsystem.entity.Issue;
+import com.sephrael.issuetrackingsystem.entity.Project;
 import com.sephrael.issuetrackingsystem.entity.User;
 import com.sephrael.issuetrackingsystem.repository.CommentRepository;
+import com.sephrael.issuetrackingsystem.repository.IssueRepository;
 import com.sephrael.issuetrackingsystem.repository.ProjectRepository;
 import com.sephrael.issuetrackingsystem.repository.UserRepository;
 import com.sephrael.issuetrackingsystem.service.IssueService;
@@ -21,6 +23,8 @@ import java.util.List;
 public class IssueController {
 
     @Autowired
+    private IssueRepository issueRepository;
+    @Autowired
     private IssueService issueService;
     @Autowired
     private UserRepository userRepository;
@@ -34,8 +38,8 @@ public class IssueController {
     @GetMapping("/{identifier}")
     public String showIssuesByProject(@PathVariable("identifier") String identifier, Model model, Principal principal) {
         List<Issue> issuesByProject = issueService.findProjectById(projectRepository.findByIdentifier(identifier).getId());
+        model.addAttribute("issues", issuesByProject);
         model.addAttribute("currentUser", userRepository.findByEmail(principal.getName()));
-        model.addAttribute("issuesByProject", issuesByProject);
         model.addAttribute("currentProject", projectRepository.findByIdentifier(identifier));
         model.addAttribute("currentUserProjects", userRepository.findByEmail(principal.getName()).getProjects());
 
@@ -43,6 +47,31 @@ public class IssueController {
             return "/organization/select-organization";
         }
         return("/issues/issues");
+    }
+
+    @GetMapping("/{identifier}/results")
+    public String filterIssues(@RequestParam(value = "type", required = false) String type,
+                               @RequestParam(value = "status", required = false) String status,
+                               @RequestParam(value = "priority", required = false) String priority,
+                               @RequestParam(value = "assignedTo", required = false) String assignedTo,
+                               @PathVariable("identifier") String identifier, Model model, Principal principal) {
+
+        // this allows filter fields to be empty
+        if(type == "") { type = null; }
+        if(status == "") { status = null; }
+        if(priority == "") { priority = null; }
+        if(assignedTo == "") { assignedTo = null; }
+
+        Project currentProject = projectRepository.findByIdentifier(identifier);
+        List<Issue> filteredIssues = issueRepository.findByProjectAndStatusAndPriorityAndTypeAndAssignedTo(currentProject,
+                status, priority, type, userRepository.findByEmail(assignedTo));
+
+        model.addAttribute("issues", filteredIssues);
+        model.addAttribute("currentProject", currentProject);
+        model.addAttribute("currentUser", userRepository.findByEmail(principal.getName()));
+        model.addAttribute("currentUserProjects", userRepository.findByEmail(principal.getName()).getProjects());
+
+        return ("/issues/issues");
     }
 
     @RequestMapping("/{identifier}/new")
