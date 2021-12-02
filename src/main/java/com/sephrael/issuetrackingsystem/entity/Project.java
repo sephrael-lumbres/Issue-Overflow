@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -17,12 +18,9 @@ public class Project {
 
     private String name;
 
-    // insert dateProjectCreated variable here (a somewhat working Date variable in Issue.java)
-    // change the format of the date
     @CreationTimestamp
-    @Temporal(TemporalType.DATE)
     @Column(updatable = false)
-    private Date dateCreated;
+    private LocalDate dateCreated;
 
     @Column(unique = true)
     private String accessKey;
@@ -77,11 +75,11 @@ public class Project {
         this.name = name;
     }
 
-    public Date getDateCreated() {
+    public LocalDate getDateCreated() {
         return dateCreated;
     }
 
-    public void setDateCreated(Date dateCreated) {
+    public void setDateCreated(LocalDate dateCreated) {
         this.dateCreated = dateCreated;
     }
 
@@ -98,7 +96,7 @@ public class Project {
     }
 
     public void setIdentifier(String identifier) {
-        this.identifier = identifier;
+        this.identifier = identifier.toUpperCase();
     }
 
     public List<User> getUsers() {

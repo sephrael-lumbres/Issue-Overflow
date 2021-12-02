@@ -316,10 +316,10 @@
                                 <table id="datatablesSimple">
                                     <thead>
                                         <tr>
-                                            <th>Project Name</th>
-                                            <th>Total Members</th>
-                                            <th>Created</th>
-                                            <th th:if="${currentUser.getRole().name == 'Project Manager' || currentUser.getRole().name == 'Admin'}">Actions</th>
+                                            <th class="align-middle text-center">Project Name</th>
+                                            <th class="align-middle text-center">Total Members</th>
+                                            <th class="align-middle text-center" data-type="date" data-format="DD MMM YYYY">Created</th>
+                                            <th class="align-middle text-center">Actions</th>
                                         </tr>
                                     </thead>
                                     <tfoot>
@@ -332,57 +332,90 @@
                                     </tfoot>
                                     <tbody>
                                         <tr th:each="project : ${currentUser.projects}">
-                                            <td th:text="${project.name} + ' (' + ${project.identifier} + ')'"></td>
-                                            <td th:text="${project.getUsers().size()}"></td>
-                                            <td th:text="${project.dateCreated}"></td>
-                                            <td th:if="${currentUser.getRole().name == 'Project Manager' || currentUser.getRole().name == 'Admin'}">
-                                                <button class="btn btn-datatable btn-icon btn-transparent-dark me-2"
+                                            <td class="align-middle" th:text="${project.name} + ' (' + ${project.identifier} + ')'"></td>
+                                            <td class="align-middle text-center" th:text="${project.getUsers().size()}"></td>
+                                            <td class="align-middle text-center" th:text="${#temporals.format(project.dateCreated, 'dd MMM yyyy')}"></td>
+                                            <td class="align-middle text-center">
+                                                <button th:if="${currentUser.getRole().name == 'Project Manager' || currentUser.getRole().name == 'Admin'}"
+                                                        class="btn btn-datatable btn-icon btn-transparent-dark me-2"
                                                         type="button" data-bs-toggle="modal" data-bs-target="#editProjectModal"
                                                         th:attrappend="data-bs-target=${project.id}">
                                                     <i data-feather="edit"></i>
                                                 </button>
-                                                <a class="btn btn-datatable btn-icon btn-transparent-dark"
+                                                <a th:if="${currentUser.getRole().name == 'Project Manager' || currentUser.getRole().name == 'Admin'}" class="btn btn-datatable btn-icon btn-transparent-dark me-2" data-bs-toggle="modal"
+                                                   data-bs-target="#viewAccessKeyModal" th:attrappend="data-bs-target=${project.id}">
+                                                    <i data-feather="key"></i>
+                                                </a>
+                                                <a th:unless="${currentUser.getRole().name == 'Project Manager' || currentUser.getRole().name == 'Admin'}"
+                                                   class="btn btn-xs btn-transparent-dark" data-bs-toggle="modal"
+                                                   data-bs-target="#viewAccessKeyModal" th:attrappend="data-bs-target=${project.id}">
+                                                    View Access Key
+                                                    <i class="ms-1" data-feather="key"></i>
+                                                </a>
+                                                <a th:if="${currentUser.getRole().name == 'Project Manager' || currentUser.getRole().name == 'Admin'}" class="btn btn-datatable btn-icon btn-transparent-dark"
                                                    th:href="@{'/projects/delete/' + ${project.id}}"
                                                    onclick="return confirm('Are you sure you want to delete this project?');">
                                                     <i data-feather="trash-2"></i>
                                                 </a>
+                                            </td>
 
-                                                <!-- Edit project modal-->
-                                                <div class="modal fade" id="editProjectModal" tabindex="-1" role="dialog" aria-labelledby="editProjectModalLabel" aria-hidden="true" th:attrappend="id=${project.id}">
-                                                    <div class="modal-dialog modal-lg" role="document">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header">
-                                                                <h5 class="modal-title" id="editProjectModalLabel">Edit Project</h5>
-                                                                <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            <!-- View Access Key Modal -->
+                                            <div class="modal fade" id="viewAccessKeyModal" tabindex="-1" role="dialog" aria-labelledby="viewAccessKeyModalLabel" aria-hidden="true" th:attrappend="id=${project.id}">
+                                                <div class="modal-dialog" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 th:text="${project.name} + ' Access Key'" class="modal-title" id="viewAccessKeyModalLabel"></h5>
+                                                            <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <div class="mb-0">
+                                                                <label class="mb-1 small text-muted" for="viewAccessKey">Project Access Key</label>
+                                                                <div class="d-flex">
+                                                                    <input th:value="${project.accessKey}" class="form-control" id="viewAccessKey" type="text" readonly/>
+                                                                    <button class="btn btn-primary ms-2" onclick="copyToClipboard()"><i data-feather="clipboard"></i></button>
+                                                                </div>
                                                             </div>
-                                                            <form action="#" th:action="@{/projects/save}" method="post">
-                                                                <div class="modal-body">
-                                                                    <div class="mb-0">
-                                                                        <input th:value="${project.id}" th:name="id" class="form-control" id="id" type="hidden" readonly/>
-                                                                        <input th:value="${project.organization.id}" name="organization" class="form-control" id="organization" type="hidden" readonly/>
-
-                                                                        <label class="mb-1" for="name">Project Name<span style="color: red">*</span></label>
-                                                                        <input th:value="${project.name}" name="name" class="form-control mb-3" id="name" type="text" placeholder="Enter project name..." required/>
-
-                                                                        <label class="mb-1" for="identifier">Project ID<span style="color: red">*</span></label>
-                                                                        <input th:value="${project.identifier}" autocapitalize="characters" name="identifier" class="form-control" id="identifier" type="text" required/>
-                                                                        <p class="form-text mb-n2">The project ID is a unique identifier for a project. A short, concise key is recommended.</p>
-                                                                        <p class="form-text">(e.g. Project ID for 'Call of Duty' could be 'COD') Uppercase letters (A-Z), numbers (0-9) and underscore (_) can be used.</p>
-
-                                                                        <label class="mb-1" for="accessKey">Project Access Key<span style="color: red">*</span></label>
-                                                                        <input th:value="${project.accessKey}" name="accessKey" class="form-control" id="accessKey" type="text" placeholder="Enter project access key..." required/>
-                                                                        <p class="form-text mb-auto">The project access key is a password that could be shared for other users to join a project.</p>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="modal-footer">
-                                                                    <button class="btn btn-danger-soft text-danger" type="button" data-bs-dismiss="modal">Cancel</button>
-                                                                    <button id="edit" name="edit" class="btn btn-primary-soft text-primary">Save Changes</button>
-                                                                </div>
-                                                            </form>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </td>
+                                            </div>
+
+                                            <!-- Edit project modal-->
+                                            <div class="modal fade" id="editProjectModal" tabindex="-1" role="dialog" aria-labelledby="editProjectModalLabel" aria-hidden="true" th:attrappend="id=${project.id}">
+                                                <div class="modal-dialog modal-lg" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="editProjectModalLabel">Edit Project</h5>
+                                                            <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <form action="#" th:action="@{/projects/save}" method="post">
+                                                            <div class="modal-body">
+                                                                <div class="mb-0">
+                                                                    <input th:value="${project.id}" th:name="id" class="form-control" id="id" type="hidden" readonly/>
+                                                                    <input th:value="${project.organization.id}" name="organization" class="form-control" id="organization" type="hidden" readonly/>
+
+                                                                    <label class="mb-1" for="name">Project Name<span style="color: red">*</span></label>
+                                                                    <input th:value="${project.name}" name="name" class="form-control mb-3" id="name" type="text" placeholder="Enter project name..." required/>
+
+                                                                    <label class="mb-1" for="identifier">Project ID<span style="color: red">*</span></label>
+                                                                    <input th:value="${project.identifier}" autocapitalize="characters" name="identifier" class="form-control" id="identifier" type="text" required/>
+                                                                    <p class="form-text mb-n2">The project ID is a unique identifier for a project. A short, concise key is recommended.</p>
+                                                                    <p class="form-text">(e.g. Project ID for 'Call of Duty' could be 'COD') Uppercase letters (A-Z), numbers (0-9) and underscore (_) can be used.</p>
+
+                                                                    <label class="mb-1" for="accessKey">Project Access Key<span style="color: red">*</span></label>
+                                                                    <input th:value="${project.accessKey}" name="accessKey" class="form-control" id="accessKey" type="text" placeholder="Enter project access key..." required/>
+                                                                    <p class="form-text mb-auto">The project access key is a password that could be shared for other users to join a project.</p>
+                                                                </div>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button class="btn btn-danger-soft text-danger" type="button" data-bs-dismiss="modal">Cancel</button>
+                                                                <button id="edit" name="edit" class="btn btn-primary-soft text-primary">Save Changes</button>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+
                                         </tr>
                                     </tbody>
                                 </table>
@@ -405,7 +438,7 @@
                                             <input th:field="*{name}" class="form-control mb-3" id="createFormProjectName" type="text" placeholder="Enter project name..." required/>
 
                                             <label class="mb-1" for="createFormProjectIdentifier" style="font-size: 14px">Project ID<span style="color: red">*</span></label>
-                                            <input th:field="*{identifier}" autocapitalize="characters" class="form-control" id="createFormProjectIdentifier" type="text" required/>
+                                            <input th:field="*{identifier}" style="text-transform: uppercase;" class="form-control" id="createFormProjectIdentifier" type="text" required/>
                                             <p class="form-text mb-n2" style="font-size: 12px">The project ID is a unique identifier for a project. A short, concise key is recommended.</p>
                                             <p class="form-text" style="font-size: 12px">(e.g. Project ID for 'Call of Duty' could be 'COD') Uppercase letters (A-Z), numbers (0-9) and underscore (_) can be used.</p>
 
@@ -462,9 +495,19 @@
                 </footer>
             </div>
         </div>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-        <script src="js/scripts.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" crossorigin="anonymous"></script>
-        <script src="js/datatables/datatables-simple-demo.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    <script src="js/scripts.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" crossorigin="anonymous"></script>
+    <script src="js/datatables/datatables-simple-demo.js"></script>
+    <script type="text/javascript">
+        function copyToClipboard() {
+            let textToCopy = document.getElementById('viewAccessKey');
+
+            textToCopy.select();
+            textToCopy.setSelectionRange(0, 99999);
+
+            navigator.clipboard.writeText(textToCopy.value);
+        }
+    </script>
     </body>
 </html>
