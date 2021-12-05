@@ -105,7 +105,7 @@ public class IssueController {
         if(userRepository.findByEmail(principal.getName()).getOrganization() == null) {
             return "/organization/select-organization";
         }
-        return "redirect:/issues/" + identifier;
+        return ("redirect:/issues/" + identifier + "/view/" + issue.getId());
     }
 
     @RequestMapping("/{identifier}/view/{id}")

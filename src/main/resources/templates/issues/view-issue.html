@@ -7,9 +7,9 @@
         <meta name="description" content="" />
         <meta name="author" content="" />
         <title th:text="${issue.title} + ' | View issue |'"></title>
-        <link href="../../../css/styles.css" rel="stylesheet" />
+        <link href="/css/styles.css" rel="stylesheet" />
         <link href="https://unpkg.com/easymde/dist/easymde.min.css" rel="stylesheet" />
-        <link rel="icon" type="image/x-icon" href="../../../assets/img/favicon.png" />
+        <link rel="icon" type="image/x-icon" href="/assets/img/favicon.png" />
         <script data-search-pseudo-elements defer src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.28.0/feather.min.js" crossorigin="anonymous"></script>
     </head>
@@ -131,7 +131,7 @@
                         </h6>
                         <!-- Example Message 1  -->
                         <a class="dropdown-item dropdown-notifications-item" href="#!">
-                            <img class="dropdown-notifications-item-img" src="../../../assets/img/illustrations/profiles/profile-2.png" />
+                            <img class="dropdown-notifications-item-img" src="/assets/img/illustrations/profiles/profile-2.png" />
                             <div class="dropdown-notifications-item-content">
                                 <div class="dropdown-notifications-item-content-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>
                                 <div class="dropdown-notifications-item-content-details">Thomas Wilcox · 58m</div>
@@ -139,7 +139,7 @@
                         </a>
                         <!-- Example Message 2-->
                         <a class="dropdown-item dropdown-notifications-item" href="#!">
-                            <img class="dropdown-notifications-item-img" src="../../../assets/img/illustrations/profiles/profile-3.png" />
+                            <img class="dropdown-notifications-item-img" src="/assets/img/illustrations/profiles/profile-3.png" />
                             <div class="dropdown-notifications-item-content">
                                 <div class="dropdown-notifications-item-content-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>
                                 <div class="dropdown-notifications-item-content-details">Emily Fowler · 2d</div>
@@ -147,7 +147,7 @@
                         </a>
                         <!-- Example Message 3-->
                         <a class="dropdown-item dropdown-notifications-item" href="#!">
-                            <img class="dropdown-notifications-item-img" src="../../../assets/img/illustrations/profiles/profile-4.png" />
+                            <img class="dropdown-notifications-item-img" src="/assets/img/illustrations/profiles/profile-4.png" />
                             <div class="dropdown-notifications-item-content">
                                 <div class="dropdown-notifications-item-content-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>
                                 <div class="dropdown-notifications-item-content-details">Marshall Rosencrantz · 3d</div>
@@ -155,7 +155,7 @@
                         </a>
                         <!-- Example Message 4-->
                         <a class="dropdown-item dropdown-notifications-item" href="#!">
-                            <img class="dropdown-notifications-item-img" src="../../../assets/img/illustrations/profiles/profile-5.png" />
+                            <img class="dropdown-notifications-item-img" src="/assets/img/illustrations/profiles/profile-5.png" />
                             <div class="dropdown-notifications-item-content">
                                 <div class="dropdown-notifications-item-content-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>
                                 <div class="dropdown-notifications-item-content-details">Colby Newton · 3d</div>
@@ -167,10 +167,10 @@
                 </li>
                 <!-- User Dropdown-->
                 <li class="nav-item dropdown no-caret dropdown-user me-3 me-lg-4">
-                    <a class="btn btn-icon btn-transparent-dark dropdown-toggle" id="navbarDropdownUserImage" href="javascript:void(0);" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img class="img-fluid" src="../../../assets/img/illustrations/profiles/profile-1.png" /></a>
+                    <a class="btn btn-icon btn-transparent-dark dropdown-toggle" id="navbarDropdownUserImage" href="javascript:void(0);" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img class="img-fluid" src="/assets/img/illustrations/profiles/profile-1.png" /></a>
                     <div class="dropdown-menu dropdown-menu-end border-0 shadow animated--fade-in-up" aria-labelledby="navbarDropdownUserImage">
                         <div class="h6 dropdown-header d-flex align-items-center">
-                            <img class="dropdown-user-img" src="../../../assets/img/illustrations/profiles/profile-1.png" />
+                            <img class="dropdown-user-img" src="/assets/img/illustrations/profiles/profile-1.png" />
                             <div class="dropdown-user-details">
                                 <div th:text="${currentUser.firstName} + ' ' + ${currentUser.lastName}" class="dropdown-user-details-name"></div>
                                 <div th:text="${currentUser.email}" class="dropdown-user-details-email"></div>
@@ -300,8 +300,9 @@
                                             <i class="me-1" data-feather="plus"></i>
                                             Create New Issue
                                         </a>
-                                        <a th:if="${issue.user==currentUser}" class="btn btn-sm btn-light text-primary"
-                                           th:href="@{'/issues/' + ${currentProject.identifier} + '/edit/' + ${issue.id}}">
+                                        <a th:if="${issue.user == currentUser || currentUser.role.name == 'Project Manager' || currentUser.role.name == 'Admin'}"
+                                           th:href="@{'/issues/' + ${currentProject.identifier} + '/edit/' + ${issue.id}}"
+                                           class="btn btn-sm btn-light text-primary">
                                             <i class="me-1" data-feather="edit"></i>
                                             Edit Issue
                                         </a>
@@ -322,6 +323,25 @@
                             <div id="targetDiv" class="card-body mt-3 mb-1"></div>
 
                             <hr class="ms-auto me-auto mb-3" style="width: 98%;">
+
+                            <ul class="row mb-2">
+                                <li class="col d-flex justify-content-between align-items-start">
+                                    <div class="ms-2 me-auto">
+                                        <div class="fw-bold mb-2">Opened By</div>
+                                        <span th:text="${issue.user.firstName} + ' ' + ${issue.user.lastName}"></span>
+                                    </div>
+                                </li>
+                                <li class="col d-flex justify-content-between align-items-start">
+                                    <div class="ms-2 me-auto">
+                                        <div class="fw-bold mb-2">Assigned To</div>
+                                        <span th:text="${issue.assignedTo.firstName} + ' ' + ${issue.assignedTo.lastName}"
+                                              th:if="${issue ne null and issue.assignedTo ne null}">
+                                        </span>
+                                    </div>
+                                </li>
+                            </ul>
+
+                            <hr class="ms-auto me-auto mt-1" style="width: 95%;">
 
                             <ul class="row mb-2">
                                 <li class="col d-flex justify-content-between align-items-start">
@@ -364,7 +384,8 @@
                                             <span th:case="Open" class="badge bg-red-soft text-red">Open</span>
                                             <span th:case="In-Progress"
                                                   class="badge bg-blue-soft text-blue">In Progress</span>
-                                            <span th:case="Closed" class="badge bg-green-soft text-green">Closed</span>
+                                            <span th:case="Resolved" class="badge bg-green-soft text-green">Resolved</span>
+                                            <span th:case="Closed" class="badge bg-yellow-soft text-yellow">Closed</span>
                                         </h5>
                                     </div>
                                 </li>
@@ -413,14 +434,14 @@
                                         </div>
                                     </li>
 
-                                    <!-- THIS IS TO ADD SEPARATION BETWEEN dateCreated and messge -->
+                                    <!-- THIS IS TO ADD SEPARATION BETWEEN dateCreated and message -->
                                     <p></p>
 
                                     <li class="d-flex mt-n1">
                                         <label for="commentMessage"></label>
-                                        <textarea th:text="${comment.message}" id="commentMessage" hidden></textarea>
+                                        <textarea th:text="${comment.message}" id="commentMessage" class="comments" hidden></textarea>
                                         <!-- THIS CONVERTS THE COMMENTS TO MARKDOWN FORMAT -->
-                                        <div id="commentDiv"></div>
+                                        <div class="commentDiv"></div>
                                     </li>
 
                                     <!-- THIS IS TO STOP PRINTING THE HORIZONTAL LINE AFTER THE LAST COMMENT -->
@@ -434,29 +455,48 @@
                         </div>
 
                         <!-- ADD A COMMENT SECTION -->
-                        <form action="#" th:action="@{'/issues/' + ${currentProject.identifier} + '/view/' + ${issue.id} + '/comment/save'}" th:object="${comment}" method="post">
-                            <div class="card">
-                                <div class="card-header">Add Comment</div>
-                                    <div class="card-body mt-n3">
-                                        <label for="commentEditor"></label>
-                                        <textarea th:field="*{message}" id="commentEditor" class="form-control" placeholder="Write a comment..."></textarea>
-                                    <button type="submit" class="btn btn-primary btn me-2 mt-n4">Add Comment</button>
-                                    <button class="btn btn-light btn me-2 mt-n4" disabled>
-                                        <i class="fas fa-paperclip me-2"></i>
-                                        Attach a File
-                                    </button>
-                                    <!-- THIS DOES NOT WORK, ONLY SUBMITS THE ADD COMMENT BUTTON FOR NOW -->
-                                    <form action="#" th:action="@{/issues/save}" th:object="${issue}" method="post">
-                                        <button th:if="${currentUser.getRole().name == 'Project Manager' || currentUser.getRole().name == 'Admin'}"
-                                                th:field="*{status}" value="Resolved" class="btn btn-light btn mt-n4">
-                                            <i class="fas fa-archive me-2"></i>
-                                            Mark as Resolved
-                                        </button>
-                                    </form>
-                                </div>
-                            </div>
-                        </form>
+                        <form action="#" th:action="@{'/issues/' + ${currentProject.identifier} + '/view/' + ${issue.id} + '/comment/save'}" th:object="${comment}" id="addComment" method="post"></form>
+                        <div class="card">
+                            <div class="card-header">Add Comment</div>
+                            <div class="card-body mt-n3">
+                                <label for="markdownCommentEditor"></label>
+                                <textarea th:field="*{comment.message}" id="markdownCommentEditor" form="addComment" class="form-control" placeholder="Write a comment..."></textarea>
+                                <button type="submit" class="btn btn-primary btn me-2 mt-n4" form="addComment">Add Comment</button>
+                                <button class="btn btn-light btn me-2 mt-n4" disabled>
+                                    <i class="fas fa-paperclip me-2"></i>
+                                    Attach a File
+                                </button>
+                                <button onclick="markIssueAsClosed()" class="btn btn-light btn mt-n4" type="submit" form="markIssueAsResolvedOrClosed"
+                                        th:if="${currentUser.role.name == 'Project Manager' || currentUser.role.name == 'Admin'}">
+                                    <i class="me-2" data-feather="x-circle"></i>
+                                    Mark as Closed
+                                </button>
+                                <button onclick="markIssueAsResolved()" class="btn btn-light btn mt-n4" type="submit" form="markIssueAsResolvedOrClosed"
+                                        th:if="${currentUser == issue.user || currentUser.role.name == 'Project Manager' || currentUser.role.name == 'Admin'}">
+                                    <i class="fas fa-archive me-2"></i>
+                                    Mark as Resolved
+                                </button>
+                                <!-- THIS CHANGES THE ISSUE STATUS TO: RESOLVED -->
+                                <form action="#" th:action="@{/issues/save}" th:object="${issue}" id="markIssueAsResolvedOrClosed" method="post">
+                                    <span hidden th:if="${currentUser == issue.user || currentUser.role.name == 'Project Manager' || currentUser.role.name == 'Admin'}">
+                                        <label for="issueId"><input th:field="*{id}" id="issueId" form="markIssueAsResolvedOrClosed" readonly/></label>
+                                        <label for="issueTitle"><input th:field="*{title}" id="issueTitle" type="text" readonly/></label>
+                                        <label for="issueDescription"><input th:field="*{description}" id="issueDescription" type="text" readonly/></label>
+                                        <label for="issueAssignedTo"><input th:field="*{assignedTo}" id="issueAssignedTo" type="text" readonly/></label>
+                                        <label for="issueType"><input th:field="*{type}" id="issueType" type="text" readonly/></label>
+                                        <label for="issuePriority"><input th:field="*{priority}" id="issuePriority" type="text" readonly/></label>
 
+                                        <label for="issueResolved">
+                                            <select th:field="*{status}" id="issueResolved">
+                                                <option value="Resolved">Resolved</option>
+                                                <option value="Closed">Closed</option>
+                                            </select>
+                                        </label>
+                                        <label for="issueProject"><input th:value="${issue.project.id}" id="issueProject" name="project" form="markIssueAsResolvedOrClosed" readonly/></label>
+                                    </span>
+                                </form>
+                            </div>
+                        </div>
                     </div>
                 </main>
                 <footer class="footer-admin mt-auto footer-light">
@@ -474,27 +514,37 @@
             </div>
         </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-        <script src="../../../js/scripts.js"></script>
+        <script src="/js/scripts.js"></script>
         <script src="https://unpkg.com/easymde/dist/easymde.min.js" crossorigin="anonymous"></script>
 <!--        <script src="https://cdn.jsdelivr.net/npm/showdown@1.9.1/dist/showdown.min.js" crossorigin="anonymous"></script>-->
-        <script src="../../../js/markdown.js"></script>
-        <script src="../../../js/showdown.min.js"></script>
+        <script src="/js/markdown.js"></script>
+        <script src="/js/showdown.min.js"></script>
 
         <script>
-            var converter1 = new showdown.Converter(),
+            let converter1 = new showdown.Converter(),
                 text1 = document.getElementById("descriptionViewer").value,
-                target1 = document.getElementById("targetDiv"),
-                html1 = converter1.makeHtml(text1);
+                target1 = document.getElementById("targetDiv");
             showdown.setOption('optionKey', 'value');
 
-            target1.innerHTML = html1;
+            target1.innerHTML = converter1.makeHtml(text1);
 
-            var converter2 = new showdown.Converter(),
-                text2 = document.getElementById("commentMessage").value,
-                target2 = document.getElementById("commentDiv"),
-                html2 = converter2.makeHtml(text2);
 
-            target2.innerHTML = html2;
+            let converter2 = new showdown.Converter();
+            for(let i=0; i < document.getElementsByClassName("comments").length; i++) {
+                let text2 = document.getElementsByClassName("comments").item(i).value,
+                    target2 = document.getElementsByClassName("commentDiv").item(i);
+
+                target2.innerHTML = converter2.makeHtml(text2);
+            }
+
+            function markIssueAsResolved() {
+                let filters = document.getElementsByTagName('select');
+                    filters[0].selectedIndex = 0;
+            }
+            function markIssueAsClosed() {
+                let filters = document.getElementsByTagName('select');
+                filters[0].selectedIndex = 1;
+            }
         </script>
     </body>
 </html>

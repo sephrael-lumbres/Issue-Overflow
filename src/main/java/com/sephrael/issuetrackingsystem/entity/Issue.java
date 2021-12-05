@@ -46,6 +46,7 @@ public class Issue {
     @JsonIgnore
     @ManyToOne
     @NotNull
+    @JoinColumn(updatable = false)
     private User user;
 
     public User getUser() {
