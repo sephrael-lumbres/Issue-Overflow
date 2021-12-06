@@ -1,0 +1,5 @@
+Add New Filter Fields for Issues and More
+
+- Add filter for 'Created By' and Unassigned Issues
+- The 'View Issue' page now displays the Issue ID/Key
+- Add file for commit message drafts

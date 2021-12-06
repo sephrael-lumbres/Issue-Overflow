@@ -6,7 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title th:text="${issue.title} + ' | View issue |'"></title>
+        <title th:text="'[' + ${issue.project.identifier} + '-' + ${issue.id} + '] ' + ${issue.title} + ' | View issue |'"></title>
         <link href="/css/styles.css" rel="stylesheet" />
         <link href="https://unpkg.com/easymde/dist/easymde.min.css" rel="stylesheet" />
         <link rel="icon" type="image/x-icon" href="/assets/img/favicon.png" />
@@ -315,7 +315,7 @@
                     <!-- Main page content -->
                     <div class="container-fluid px-4 mt-4">
                         <div class="card mb-4">
-                            <div th:text="${issue.title}" class="card-header"></div>
+                            <div th:text="'[' + ${issue.project.identifier} + '-' + ${issue.id} + '] ' + ${issue.title}" class="card-header"></div>
 
                             <label for="descriptionViewer"></label>
                             <textarea th:text="${issue.description}" id="descriptionViewer" hidden></textarea>

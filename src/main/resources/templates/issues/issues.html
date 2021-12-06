@@ -326,9 +326,19 @@
                                                                 <label class="mb-1" for="filterByAssignedTo" style="font-size: 14px">Assigned To</label>
                                                                 <select th:name="assignedTo" class="form-control" id="filterByAssignedTo">
                                                                     <option></option>
+                                                                    <option value="Unassigned">Unassigned</option>
                                                                     <option th:each="assignedUser : ${currentProject.getUsers()}"
                                                                             th:text="${assignedUser.firstName} + ' ' + ${assignedUser.lastName}"
                                                                             th:value="${assignedUser.email}">
+                                                                    </option>
+                                                                </select>
+
+                                                                <label class="mb-1" for="filterByCreatedBy" style="font-size: 14px">Created By</label>
+                                                                <select th:name="createdBy" class="form-control" id="filterByCreatedBy">
+                                                                    <option></option>
+                                                                    <option th:each="createdBy : ${currentProject.getUsers()}"
+                                                                            th:text="${createdBy.firstName} + ' ' + ${createdBy.lastName}"
+                                                                            th:value="${createdBy.email}">
                                                                     </option>
                                                                 </select>
 
@@ -400,7 +410,7 @@
                                     <tbody>
                                         <!-- THIS MAKES EACH ROW CLICKABLE TO VIEW AN ISSUE -->
                                         <tr th:each="issue : ${issues}" style="cursor: pointer"
-                                            th:href="@{'/issues/' + ${currentProject.identifier} + '/view/' + ${issue.id}}"
+                                            th:href="@{'/issues/' + ${currentProject.identifier} + '/view/' + ${issue.project.identifier} + '-' + ${issue.id}}"
                                             onclick="rowClicked(this.getAttribute('href'))">
                                             <td th:switch="${issue.type}" class="align-middle text-center">
                                                 <span class="badge bg-red-soft text-red" th:case="Bug">Bug</span>
@@ -492,6 +502,7 @@
             const urlParams = new URLSearchParams(queryString);
             document.getElementById('filterByType').value=urlParams.get('type');
             document.getElementById('filterByAssignedTo').value=urlParams.get('assignedTo');
+            document.getElementById('filterByCreatedBy').value=urlParams.get('createdBy');
             document.getElementById('filterByPriority').value=urlParams.get('priority');
             document.getElementById('filterByStatus').value=urlParams.get('status');
 

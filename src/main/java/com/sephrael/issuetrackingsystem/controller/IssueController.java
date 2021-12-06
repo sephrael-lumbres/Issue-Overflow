@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Objects;
 
 @Controller
 @RequestMapping("/issues")
@@ -53,18 +54,27 @@ public class IssueController {
     public String filterIssues(@RequestParam(value = "type", required = false) String type,
                                @RequestParam(value = "status", required = false) String status,
                                @RequestParam(value = "priority", required = false) String priority,
+                               @RequestParam(value = "createdBy", required = false) String createdBy,
                                @RequestParam(value = "assignedTo", required = false) String assignedTo,
                                @PathVariable("identifier") String identifier, Model model, Principal principal) {
+
+        Project currentProject = projectRepository.findByIdentifier(identifier);
+        List<Issue> filteredIssues;
 
         // this allows filter fields to be empty
         if(type == "") { type = null; }
         if(status == "") { status = null; }
         if(priority == "") { priority = null; }
-        if(assignedTo == "") { assignedTo = null; }
-
-        Project currentProject = projectRepository.findByIdentifier(identifier);
-        List<Issue> filteredIssues = issueRepository.findByProjectAndStatusAndPriorityAndTypeAndAssignedTo(currentProject,
-                status, priority, type, userRepository.findByEmail(assignedTo));
+        if(createdBy == "") { createdBy = null; }
+        // this allows a User to view Issues that are unassigned or assigned to a specific User or all issues that are
+        // neither assigned nor unassigned
+        if(Objects.equals(assignedTo, "Unassigned")) {
+            filteredIssues = issueRepository.findByProjectAndStatusAndPriorityAndTypeAndUserAndAssignedTo(currentProject,
+                    status, priority, type, userRepository.findByEmail(createdBy), null);
+        } else {
+            filteredIssues = issueRepository.findByProjectAndStatusAndPriorityAndTypeAndAssignedToAndUser(currentProject,
+                    status, priority, type, userRepository.findByEmail(assignedTo), userRepository.findByEmail(createdBy));
+        }
 
         model.addAttribute("issues", filteredIssues);
         model.addAttribute("currentProject", currentProject);
@@ -108,7 +118,7 @@ public class IssueController {
         return ("redirect:/issues/" + identifier + "/view/" + issue.getId());
     }
 
-    @RequestMapping("/{identifier}/view/{id}")
+    @RequestMapping("/{identifier}/view/{identifier}-{id}")
     public String showViewIssuePage(@PathVariable("id") long id, @PathVariable(name = "identifier") String identifier, Model model, Principal principal) {
         Issue issue = issueService.find(id);
         model.addAttribute("comment", new Comment());
