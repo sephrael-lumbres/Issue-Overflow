@@ -1,6 +1,7 @@
 package com.sephrael.issuetrackingsystem.repository;
 
 import com.sephrael.issuetrackingsystem.entity.Issue;
+import com.sephrael.issuetrackingsystem.entity.Organization;
 import com.sephrael.issuetrackingsystem.entity.Project;
 import com.sephrael.issuetrackingsystem.entity.User;
 import org.springframework.data.jpa.repository.Query;
@@ -14,6 +15,7 @@ public interface IssueRepository extends CrudRepository<Issue, Long> {
 
     List<Issue> findByUser(User user);
     List<Issue> findByProject(Project project);
+    List<Issue> findByOrganization(Organization organization);
     Issue findIssueByTitle(String title);
 
     @Query("SELECT i FROM Issue i WHERE (:project is null  or i.project = :project) and " +

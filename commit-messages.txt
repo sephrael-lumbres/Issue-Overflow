@@ -3,3 +3,19 @@ Add New Filter Fields for Issues and More
 - Add filter for 'Created By' and Unassigned Issues
 - The 'View Issue' page now displays the Issue ID/Key
 - Add file for commit message drafts
+
+Fix LocalDateTime Bug and More
+
+- Fix bug where date and time were not able to be saved into 1 variable
+(previously had to use two variables, one for date and one for time)
+- Fix bug where LocalDateTime was only saving the Date (because in
+application.properties 'spring.jpa.hibernate.ddl-auto=update' did not
+let me change existing column type from DATE to DATETIME)
+- Now 'Issue' only has one variable each that holds both the date AND
+time for dateCreated and dateUpdated
+- Now 'Comment' only has one variable that holds both the date AND time
+for dateCreated
+- Add connection between 'Issue' and 'Organization'
+- Update Comment controller URL paths when creating and deleting a
+comment to support the URL change to include Issue ID (i.e. IST-1)
+- Made some JSON changes

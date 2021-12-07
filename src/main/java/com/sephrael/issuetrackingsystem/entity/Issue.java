@@ -1,19 +1,19 @@
 package com.sephrael.issuetrackingsystem.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sun.istack.NotNull;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
-import java.time.LocalDate;
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
 public class Issue {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String title;
@@ -27,26 +27,32 @@ public class Issue {
     private String status;
 
     @CreationTimestamp
+    @JsonFormat(pattern = "dd MMM yyyy HH:mm:ss")
     @Column(updatable = false)
-    private LocalDate dateCreated;
-
-    @CreationTimestamp
-    @Column(updatable = false)
-    private LocalTime timeCreated;
+    private LocalDateTime dateCreated;
 
     @UpdateTimestamp
-    private LocalDate dateUpdated;
-
-    @UpdateTimestamp
-    private LocalTime timeUpdated;
+    @JsonFormat(pattern = "dd MMM yyyy HH:mm:ss")
+    private LocalDateTime dateUpdated;
 
 //    @Enumerated(EnumType.STRING)
 //    private IssueStatus issueStatus;
 
-    @JsonIgnore
+    @ManyToOne
+    private Organization organization;
+
+    public Organization getOrganization() {
+        return organization;
+    }
+
+    public void setOrganization(Organization organization) {
+        this.organization = organization;
+    }
+
     @ManyToOne
     @NotNull
     @JoinColumn(updatable = false)
+    @JsonIgnore
     private User user;
 
     public User getUser() {
@@ -57,8 +63,8 @@ public class Issue {
         this.user = user;
     }
 
-    @JsonIgnore
     @ManyToOne
+    @JsonIgnore
     private User assignedTo;
 
     public User getAssignedTo() {
@@ -69,9 +75,9 @@ public class Issue {
         this.assignedTo = assignedTo;
     }
 
-    @JsonIgnore
     @ManyToOne
     @NotNull
+//    @JsonIgnore
     private Project project;
 
     public Project getProject() {
@@ -146,36 +152,20 @@ public class Issue {
         this.status = status;
     }
 
-    public LocalDate getDateCreated() {
+    public LocalDateTime getDateCreated() {
         return dateCreated;
     }
 
-    public void setDateCreated(LocalDate dateCreated) {
+    public void setDateCreated(LocalDateTime dateCreated) {
         this.dateCreated = dateCreated;
     }
 
-    public LocalTime getTimeCreated() {
-        return timeCreated;
-    }
-
-    public void setTimeCreated(LocalTime timeCreated) {
-        this.timeCreated = timeCreated;
-    }
-
-    public LocalDate getDateUpdated() {
+    public LocalDateTime getDateUpdated() {
         return dateUpdated;
     }
 
-    public void setDateUpdated(LocalDate dateUpdated) {
+    public void setDateUpdated(LocalDateTime dateUpdated) {
         this.dateUpdated = dateUpdated;
-    }
-
-    public LocalTime getTimeUpdated() {
-        return timeUpdated;
-    }
-
-    public void setTimeUpdated(LocalTime timeUpdated) {
-        this.timeUpdated = timeUpdated;
     }
 
     //    public IssueStatus getIssueStatus() {

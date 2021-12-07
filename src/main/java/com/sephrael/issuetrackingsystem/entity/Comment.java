@@ -1,13 +1,12 @@
 package com.sephrael.issuetrackingsystem.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sun.istack.NotNull;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Entity
 public class Comment {
@@ -19,16 +18,11 @@ public class Comment {
 
     private boolean isEdited;
 
-    // change the format of the date and include time
     @CreationTimestamp
+    @JsonFormat(pattern = "dd MMM yyyy HH:mm:ss")
     @Column(updatable = false)
-    private LocalDate dateCreated;
+    private LocalDateTime dateCreated;
 
-    @CreationTimestamp
-    @Column(updatable = false)
-    private LocalTime timeCreated;
-
-    // add variable for author
     @JsonIgnore
     @ManyToOne
     @NotNull
@@ -84,19 +78,11 @@ public class Comment {
         isEdited = edited;
     }
 
-    public LocalDate getDateCreated() {
+    public LocalDateTime getDateCreated() {
         return dateCreated;
     }
 
-    public void setDateCreated(LocalDate dateCreated) {
+    public void setDateCreated(LocalDateTime dateCreated) {
         this.dateCreated = dateCreated;
-    }
-
-    public LocalTime getTimeCreated() {
-        return timeCreated;
-    }
-
-    public void setTimeCreated(LocalTime timeCreated) {
-        this.timeCreated = timeCreated;
     }
 }

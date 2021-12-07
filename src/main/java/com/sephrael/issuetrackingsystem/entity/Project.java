@@ -40,6 +40,7 @@ public class Project {
     private Organization organization;
 
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Issue> issues;
 
     public List<Issue> getIssues() {

@@ -1,6 +1,7 @@
 package com.sephrael.issuetrackingsystem.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -36,6 +37,13 @@ public class Organization {
 
     public void addToProject(Project project) {
         project.setOrganization(this);
+    }
+
+    @OneToMany(mappedBy = "organization")
+    private List<Issue> issues;
+
+    public void addToIssue(Issue issue) {
+        issue.setOrganization(this);
     }
 
     @Column(unique = true, updatable = false)

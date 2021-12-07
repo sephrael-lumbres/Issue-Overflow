@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.sephrael</groupId>
-	<artifactId>Issue Tracking System</artifactId>
+	<artifactId>IssueTrackingSystem</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>Issue Tracking System</name>
 	<description>Issue Tracking System with Spring Boot</description>

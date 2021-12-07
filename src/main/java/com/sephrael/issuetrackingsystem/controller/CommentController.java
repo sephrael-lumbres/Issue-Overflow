@@ -13,7 +13,7 @@ import java.security.Principal;
 import java.util.List;
 
 @Controller
-@RequestMapping("/issues/{identifier}/view/{issueId}/comment")
+@RequestMapping("/issues/{identifier}/view/{identifier}-{issueId}/comment")
 public class CommentController {
     @Autowired
     private CommentRepository commentRepository;
@@ -32,7 +32,7 @@ public class CommentController {
         if(userRepository.findByEmail(principal.getName()).getOrganization() == null) {
             return "/organization/select-organization";
         }
-        return "redirect:/issues/{identifier}/view/" + issueId;
+        return "redirect:/issues/{identifier}/view/" + identifier + '-' + issueId;
     }
 
     @RequestMapping("/{commentId}/delete")
@@ -43,7 +43,7 @@ public class CommentController {
         if(userRepository.findByEmail(principal.getName()).getOrganization() == null) {
             return "/organization/select-organization";
         }
-        return "redirect:/issues/{identifier}/view/" + issueId;
+        return "redirect:/issues/{identifier}/view/" + identifier + '-' + issueId;
     }
 
     // this shows the json format of all the Comments of an Issue

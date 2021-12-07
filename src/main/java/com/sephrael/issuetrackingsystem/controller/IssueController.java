@@ -107,6 +107,9 @@ public class IssueController {
         // this connects the newly created Issue to the current User that created the Issue
         userRepository.findByEmail(principal.getName()).addToIssue(issue);
 
+        // this connects the issue to the current user's Organization
+        userRepository.findByEmail(principal.getName()).getOrganization().addToIssue(issue);
+
         issue.setAssignedTo(assignedTo);
         String identifier = projectRepository.findProjectById(id).getIdentifier();
 
@@ -115,7 +118,7 @@ public class IssueController {
         if(userRepository.findByEmail(principal.getName()).getOrganization() == null) {
             return "/organization/select-organization";
         }
-        return ("redirect:/issues/" + identifier + "/view/" + issue.getId());
+        return ("redirect:/issues/" + identifier + "/view/" + identifier + "-" + issue.getId());
     }
 
     @RequestMapping("/{identifier}/view/{identifier}-{id}")

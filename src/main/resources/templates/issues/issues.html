@@ -431,11 +431,9 @@
                                             </td>
                                             <td class="align-middle text-center text-nowrap">
                                                 <span th:text="${#temporals.format(issue.dateCreated, 'dd MMM yyyy')}"></span>
-                                                <span th:text="${#temporals.format(issue.timeCreated, 'HH:mm:ss')}" hidden></span>
                                             </td>
                                             <td class="align-middle text-center text-nowrap">
                                                 <span th:text="${#temporals.format(issue.dateUpdated, 'dd MMM yyyy')}"></span>
-                                                <span th:text="${#temporals.format(issue.timeUpdated, 'HH:mm:ss')}" hidden></span>
                                             </td>
                                             <td th:text="${issue.user.firstName} + ' ' + ${issue.user.lastName}"
                                                 class="align-middle text-center text-nowrap">
