@@ -6,9 +6,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title th:text="${issue.title} + ' | Edit issue |'"></title>
+        <title th:text="'[' + ${currentProject.identifier} + '] ' + ${currentProject.name} + ' | Project Home | Issue Tracking System'"></title>
         <link href="/css/styles.css" rel="stylesheet" />
-        <link href="https://unpkg.com/easymde/dist/easymde.min.css" rel="stylesheet" />
         <link rel="icon" type="image/x-icon" href="/assets/img/favicon.png" />
         <script data-search-pseudo-elements defer src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.28.0/feather.min.js" crossorigin="anonymous"></script>
@@ -222,7 +221,7 @@
                             </a>
                             <!-- Sidenav Link (Add Issue)-->
                             <div th:if="${currentUser.getRole().name == 'Project Manager' ||
-                                        currentUser.getRole().name == 'Admin' || currentUser.getRole().name == 'Developer'}">
+                                    currentUser.getRole().name == 'Admin' || currentUser.getRole().name == 'Developer'}">
                                 <a class="nav-link collapsed" href="javascript:void(0);" data-bs-toggle="collapse"
                                    data-bs-target="#collapseAddIssue" aria-expanded="false" aria-controls="collapseAddIssue">
                                     <div class="nav-link-icon"><i data-feather="plus"></i></div>
@@ -238,16 +237,16 @@
                                 </div>
                             </div>
                             <!-- Sidenav Link (Issues List)-->
-                            <a class="nav-link active" href="javascript:void(0);" data-bs-toggle="collapse"
-                               data-bs-target="#collapseIssues" aria-expanded="false" aria-controls="collapseIssues">
+                            <a class="nav-link collapsed" href="javascript:void(0);" data-bs-toggle="collapse"
+                               data-bs-target="#collapseDashboards" aria-expanded="false" aria-controls="collapseDashboards">
                                 <div class="nav-link-icon"><i data-feather="list"></i></div>
                                 Issues
                                 <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                             </a>
-                            <div class="collapse show" id="collapseIssues" data-bs-parent="#accordionSidenav">
+                            <div class="collapse" id="collapseDashboards" data-bs-parent="#accordionSidenav">
                                 <a class="nav-link" th:href="@{'/issues/all'}">All Issues</a>
-                                <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavIssues">
-                                    <a class="nav-link" th:each="project : ${currentUserProjects}" th:classappend="${project.id==currentProject.id} ? active" th:href="@{'/issues/' + ${project.identifier}}" th:value="${project.id}" th:text="${project.name}"></a>
+                                <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavPages">
+                                    <a class="nav-link" th:href="@{'/issues/' + ${project.identifier}}" th:each="project : ${currentUserProjects}" th:value="${project.id}" th:text="${project.name}"></a>
                                 </nav>
                             </div>
                             <!-- Sidenav Link (Organization)-->
@@ -256,16 +255,16 @@
                                 Organization
                             </a>
                             <!-- Sidenav Link (Projects)-->
-                            <a class="nav-link collapsed" href="javascript:void(0);" data-bs-toggle="collapse"
+                            <a class="nav-link active" href="javascript:void(0);" data-bs-toggle="collapse"
                                data-bs-target="#collapseProjects" aria-expanded="false" aria-controls="collapseProjects">
                                 <div class="nav-link-icon"><i data-feather="grid"></i></div>
                                 Projects
                                 <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                             </a>
-                            <div class="collapse" id="collapseProjects" data-bs-parent="#accordionSidenav">
+                            <div class="collapse show" id="collapseProjects" data-bs-parent="#accordionSidenav">
                                 <a class="nav-link" th:href="@{'/projects/all'}">All Projects</a>
                                 <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavProjects">
-                                    <a class="nav-link" th:href="@{'/projects/' + ${project.identifier}}" th:each="project : ${currentUserProjects}" th:value="${project.id}" th:text="${project.name}"></a>
+                                    <a class="nav-link" th:href="@{'/projects/' + ${project.identifier}}" th:each="project : ${currentUserProjects}" th:value="${project.id}" th:text="${project.name}" th:classappend="${project.id==currentProject.id} ? active"></a>
                                 </nav>
                             </div>
                             <!-- Sidenav Link (Users)-->
@@ -293,126 +292,269 @@
                                 <div class="row align-items-center justify-content-between pt-3">
                                     <div class="col-auto mb-3">
                                         <h1 class="page-header-title">
-                                            <div class="page-header-icon"><i data-feather="file-text"></i></div>
-                                            Edit Post
+                                            <div class="page-header-icon"><i data-feather="home"></i></div>
+                                            Project Home
                                         </h1>
                                     </div>
                                     <div class="col-12 col-xl-auto mb-3">
-                                        <a class="btn btn-sm btn-light text-primary" th:href="@{'/issues/' + ${currentProject.identifier}}">
-                                            <i class="me-1" data-feather="arrow-left"></i>
-                                            Back to All Issues
+                                        <a class="btn btn-sm btn-light text-primary" href="/users">
+                                            <i class="me-1" data-feather="user"></i>
+                                            Manage Users
                                         </a>
+                                        <a class="btn btn-sm btn-light text-primary" href="/projects">
+                                            <i class="me-1" data-feather="users"></i>
+                                            Manage Projects
+                                        </a>
+
+                                        <a class="btn btn-sm btn-light text-primary" data-bs-toggle="modal" data-bs-target="#viewAccessKeyModal">
+                                            <i class="me-1" data-feather="key"></i>
+                                            View Access Key
+                                        </a>
+
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </header>
-
                     <!-- Main page content-->
                     <div class="container-fluid px-4">
-                        <form action="#" th:action="@{/issues/save}" th:object="${issue}" method="post" class="row gx-4">
-                            <div class="col-lg-9">
-                                <div class="card mb-4">
-                                    <label for="id" class="card-header">Issue ID</label>
-                                    <div class="card-body"><input th:field="*{id}" readonly="readonly" class="form-control" id="id" type="text"/></div>
-                                </div>
-                                <div class="card mb-4">
-                                    <label for="title" class="card-header">Title</label>
-                                    <div class="card-body"><input th:field="*{title}" class="form-control" id="title" type="text" placeholder="Enter your title..." /></div>
-                                </div>
-                                <div class="card card-header-actions mb-4">
-                                    <label for="markdownDescriptionEditor" class="card-header">
-                                        Description
-                                        <i class="text-muted" data-feather="info" data-bs-toggle="tooltip" data-bs-placement="left" title="Markdown is supported within the issue description editor."></i>
-                                    </label>
-                                    <div class="card-body">
-                                        <textarea th:field="*{description}" id="markdownDescriptionEditor" placeholder="Enter a description..."></textarea>
+                        <div class="card bg-gradient-primary-to-secondary mb-4">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <div class="me-3">
+                                        <div class="small text-white-50">Project Name:</div>
+                                        <div th:text="${currentProject.name}" class="h1 text-white"></div>
                                     </div>
-                                </div>
-
-                                <div class="card mb-4">
-                                    <label for="assignedTo" class="card-header">Assign To</label>
-                                    <div class="card-body">
-                                        <select class="form-control" name="assignedTo" id="assignedTo" required>
-                                            <option th:field="*{assignedTo}" value=" "> </option>
-                                            <option th:each="assignedUser : ${currentProject.getUsers()}" th:value="${assignedUser.id}"
-                                                    th:text="${assignedUser.firstName} + ' ' + ${assignedUser.lastName}"
-                                                    th:if="${assignedUser.getRole().name == 'Project Manager' ||
-                                                        assignedUser.getRole().name == 'Admin' || assignedUser.getRole().name == 'Developer'}"
-                                                    th:selected="${assignedUser==issue.assignedTo}"></option>
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <!--  THIS MAKES A GRID FOR THE DROPDOWN MENUS  -->
-                                <div class="row row-cols-1 row-cols-md-2 g-4 text-center">
-                                    <!--  This connects each newly created issue to the project of the current user's choosing  -->
-                                    <div class="col">
-                                        <div class="card">
-                                            <label for="chooseProject" class="card-header">Project</label>
-                                            <div class="card-body">
-                                                <select class="form-control" name="project" id="chooseProject" required>
-                                                    <option th:each="project : ${currentProject}" th:value="${project.id}"
-                                                            th:text="${project.name}" th:selected="${project.id==currentProject.id}"></option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col">
-                                        <div class="card">
-                                            <label for="typeInput" class="card-header">Type</label>
-                                            <div class="card-body">
-                                                <select th:field="*{type}" class="form-control" id="typeInput">
-                                                    <option value="Bug">Bug</option>
-                                                    <option value="Task">Task</option>
-                                                    <option value="Request">Request</option>
-                                                    <option value="Other">Other</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col">
-                                        <div class="card">
-                                            <label for="priorityInput" class="card-header">Priority</label>
-                                            <div class="card-body">
-                                                <select th:field="*{priority}" class="form-control" id="priorityInput">
-                                                    <option value="Low">Low</option>
-                                                    <option value="Normal">Normal</option>
-                                                    <option value="High">High</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col">
-                                        <div class="card">
-                                            <label for="statusInput" class="card-header">Status</label>
-                                            <div class="card-body">
-                                                <select th:field="*{status}" class="form-control" id="statusInput">
-                                                    <option value="Open">Open</option>
-                                                    <option value="In-Progress">In Progress</option>
-                                                    <option th:if="${currentUser.role.name == 'Project Manager' ||
-                                                        currentUser.role.name == 'Admin'}" value="Resolved">Resolved</option>
-                                                    <option th:if="${currentUser.role.name == 'Project Manager' ||
-                                                        currentUser.role.name == 'Admin'}" value="Closed">Closed</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    <div class="text-white"><span th:text="${currentProject.getUsers().size()}"></span> Member(s)</div>
                                 </div>
                             </div>
-                            <div class="col-lg-3">
-                                <div class="nav-sticky card card-header-actions">
+                        </div>
+
+                        <div class="row">
+
+                            <!-- Recent Activity Card -->
+                            <div class="col-xl-8 col-lg-12 mb-4">
+                                <div class="card card-header-actions h-100">
                                     <div class="card-header">
-                                        Update Issue
-                                        <i class="text-muted" data-feather="info" data-bs-toggle="tooltip" data-bs-placement="left" title="After submitting, your post will be published once it is approved by a moderator."></i>
+                                        Recent Activity
                                     </div>
-                                    <div class="card-body">
-                                        <div class="d-grid"><button type="submit" class="fw-500 btn btn-primary">Submit</button></div>
+                                    <div class="card-body" style="height: 25em; overflow-y: scroll;">
+                                        <div class="timeline timeline-xs">
+                                            <!-- Timeline item for newly created and updated Issues -->
+                                            <div th:each="issue, list : ${issues}" class="timeline-item">
+                                                <div class="timeline-item-marker">
+                                                    <div th:text="${issueService.getIssueDateTimeString(issue)}" class="timeline-item-marker-text"></div>
+                                                    <div th:if="${issue.dateCreated == issue.dateUpdated}" class="timeline-item-marker-indicator bg-green"></div>
+                                                    <div th:unless="${issue.dateCreated == issue.dateUpdated}" class="timeline-item-marker-indicator bg-purple"></div>
+                                                </div>
+                                                <div th:if="${issue.dateCreated == issue.dateUpdated}" class="timeline-item-content">
+                                                    New issue opened!
+                                                    <a th:href="@{'/issues/' + ${issue.project.identifier} + '/view/' + ${issue.project.identifier} + '-' + ${issue.id}}"
+                                                       th:text="${issue.project.identifier} + '-' + ${issue.id}" class="fw-bold text-dark">
+                                                    </a>
+                                                    has been opened by <strong th:text="${issue.user.firstName} + ' ' + ${issue.user.lastName}"></strong>.
+                                                </div>
+                                                <div th:unless="${issue.dateCreated == issue.dateUpdated}" class="timeline-item-content">
+                                                    Details for
+                                                    <a th:href="@{'/issues/' + ${issue.project.identifier} + '/view/' + ${issue.project.identifier} + '-' + ${issue.id}}"
+                                                       th:text="' ' + ${issue.project.identifier} + '-' + ${issue.id}" class="fw-bold text-dark">
+                                                    </a>
+                                                    have been updated.
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </form>
 
+                            <div class="col-xl-4 col-lg-12">
+                                <div class="row">
+
+                                    <!-- Progress Tracker for Projects -->
+                                    <div class="col-12 mb-3">
+                                        <div class="card">
+                                            <div class="card-header">Progress Tracker</div>
+                                            <div class="card-body mt-n2">
+                                                <span th:text="${#numbers.formatPercent(#lists.size(issueRepository.findByProjectAndStatus(currentProject, 'Closed')) / (currentProject.issues.size() * 1.0), 1, 0)}" class="float-end fw-bold"></span>
+                                                <span th:text="${#lists.size(issueRepository.findByProjectAndStatus(currentProject, 'Closed')) / (currentProject.issues.size() * 1.0)}" class="projectProgressDecimal" hidden></span>
+                                                <h4 th:text="${currentProject.name}" class="small"></h4>
+                                                <div class="progress mb-n1">
+                                                    <div th:attrappend="style='width: ' + ${#numbers.formatPercent(#lists.size(issueRepository.findByProjectAndStatus(currentProject, 'Closed')) / (currentProject.issues.size() * 1.0), 1, 0)}"
+                                                         class="progress-bar projectProgressBar" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Team members / people dashboard card example-->
+                                    <div class="col-12 mb-4">
+                                        <div class="card">
+                                            <div class="card-header">Members<span th:text="' (' + ${currentProject.getUsers().size()} + ')'"></span></div>
+                                            <div class="card-body" style="height: 25em; overflow-y: scroll;">
+                                                <!-- Item 1-->
+                                                <div class="d-flex align-items-center justify-content-between mb-4">
+                                                    <div class="d-flex align-items-center flex-shrink-0 me-3">
+                                                        <div class="avatar avatar-xl me-3 bg-gray-200"><img class="avatar-img img-fluid" src="/assets/img/illustrations/profiles/profile-1.png" alt="" /></div>
+                                                        <div class="d-flex flex-column fw-bold">
+                                                            <a class="text-dark line-height-normal mb-1" href="#!">Sid Rooney</a>
+                                                            <div class="small text-muted line-height-normal">Position</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- Item 2-->
+                                                <div class="d-flex align-items-center justify-content-between mb-4">
+                                                    <div class="d-flex align-items-center flex-shrink-0 me-3">
+                                                        <div class="avatar avatar-xl me-3 bg-gray-200"><img class="avatar-img img-fluid" src="/assets/img/illustrations/profiles/profile-2.png" alt="" /></div>
+                                                        <div class="d-flex flex-column fw-bold">
+                                                            <a class="text-dark line-height-normal mb-1" href="#!">Keelan Garza</a>
+                                                            <div class="small text-muted line-height-normal">Position</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- Item 3-->
+                                                <div class="d-flex align-items-center justify-content-between mb-4">
+                                                    <div class="d-flex align-items-center flex-shrink-0 me-3">
+                                                        <div class="avatar avatar-xl me-3 bg-gray-200"><img class="avatar-img img-fluid" src="/assets/img/illustrations/profiles/profile-3.png" alt="" /></div>
+                                                        <div class="d-flex flex-column fw-bold">
+                                                            <a class="text-dark line-height-normal mb-1" href="#!">Kaia Smyth</a>
+                                                            <div class="small text-muted line-height-normal">Position</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- Item 4-->
+                                                <div class="d-flex align-items-center justify-content-between mb-4">
+                                                    <div class="d-flex align-items-center flex-shrink-0 me-3">
+                                                        <div class="avatar avatar-xl me-3 bg-gray-200"><img class="avatar-img img-fluid" src="/assets/img/illustrations/profiles/profile-4.png" alt="" /></div>
+                                                        <div class="d-flex flex-column fw-bold">
+                                                            <a class="text-dark line-height-normal mb-1" href="#!">Kerri Kearney</a>
+                                                            <div class="small text-muted line-height-normal">Position</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- Item 5-->
+                                                <div class="d-flex align-items-center justify-content-between mb-4">
+                                                    <div class="d-flex align-items-center flex-shrink-0 me-3">
+                                                        <div class="avatar avatar-xl me-3 bg-gray-200"><img class="avatar-img img-fluid" src="/assets/img/illustrations/profiles/profile-5.png" alt="" /></div>
+                                                        <div class="d-flex flex-column fw-bold">
+                                                            <a class="text-dark line-height-normal mb-1" href="#!">Georgina Findlay</a>
+                                                            <div class="small text-muted line-height-normal">Position</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- Item 6-->
+                                                <div class="d-flex align-items-center justify-content-between">
+                                                    <div class="d-flex align-items-center flex-shrink-0 me-3">
+                                                        <div class="avatar avatar-xl me-3 bg-gray-200"><img class="avatar-img img-fluid" src="/assets/img/illustrations/profiles/profile-6.png" alt="" /></div>
+                                                        <div class="d-flex flex-column fw-bold">
+                                                            <a class="text-dark line-height-normal mb-1" href="#!">Wilf Ingram</a>
+                                                            <div class="small text-muted line-height-normal">Position</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- Number of Issues of each Status Cards -->
+                        <div class="row">
+                            <div class="col-lg-6 col-xl-3 mb-4">
+                                <div class="card bg-primary text-white h-100">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div class="me-3">
+                                                <div class="text-white-75 small">In Progress</div>
+                                                <div th:text="${numberOfInProgressIssues}" class="text-lg fw-bold"></div>
+                                            </div>
+                                            <i class="feather-xl text-white-50" data-feather="clock"></i>
+                                        </div>
+                                    </div>
+                                    <div class="card-footer d-flex align-items-center justify-content-between small">
+                                        <a class="text-white stretched-link" th:href="@{'/issues/' + ${currentProject.identifier} + '/results?status=In-Progress'}">View</a>
+                                        <div class="text-white"><i class="fas fa-angle-right"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-xl-3 mb-4">
+                                <div class="card bg-warning text-white h-100">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div class="me-3">
+                                                <div class="text-white-75 small">Closed</div>
+                                                <div th:text="${numberOfClosedIssues}" class="text-lg fw-bold"></div>
+                                            </div>
+                                            <i class="feather-xl text-white-50" data-feather="x-circle"></i>
+                                        </div>
+                                    </div>
+                                    <div class="card-footer d-flex align-items-center justify-content-between small">
+                                        <a class="text-white stretched-link" th:href="@{'/issues/' + ${currentProject.identifier} + '/results?status=Closed'}">View</a>
+                                        <div class="text-white"><i class="fas fa-angle-right"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-xl-3 mb-4">
+                                <div class="card bg-success text-white h-100">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div class="me-3">
+                                                <div class="text-white-75 small">Resolved</div>
+                                                <div th:text="${numberOfResolvedIssues}" class="text-lg fw-bold"></div>
+                                            </div>
+                                            <i class="feather-xl text-white-50" data-feather="check-circle"></i>
+                                        </div>
+                                    </div>
+                                    <div class="card-footer d-flex align-items-center justify-content-between small">
+                                        <a class="text-white stretched-link" th:href="@{'/issues/' + ${currentProject.identifier} + '/results?status=Resolved'}">View</a>
+                                        <div class="text-white"><i class="fas fa-angle-right"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-xl-3 mb-4">
+                                <div class="card bg-danger text-white h-100">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div class="me-3">
+                                                <div class="text-white-75 small">Open</div>
+                                                <div th:text="${numberOfOpenIssues}" class="text-lg fw-bold"></div>
+                                            </div>
+                                            <i class="feather-xl text-white-50" data-feather="alert-circle"></i>
+                                        </div>
+                                    </div>
+                                    <div class="card-footer d-flex align-items-center justify-content-between small">
+                                        <a class="text-white stretched-link" th:href="@{'/issues/' + ${currentProject.identifier} + '/results?status=Open'}">View</a>
+                                        <div class="text-white"><i class="fas fa-angle-right"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                    <!-- View Access Key Modal -->
+                    <div class="modal fade" id="viewAccessKeyModal" tabindex="-1" role="dialog" aria-labelledby="viewAccessKeyModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 th:text="${currentProject.name} + ' Access Key'" class="modal-title" id="viewAccessKeyModalLabel"></h5>
+                                    <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="mb-0">
+                                        <label class="mb-1 small text-muted" for="viewAccessKey">Project Access Key</label>
+                                        <div class="d-flex">
+                                            <input th:value="${currentProject.accessKey}" class="form-control" id="viewAccessKey" type="text" readonly/>
+                                            <button class="btn btn-primary ms-2" onclick="copyToClipboard()"><i data-feather="clipboard"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                 </main>
@@ -432,7 +574,33 @@
         </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
         <script src="/js/scripts.js"></script>
-        <script src="https://unpkg.com/easymde/dist/easymde.min.js" crossorigin="anonymous"></script>
-        <script src="/js/markdown.js"></script>
+        <script type="text/javascript">
+            function copyToClipboard() {
+                let textToCopy = document.getElementById('viewAccessKey');
+
+                textToCopy.select();
+                textToCopy.setSelectionRange(0, 99999);
+
+                navigator.clipboard.writeText(textToCopy.value);
+            }
+
+            // this loop determines project progress bar color by its percentage
+            for(let i=0; i < document.getElementsByClassName("projectProgressDecimal").length; i++) {
+                let element = document.getElementsByClassName("projectProgressDecimal").item(i).innerHTML.toString();
+                let progressBar = document.getElementsByClassName("projectProgressBar").item(i);
+
+                if(element <= 0.2) {
+                    progressBar.className += " bg-red";
+                } else if(element <= 0.4) {
+                    progressBar.className += " bg-yellow";
+                } else if(element <= 0.6) {
+                    progressBar.className += " bg-blue";
+                } else if(element <= 0.8) {
+                    progressBar.className += " bg-purple";
+                } else if(element === '1.0') {
+                    progressBar.className += " bg-green";
+                }
+            }
+        </script>
     </body>
 </html>

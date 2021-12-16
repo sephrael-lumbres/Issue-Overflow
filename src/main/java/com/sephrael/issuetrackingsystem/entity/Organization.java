@@ -35,6 +35,10 @@ public class Organization {
     @OneToMany(mappedBy = "organization")
     private List<Project> projects;
 
+    public List<Project> getProjects() {
+        return projects;
+    }
+
     public void addToProject(Project project) {
         project.setOrganization(this);
     }

@@ -5,10 +5,11 @@ import com.sephrael.issuetrackingsystem.entity.Project;
 import com.sephrael.issuetrackingsystem.entity.User;
 import com.sephrael.issuetrackingsystem.repository.IssueRepository;
 import com.sephrael.issuetrackingsystem.repository.ProjectRepository;
-import com.sephrael.issuetrackingsystem.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Service
@@ -17,24 +18,10 @@ public class IssueService {
     @Autowired
     private IssueRepository issueRepository;
     @Autowired
-    private UserRepository userRepository;
-    @Autowired
     private ProjectRepository projectRepository;
 
     public List<Issue> listAll() {
         return (List<Issue>) issueRepository.findAll();
-    }
-
-    public List<Issue> findByUser(Long id) {
-        User user = userRepository.findById(id).get();
-
-        return issueRepository.findByUser(user);
-    }
-
-    public List<Issue> findProjectByAccessKey(String accessKey) {
-        Project project = projectRepository.findByAccessKey(accessKey);
-
-        return issueRepository.findByProject(project);
     }
 
     public List<Issue> findProjectByIdentifier(String identifier) {
@@ -59,5 +46,62 @@ public class IssueService {
 
     public void delete(long id) {
         issueRepository.deleteById(id);
+    }
+
+    public List<Issue> getIssuesSortedByRecentActivity(List<Issue> sortedIssues, List<Issue> issuesSortedByDateCreated, List<Issue> issuesSortedByDateUpdated) {
+        for(int i=0; i < issuesSortedByDateCreated.size(); i++) {
+            if(issuesSortedByDateCreated.get(i).getDateCreated().isEqual(issuesSortedByDateUpdated.get(i).getDateUpdated())) {
+                sortedIssues.set(i, issuesSortedByDateCreated.get(i));
+            } else if(issuesSortedByDateCreated.get(i).getDateCreated().isBefore(issuesSortedByDateUpdated.get(i).getDateUpdated())) {
+                sortedIssues.set(i, issuesSortedByDateUpdated.get(i));
+            }
+        }
+
+        return sortedIssues;
+    }
+
+    public String getIssueDateTimeString(Issue issue) {
+        LocalDateTime currentDateTime = LocalDateTime.now();
+        LocalDateTime issueDateTimeString;
+
+        if(issue.getDateCreated() == issue.getDateUpdated()) {
+            issueDateTimeString = issue.getDateCreated();
+        } else {
+            issueDateTimeString = issue.getDateUpdated();
+        }
+
+        if(issueDateTimeString.until(currentDateTime, ChronoUnit.HOURS) < 1) {
+            return issueDateTimeString.until(currentDateTime, ChronoUnit.MINUTES) + " min";
+        } else if(issueDateTimeString.until(currentDateTime, ChronoUnit.HOURS) == 1) {
+            return issueDateTimeString.until(currentDateTime, ChronoUnit.HOURS) + " hr";
+        } else if(issueDateTimeString.until(currentDateTime, ChronoUnit.HOURS) < 24) {
+            return issueDateTimeString.until(currentDateTime, ChronoUnit.HOURS) + " hrs";
+        } else if(issueDateTimeString.until(currentDateTime, ChronoUnit.HOURS) < 48) {
+            return issueDateTimeString.until(currentDateTime, ChronoUnit.DAYS) + " day";
+        } else {
+            return issueDateTimeString.until(currentDateTime, ChronoUnit.DAYS) + " days";
+        }
+    }
+
+    public int getNumberOfIssuesByProjectAndStatus(String status, String projectIdentifier) {
+        return issueRepository.findByProjectAndStatus(projectRepository.findByIdentifier(projectIdentifier), status).size();
+    }
+
+    public int getNumberOfIssuesByOrganizationAndStatus(String status, User currentUser) {
+        int numberOfIssuesByOrganizationAndStatus = 0;
+        List<Project> currentProjects = currentUser.getProjects();
+
+        for(Project project : currentProjects) {
+            numberOfIssuesByOrganizationAndStatus += issueRepository.findByProjectAndStatus(project, status).size();
+        }
+
+        return numberOfIssuesByOrganizationAndStatus;
+    }
+
+    // this allows filter fields to be empty
+    public String setEmptyFilterFieldToNull(String filterField) {
+        if(filterField == "") { filterField = null; }
+
+        return filterField;
     }
 }

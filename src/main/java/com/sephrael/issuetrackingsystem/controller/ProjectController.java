@@ -1,11 +1,13 @@
 package com.sephrael.issuetrackingsystem.controller;
 
+import com.sephrael.issuetrackingsystem.entity.Issue;
 import com.sephrael.issuetrackingsystem.entity.Organization;
 import com.sephrael.issuetrackingsystem.entity.Project;
 import com.sephrael.issuetrackingsystem.entity.User;
-import com.sephrael.issuetrackingsystem.repository.OrganizationRepository;
+import com.sephrael.issuetrackingsystem.repository.IssueRepository;
 import com.sephrael.issuetrackingsystem.repository.ProjectRepository;
 import com.sephrael.issuetrackingsystem.repository.UserRepository;
+import com.sephrael.issuetrackingsystem.service.IssueService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,8 +25,12 @@ public class ProjectController {
     private ProjectRepository projectRepository;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private IssueRepository issueRepository;
+    @Autowired
+    private IssueService issueService;
 
-    @RequestMapping("")
+    @RequestMapping("/all")
     public String viewProjects(Model model, Principal principal) {
         model.addAttribute("newProject", new Project());
         model.addAttribute("currentUser", userRepository.findByEmail(principal.getName()));
@@ -34,6 +40,35 @@ public class ProjectController {
             return "/organization/select-organization";
         }
         return "/projects/projects";
+    }
+
+    @RequestMapping("/{identifier}")
+    public String projectHome(@PathVariable("identifier") String identifier, Model model, Principal principal) {
+        User currentUser = userRepository.findByEmail(principal.getName());
+        Project currentProject = projectRepository.findByIdentifier(identifier);
+
+        List<Issue> sortedIssues = issueService.getIssuesSortedByRecentActivity(
+                issueRepository.findByProject(currentProject),
+                issueRepository.findByProjectOrderByDateCreatedDesc(currentProject),
+                issueRepository.findByProjectOrderByDateUpdatedDesc(currentProject)
+        );
+
+        model.addAttribute("issues", sortedIssues);
+        model.addAttribute("currentUser", currentUser);
+        model.addAttribute("newProject", new Project());
+        model.addAttribute("issueService", issueService);
+        model.addAttribute("currentProject", currentProject);
+        model.addAttribute("issueRepository", issueRepository);
+        model.addAttribute("currentUserProjects", currentUser.getProjects());
+        model.addAttribute("numberOfOpenIssues", issueService.getNumberOfIssuesByProjectAndStatus("Open", identifier));
+        model.addAttribute("numberOfClosedIssues", issueService.getNumberOfIssuesByProjectAndStatus("Closed", identifier));
+        model.addAttribute("numberOfResolvedIssues", issueService.getNumberOfIssuesByProjectAndStatus("Resolved", identifier));
+        model.addAttribute("numberOfInProgressIssues", issueService.getNumberOfIssuesByProjectAndStatus("In-Progress", identifier));
+
+        if(userRepository.findByEmail(principal.getName()).getOrganization() == null) {
+            return "/organization/select-organization";
+        }
+        return "/projects/project-home";
     }
 
     @PostMapping("/new")
@@ -118,7 +153,7 @@ public class ProjectController {
     }
 
     // this returns the json of all the projects
-    @GetMapping(path = "/all")
+    @GetMapping(path = "/json")
     public @ResponseBody
     List<Project> getAllProjects() {
         return projectRepository.findAll();

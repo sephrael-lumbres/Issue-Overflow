@@ -20,7 +20,7 @@
             <!-- * * Tip * * You can use text or an image for your navbar brand.-->
             <!-- * * * * * * When using an image, we recommend the SVG format.-->
             <!-- * * * * * * Dimensions: Maximum height: 32px, maximum width: 240px-->
-            <a class="navbar-brand pe-3 ps-0 ps-lg-2" href="/index.html">Issue Tracking System</a>
+            <a class="navbar-brand pe-3 ps-0 ps-lg-2" href="/dashboard">Issue Tracking System</a>
             <!-- Navbar Search Input-->
             <!-- * * Note: * * Visible only on and above the lg breakpoint-->
             <form class="form-inline me-auto d-none d-lg-block me-3">
@@ -244,6 +244,7 @@
                                 <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                             </a>
                             <div class="collapse" id="collapseDashboards" data-bs-parent="#accordionSidenav">
+                                <a class="nav-link" th:href="@{'/issues/all'}">All Issues</a>
                                 <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavPages">
                                     <a class="nav-link" th:href="@{'/issues/' + ${project.identifier}}" th:each="project : ${currentUserProjects}" th:value="${project.id}" th:text="${project.name}"></a>
                                 </nav>
@@ -254,10 +255,18 @@
                                 Organization
                             </a>
                             <!-- Sidenav Link (Projects)-->
-                            <a class="nav-link" href="/projects">
+                            <a class="nav-link collapsed" href="javascript:void(0);" data-bs-toggle="collapse"
+                               data-bs-target="#collapseProjects" aria-expanded="false" aria-controls="collapseProjects">
                                 <div class="nav-link-icon"><i data-feather="grid"></i></div>
                                 Projects
+                                <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                             </a>
+                            <div class="collapse" id="collapseProjects" data-bs-parent="#accordionSidenav">
+                                <a class="nav-link" th:href="@{'/projects/all'}">All Projects</a>
+                                <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavProjects">
+                                    <a class="nav-link" th:href="@{'/projects/' + ${project.identifier}}" th:each="project : ${currentUserProjects}" th:value="${project.id}" th:text="${project.name}"></a>
+                                </nav>
+                            </div>
                             <!-- Sidenav Link (Users)-->
                             <a class="nav-link active" href="/users">
                                 <div class="nav-link-icon"><i data-feather="users"></i></div>

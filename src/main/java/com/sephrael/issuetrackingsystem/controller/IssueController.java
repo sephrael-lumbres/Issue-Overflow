@@ -36,6 +36,58 @@ public class IssueController {
     @Autowired
     private ProjectRepository projectRepository;
 
+    @GetMapping("/all")
+    public String showIssuesByOrganization(Principal principal, Model model) {
+        List<Issue> issuesByOrganization = issueRepository.findByOrganization(userRepository.findByEmail(principal.getName()).getOrganization());
+        User currentUser = userRepository.findByEmail(principal.getName());
+
+        model.addAttribute("issues", issuesByOrganization);
+        model.addAttribute("currentUser", currentUser);
+//        model.addAttribute("currentProject", null);
+        model.addAttribute("currentUserProjects", currentUser.getProjects());
+
+        if(userRepository.findByEmail(principal.getName()).getOrganization() == null) {
+            return "/organization/select-organization";
+        }
+        return("/issues/issues-by-organization");
+    }
+    
+    @GetMapping("/all/results")
+    public String filterAllIssues(Model model, Principal principal,
+                                  @RequestParam(value = "type", required = false) String type,
+                                  @RequestParam(value = "status", required = false) String status,
+                                  @RequestParam(value = "priority", required = false) String priority,
+                                  @RequestParam(value = "createdBy", required = false) String createdBy,
+                                  @RequestParam(value = "assignedTo", required = false) String assignedTo,
+                                  @RequestParam(value = "projectIdentifier", required = false) String projectIdentifier) {
+
+        List<Issue> filteredIssues;
+
+        // this allows filter fields to be empty
+        type = issueService.setEmptyFilterFieldToNull(type);
+        status = issueService.setEmptyFilterFieldToNull(status);
+        priority = issueService.setEmptyFilterFieldToNull(priority);
+        createdBy = issueService.setEmptyFilterFieldToNull(createdBy);
+        projectIdentifier = issueService.setEmptyFilterFieldToNull(projectIdentifier);
+
+        // this allows a User to view Issues that are unassigned or assigned to a specific User or all issues that are
+        // neither assigned nor unassigned
+        if(Objects.equals(assignedTo, "Unassigned")) {
+            filteredIssues = issueRepository.findByProjectAndStatusAndPriorityAndTypeAndUserAndAssignedTo(projectRepository.findByIdentifier(projectIdentifier),
+                    status, priority, type, userRepository.findByEmail(createdBy), null);
+        } else {
+            filteredIssues = issueRepository.findByProjectAndStatusAndPriorityAndTypeAndAssignedToAndUser(projectRepository.findByIdentifier(projectIdentifier),
+                    status, priority, type, userRepository.findByEmail(assignedTo), userRepository.findByEmail(createdBy));
+        }
+
+        model.addAttribute("issues", filteredIssues);
+//        model.addAttribute("currentProject", null);
+        model.addAttribute("currentUser", userRepository.findByEmail(principal.getName()));
+        model.addAttribute("currentUserProjects", userRepository.findByEmail(principal.getName()).getProjects());
+
+        return ("/issues/issues-by-organization");
+    }
+
     @GetMapping("/{identifier}")
     public String showIssuesByProject(@PathVariable("identifier") String identifier, Model model, Principal principal) {
         List<Issue> issuesByProject = issueService.findProjectById(projectRepository.findByIdentifier(identifier).getId());
@@ -62,10 +114,11 @@ public class IssueController {
         List<Issue> filteredIssues;
 
         // this allows filter fields to be empty
-        if(type == "") { type = null; }
-        if(status == "") { status = null; }
-        if(priority == "") { priority = null; }
-        if(createdBy == "") { createdBy = null; }
+        type = issueService.setEmptyFilterFieldToNull(type);
+        status = issueService.setEmptyFilterFieldToNull(status);
+        priority = issueService.setEmptyFilterFieldToNull(priority);
+        createdBy = issueService.setEmptyFilterFieldToNull(createdBy);
+        
         // this allows a User to view Issues that are unassigned or assigned to a specific User or all issues that are
         // neither assigned nor unassigned
         if(Objects.equals(assignedTo, "Unassigned")) {
@@ -162,19 +215,19 @@ public class IssueController {
     }
 
     // this shows the json format of all the Issues
-    @GetMapping(path = "/all")
+    @GetMapping(path = "/json")
     public @ResponseBody Iterable<Issue> getAllIssues() {
         return issueService.listAll();
     }
 
     // this shows the json format of all the Issues by Project
-    @GetMapping(path = "/{identifier}/all")
+    @GetMapping(path = "/{identifier}/json")
     public @ResponseBody Iterable<Issue> getAllIssuesByProject(@PathVariable("identifier") String identifier) {
         return issueService.findProjectByIdentifier(identifier);
     }
 
     // this shows the json format of all the Comments
-    @GetMapping(path = "/comments/all")
+    @GetMapping(path = "/comments/json")
     public @ResponseBody Iterable<Comment> getAllComments() {
         return commentRepository.findAll();
     }

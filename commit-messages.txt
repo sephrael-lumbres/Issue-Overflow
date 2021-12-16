@@ -4,6 +4,7 @@ Add New Filter Fields for Issues and More
 - The 'View Issue' page now displays the Issue ID/Key
 - Add file for commit message drafts
 
+
 Fix LocalDateTime Bug and More
 
 - Fix bug where date and time were not able to be saved into 1 variable
@@ -19,3 +20,52 @@ for dateCreated
 - Update Comment controller URL paths when creating and deleting a
 comment to support the URL change to include Issue ID (i.e. IST-1)
 - Made some JSON changes
+
+
+MONUMENTAL ADDITIONS AND CHANGES
+
+- Add Dashboard that displays all the Current User's Projects with
+buttons to: go to it's Home Page, add an Issue, view all it's Issues,
+dynamic buttons with numbers that display how many Issues have an
+'Open', 'In Progress', 'Resolved', and 'Closed' status and when they
+are clicked on, it displays all the issues with that Status within the
+Project, there is also a button that displays more buttons to: Create a
+New Project, Join an existing Project, or to View All Projects
+
+- The Dashboard also dynamically displays all the Recent Issue Activity
+within the Organization, but only displays Issues that the Current User
+is a part of, it also displays the Issue's Key which can be clicked on
+to go view the full details of that Issue
+
+- The Dashboard also dynamically displays a Progress Bar which shows
+the Percentage of how many Issues have been closed within a Project
+
+- The Dashboard also has dynamic buttons that display the number of
+issues for each Status and when clicked, it displays all the Issues
+with that Status within the Organization and that the Current User
+is a part of
+
+- The Dashboard also displays a table of all of an Organization's Users
+with their name, email, role, Projects they're a part of and 'Edit' and
+'Delete' buttons if the Current User is a 'Project Manager'
+
+- Add a Project Home Page that displays the Recent Activity for its
+Issues, Progress Bar, a list of its Members, buttons with the number of
+Issues by Status that, when clicked, displays the Issues of that Status
+
+- Update Sidenav to display all the Current User's Projects and when
+clicked, goes to its Home Page
+
+- Add a variable for a Project's 'Color' that is required when creating
+a Project. This will be used to distinguish from other Projects
+throughout the website
+
+- Add a page to View all the Issues of an Organization that the Current
+User is a part of, this table can also be Filtered by Project, Type,
+Assigned To, Created By, Priority, and Status, this table also displays
+each Issue's Key
+
+- Add Column in Users table which displays all the Projects a User is a
+part of
+
+- Fix local file pathing in all HTML files

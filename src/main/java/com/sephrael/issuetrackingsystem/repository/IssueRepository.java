@@ -14,9 +14,20 @@ import java.util.List;
 public interface IssueRepository extends CrudRepository<Issue, Long> {
 
     List<Issue> findByUser(User user);
-    List<Issue> findByProject(Project project);
     List<Issue> findByOrganization(Organization organization);
+    List<Issue> findByProject(Project project);
     Issue findIssueByTitle(String title);
+
+    // used to sort Issues of a Project for Recent Activity
+    List<Issue> findByProjectOrderByDateCreatedDesc(Project project);
+    List<Issue> findByProjectOrderByDateUpdatedDesc(Project project);
+
+    // used to sort Issues of an Organization for Recent Activity
+    List<Issue> findByOrganizationOrderByDateCreatedDesc(Organization organization);
+    List<Issue> findByOrganizationOrderByDateUpdatedDesc(Organization organization);
+
+    // used to calculate % progress in dashboard
+    List<Issue> findByProjectAndStatus(Project project, String status);
 
     @Query("SELECT i FROM Issue i WHERE (:project is null  or i.project = :project) and " +
             "(:status is null or i.status = :status) and (:priority is null or i.priority = :priority) and " +

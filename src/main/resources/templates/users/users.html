@@ -21,7 +21,7 @@
             <!-- * * Tip * * You can use text or an image for your navbar brand.-->
             <!-- * * * * * * When using an image, we recommend the SVG format.-->
             <!-- * * * * * * Dimensions: Maximum height: 32px, maximum width: 240px-->
-            <a class="navbar-brand pe-3 ps-0 ps-lg-2" href="/index.html">Issue Tracking System</a>
+            <a class="navbar-brand pe-3 ps-0 ps-lg-2" href="/dashboard">Issue Tracking System</a>
             <!-- Navbar Search Input-->
             <!-- * * Note: * * Visible only on and above the lg breakpoint-->
             <form class="form-inline me-auto d-none d-lg-block me-3">
@@ -245,6 +245,7 @@
                                 <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                             </a>
                             <div class="collapse" id="collapseDashboards" data-bs-parent="#accordionSidenav">
+                                <a class="nav-link" th:href="@{'/issues/all'}">All Issues</a>
                                 <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavPages">
                                     <a class="nav-link" th:href="@{'/issues/' + ${project.identifier}}" th:each="project : ${currentUserProjects}" th:value="${project.id}" th:text="${project.name}"></a>
                                 </nav>
@@ -255,10 +256,18 @@
                                 Organization
                             </a>
                             <!-- Sidenav Link (Projects)-->
-                            <a class="nav-link" href="/projects">
+                            <a class="nav-link collapsed" href="javascript:void(0);" data-bs-toggle="collapse"
+                               data-bs-target="#collapseProjects" aria-expanded="false" aria-controls="collapseProjects">
                                 <div class="nav-link-icon"><i data-feather="grid"></i></div>
                                 Projects
+                                <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                             </a>
+                            <div class="collapse" id="collapseProjects" data-bs-parent="#accordionSidenav">
+                                <a class="nav-link" th:href="@{'/projects/all'}">All Projects</a>
+                                <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavProjects">
+                                    <a class="nav-link" th:href="@{'/projects/' + ${project.identifier}}" th:each="project : ${currentUserProjects}" th:value="${project.id}" th:text="${project.name}"></a>
+                                </nav>
+                            </div>
                             <!-- Sidenav Link (Users)-->
                             <a class="nav-link active" href="/users">
                                 <div class="nav-link-icon"><i data-feather="users"></i></div>
@@ -313,6 +322,7 @@
                                         <th class="align-middle text-center">Name</th>
                                         <th class="align-middle text-center">Email</th>
                                         <th class="align-middle text-center">Role</th>
+                                        <th class="align-middle text-center">Projects</th>
                                         <th class="align-middle text-center" th:if="${currentUser.role.name == 'Project Manager'}">Actions</th>
                                     </tr>
                                     </thead>
@@ -322,6 +332,7 @@
                                         <th>Name</th>
                                         <th>Email</th>
                                         <th>Role</th>
+                                        <th>Projects</th>
                                         <th th:if="${currentUser.role.name == 'Project Manager'}">Actions</th>
                                     </tr>
                                     </tfoot>
@@ -331,6 +342,11 @@
                                         <td th:text="${user.firstName} + ' ' + ${user.lastName}"></td>
                                         <td th:text="${user.email}"></td>
                                         <td th:text="${user.role.name}"></td>
+                                        <td>
+                                            <span th:each="project : ${currentUser.organization.getProjects()}">
+                                                <span th:if="${project.users.contains(user)}" th:text="${project.name}" th:classappend="'bg-' + ${project.color} + '-soft' + ' text-' + ${project.color}" class="badge"></span>
+                                            </span>
+                                        </td>
                                         <td th:if="${currentUser.role.name == 'Project Manager'}">
                                             <a class="btn btn-datatable btn-icon btn-transparent-dark me-2"
                                                th:href="@{'/users/edit/' + ${user.id}}"><i data-feather="edit"></i></a>

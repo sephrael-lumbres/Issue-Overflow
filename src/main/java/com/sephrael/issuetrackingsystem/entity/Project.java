@@ -3,6 +3,7 @@ package com.sephrael.issuetrackingsystem.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -28,6 +29,8 @@ public class Project {
     @Column(unique = true)
     private String identifier;
 
+    private String color;
+
     @JsonIgnore
     @ManyToMany
     @JoinTable(
@@ -37,6 +40,7 @@ public class Project {
     private List<User> users = new ArrayList<>();
 
     @ManyToOne
+    @JsonIgnore
     private Organization organization;
 
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
@@ -98,6 +102,14 @@ public class Project {
 
     public void setIdentifier(String identifier) {
         this.identifier = identifier.toUpperCase();
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
     }
 
     public List<User> getUsers() {
