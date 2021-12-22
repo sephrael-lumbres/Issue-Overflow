@@ -431,9 +431,10 @@
                                         <div class="me-auto">
                                             <div th:text="${comment.user.firstName} + ' ' + ${comment.user.lastName}" class="fw-bold mb-n2"></div>
                                                 <div th:if="${comment.user==currentUser}" style="position: absolute; left: 91.5%;">
-                                                    <a class="btn-lg btn-icon btn-transparent-dark me-2" href="#"><i data-feather="edit"></i></a>
+                                                    <a th:id="'editCommentButton' + ${list.index}" onclick="editComment(this)" class="btn-lg btn-icon btn-transparent-dark me-2 editCommentButton" href="javascript:void(0);"><i data-feather="edit"></i></a>
                                                     <a class="btn-lg btn-icon btn-transparent-dark"
-                                                       th:href="@{'/issues/' + ${currentProject.identifier} + '/view/' + ${issue.project.identifier} + '-' + ${issue.id} + '/comment/' + ${comment.id} + '/delete'}">
+                                                       th:href="@{'/issues/' + ${currentProject.identifier} + '/view/' + ${issue.project.identifier} + '-' + ${issue.id} + '/comment/' + ${comment.id} + '/delete'}"
+                                                       onclick="return confirm('Are you sure you want to delete this comment?');">
                                                         <i data-feather="trash-2"></i>
                                                     </a>
                                                 </div>
@@ -444,11 +445,19 @@
                                     <!-- THIS IS TO ADD SEPARATION BETWEEN dateCreated and message -->
                                     <p></p>
 
-                                    <li class="d-flex mt-n1">
-                                        <label for="commentMessage"></label>
-                                        <textarea th:text="${comment.message}" id="commentMessage" class="comments" hidden></textarea>
-                                        <!-- THIS CONVERTS THE COMMENTS TO MARKDOWN FORMAT -->
-                                        <div class="commentDiv"></div>
+                                    <li class="mt-n1" style="list-style-type: none;">
+                                        <form action="#" th:action="@{'/issues/' + ${currentProject.identifier} + '/view/' + ${issue.project.identifier} + '-' + ${issue.id} + '/comment/save'}" th:object="${comment}" method="post">
+                                            <label for="id" hidden><input th:value="${comment.id}" th:name="id" readonly="readonly" id="id"></label>
+                                            <label for="user" hidden><input th:value="${comment.user.id}" th:name="user" readonly="readonly" id="user"></label>
+                                            <label for="issue" hidden><input th:value="${comment.issue.id}" th:name="issue" readonly="readonly" id="issue"></label>
+                                            <label hidden for="isEdited"><input th:value="${comment.isEdited}" th:name="isEdited" readonly="readonly" id="isEdited" class="isEdited"></label>
+                                            <label for="markdownEditCommentEditor" hidden></label>
+                                            <textarea th:text="${comment.message}" th:value="${comment.message}" th:name="message" id="markdownEditCommentEditor" class="comments" style="display: none;"></textarea>
+                                            <button th:id="'editCommentButton' + ${list.index}" onclick="editComment(this)" type="button" class="cancelEditCommentButton btn btn-outline-primary btn-sm me-2 mt-n5" hidden>Cancel</button>
+                                            <button type="submit" class="submitEditCommentButton btn btn-primary btn-sm mt-n5" hidden>Submit</button>
+                                            <!-- THIS CONVERTS THE COMMENTS TO MARKDOWN FORMAT -->
+                                            <div class="markdownFormattedComment"></div>
+                                        </form>
                                     </li>
 
                                     <!-- THIS IS TO STOP PRINTING THE HORIZONTAL LINE AFTER THE LAST COMMENT -->
@@ -462,12 +471,12 @@
                         </div>
 
                         <!-- ADD A COMMENT SECTION -->
-                        <form action="#" th:action="@{'/issues/' + ${currentProject.identifier} + '/view/' + ${issue.project.identifier} + '-' + ${issue.id} + '/comment/save'}" th:object="${comment}" id="addComment" method="post"></form>
+                        <form action="#" th:action="@{'/issues/' + ${currentProject.identifier} + '/view/' + ${issue.project.identifier} + '-' + ${issue.id} + '/comment/new'}" th:object="${newComment}" id="addComment" method="post"></form>
                         <div class="card">
                             <div class="card-header">Add Comment</div>
                             <div class="card-body mt-n3">
                                 <label for="markdownCommentEditor"></label>
-                                <textarea th:field="*{comment.message}" id="markdownCommentEditor" form="addComment" class="form-control" placeholder="Write a comment..."></textarea>
+                                <textarea th:field="*{newComment.message}" id="markdownCommentEditor" form="addComment" class="form-control" placeholder="Write a comment..."></textarea>
                                 <button type="submit" class="btn btn-primary btn me-2 mt-n4" form="addComment">Add Comment</button>
                                 <button class="btn btn-light btn me-2 mt-n4" disabled>
                                     <i class="fas fa-paperclip me-2"></i>
@@ -528,6 +537,32 @@
         <script src="/js/showdown.min.js"></script>
 
         <script>
+            // this sets each Edit Comment Editor to have a unique ID to be used to show/hide itself
+            for(let i=0; i < document.getElementsByClassName("EasyMDEContainer").length - 1; i++) {
+                document.getElementsByClassName("EasyMDEContainer").item(i).setAttribute("id", "editCommentEditor" + i);
+                document.getElementsByClassName("EasyMDEContainer").item(i).setAttribute("style", "display: none;");
+            }
+
+            // this hides the Markdown formatted Comment Message and replaces it with a Markdown Editor to Edit a Comment
+            function editComment(commentId) {
+                let commentIndex = commentId.id.replace("editCommentButton", "");
+
+                if(document.getElementsByClassName("EasyMDEContainer").item(commentIndex).getAttribute("style") === "display: none;") {
+                    document.getElementsByClassName("markdownFormattedComment").item(commentIndex).setAttribute("style", "display: none;");
+
+                    document.getElementsByClassName("EasyMDEContainer").item(commentIndex).setAttribute("style", "display: block;");
+                    document.getElementsByClassName("cancelEditCommentButton").item(commentIndex).removeAttribute("hidden");
+                    document.getElementsByClassName("submitEditCommentButton").item(commentIndex).removeAttribute("hidden");
+                } else {
+                    document.getElementsByClassName("EasyMDEContainer").item(commentIndex).setAttribute("style", "display: none;");
+                    document.getElementsByClassName("cancelEditCommentButton").item(commentIndex).setAttribute("hidden", "");
+                    document.getElementsByClassName("submitEditCommentButton").item(commentIndex).setAttribute("hidden", "");
+
+                    document.getElementsByClassName("markdownFormattedComment").item(commentIndex).setAttribute("style", "display: block;");
+                }
+            }
+
+            // Markdown Formatted Issue Description
             let converter1 = new showdown.Converter(),
                 text1 = document.getElementById("descriptionViewer").value,
                 target1 = document.getElementById("targetDiv");
@@ -536,12 +571,26 @@
             target1.innerHTML = converter1.makeHtml(text1);
 
 
+            // Markdown Formatted Comments
             let converter2 = new showdown.Converter();
             for(let i=0; i < document.getElementsByClassName("comments").length; i++) {
                 let text2 = document.getElementsByClassName("comments").item(i).value,
-                    target2 = document.getElementsByClassName("commentDiv").item(i);
+                    target2 = document.getElementsByClassName("markdownFormattedComment").item(i);
 
+                // An HTML Span to be appended if a comment has been edited
+                let editedSpan = document.createElement('span');
+                editedSpan.innerHTML = " (Edited)";
+                editedSpan.setAttribute("style", "font-size: 11px;");
+                editedSpan.setAttribute("class", "text-muted fst-italic");
+
+                // converts to Markdown format
                 target2.innerHTML = converter2.makeHtml(text2);
+
+                // checks if a comment has been edited and appends the Span accordingly
+                let isEdited = document.getElementsByClassName("isEdited").item(i).value;
+                if(isEdited === "true") {
+                    target2.lastChild.appendChild(editedSpan);
+                }
             }
 
             function markIssueAsResolved() {

@@ -2,6 +2,7 @@ package com.sephrael.issuetrackingsystem.controller;
 
 import com.sephrael.issuetrackingsystem.entity.Comment;
 import com.sephrael.issuetrackingsystem.entity.Issue;
+import com.sephrael.issuetrackingsystem.entity.User;
 import com.sephrael.issuetrackingsystem.repository.CommentRepository;
 import com.sephrael.issuetrackingsystem.repository.UserRepository;
 import com.sephrael.issuetrackingsystem.service.IssueService;
@@ -10,7 +11,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
-import java.util.List;
 
 @Controller
 @RequestMapping("/issues/{identifier}/view/{identifier}-{issueId}/comment")
@@ -22,12 +22,34 @@ public class CommentController {
     @Autowired
     private UserRepository userRepository;
 
-    @PostMapping("/save")
+    @PostMapping("/new")
     public String addComment(@PathVariable(value = "issueId") Long issueId, @PathVariable(name = "identifier") String identifier, Comment comment, Principal principal) {
         userRepository.findByEmail(principal.getName()).addToComment(comment);
         issueService.find(issueId).addToComment(comment);
 
+        comment.setIsEdited(false);
         commentRepository.save(comment);
+
+        if(userRepository.findByEmail(principal.getName()).getOrganization() == null) {
+            return "/organization/select-organization";
+        }
+        return "redirect:/issues/{identifier}/view/" + identifier + '-' + issueId;
+    }
+
+    @PostMapping("/save")
+    public String editComment(@RequestParam("id") Long id, @RequestParam("user") User user, @RequestParam("issue") Issue issue,
+                              @RequestParam("isEdited") boolean isEdited, @RequestParam("message") String message,
+                              @PathVariable(value = "issueId") Long issueId, @PathVariable(name = "identifier") String identifier, Principal principal) {
+
+        Comment updatedComment = commentRepository.findCommentById(id);
+
+        updatedComment.setUser(user);
+        updatedComment.setIssue(issue);
+        // sets Comment isEdited to true if comment has not yet been edited
+        if(!isEdited) { updatedComment.setIsEdited(true); }
+        updatedComment.setMessage(message);
+
+        commentRepository.save(updatedComment);
 
         if(userRepository.findByEmail(principal.getName()).getOrganization() == null) {
             return "/organization/select-organization";

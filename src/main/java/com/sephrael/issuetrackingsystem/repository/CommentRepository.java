@@ -11,4 +11,5 @@ import java.util.List;
 public interface CommentRepository extends CrudRepository<Comment, Long> {
     List<Comment> findByIssue(Issue issue);
     Comment findCommentByMessage(String message);
+    Comment findCommentById(Long id);
 }

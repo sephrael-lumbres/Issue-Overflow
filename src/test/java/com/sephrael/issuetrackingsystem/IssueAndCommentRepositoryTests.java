@@ -106,7 +106,7 @@ public class IssueAndCommentRepositoryTests {
     @Order(8)
     public void testUpdateComment() {
         Comment comment = commentRepository.findCommentByMessage("Just get good, you're garbage kid");
-        comment.setEdited(true);
+        comment.setIsEdited(true);
 
         commentRepository.save(comment);
 

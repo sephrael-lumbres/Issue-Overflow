@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.security.Principal;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Controller
@@ -45,6 +46,7 @@ public class HomeController {
         model.addAttribute("issueRepository", issueRepository);
         model.addAttribute("issueService", issueService);
         model.addAttribute("issues", sortedIssues);
+        model.addAttribute("seconds", ChronoUnit.SECONDS);
         model.addAttribute("currentUserProjects", currentUser.getProjects());
         model.addAttribute("usersByOrganization", userRepository.findByOrganization(currentOrganization));
         model.addAttribute("numberOfOpenIssues", issueService.getNumberOfIssuesByOrganizationAndStatus("Open", currentUser));

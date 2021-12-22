@@ -177,7 +177,7 @@ public class IssueController {
     @RequestMapping("/{identifier}/view/{identifier}-{id}")
     public String showViewIssuePage(@PathVariable("id") long id, @PathVariable(name = "identifier") String identifier, Model model, Principal principal) {
         Issue issue = issueService.find(id);
-        model.addAttribute("comment", new Comment());
+        model.addAttribute("newComment", new Comment());
         model.addAttribute("comments", issue.getComments());
         model.addAttribute("issue", issue);
         model.addAttribute("currentUser", userRepository.findByEmail(principal.getName()));

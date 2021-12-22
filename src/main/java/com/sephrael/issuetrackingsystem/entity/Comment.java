@@ -26,6 +26,7 @@ public class Comment {
     @JsonIgnore
     @ManyToOne
     @NotNull
+    @JoinColumn(updatable = false)
     private User user;
 
     public User getUser() {
@@ -74,8 +75,8 @@ public class Comment {
         return isEdited;
     }
 
-    public void setEdited(boolean edited) {
-        isEdited = edited;
+    public void setIsEdited(boolean isEdited) {
+        this.isEdited = isEdited;
     }
 
     public LocalDateTime getDateCreated() {

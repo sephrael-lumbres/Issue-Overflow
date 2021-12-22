@@ -5,6 +5,7 @@ Add New Filter Fields for Issues and More
 - Add file for commit message drafts
 
 
+
 Fix LocalDateTime Bug and More
 
 - Fix bug where date and time were not able to be saved into 1 variable
@@ -20,6 +21,7 @@ for dateCreated
 - Update Comment controller URL paths when creating and deleting a
 comment to support the URL change to include Issue ID (i.e. IST-1)
 - Made some JSON changes
+
 
 
 MONUMENTAL ADDITIONS AND CHANGES
@@ -69,3 +71,17 @@ each Issue's Key
 part of
 
 - Fix local file pathing in all HTML files
+
+
+
+Add Functionality to Edit A Comment and Fix Bugs
+
+- Added functionality to allow a User to Edit their own Comment
+- When the User clicks on the 'Edit Comment' button, a Markdown Editor
+appears, where the User can then do whatever edits they need to do
+- Added logic to show/hide the 'Edit Comment' Markdown Editor,
+formatted comment, 'Cancel', and 'Submit' buttons
+- Added a visual indication to show if a comment has been edited
+- fix bug where when creating a new issue showed as an updated issue on
+the ‘Recent Activity’ because ‘dateCreated’ and ‘dateUpdated’ had a
+tiny difference in nanoseconds
