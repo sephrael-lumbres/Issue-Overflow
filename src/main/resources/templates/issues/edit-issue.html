@@ -294,11 +294,11 @@
                                     <div class="col-auto mb-3">
                                         <h1 class="page-header-title">
                                             <div class="page-header-icon"><i data-feather="file-text"></i></div>
-                                            Edit Post
+                                            Edit Issue
                                         </h1>
                                     </div>
                                     <div class="col-12 col-xl-auto mb-3">
-                                        <a class="btn btn-sm btn-light text-primary" th:href="@{'/issues/' + ${currentProject.identifier}}">
+                                        <a class="btn btn-sm btn-light text-primary" href="/issues/all">
                                             <i class="me-1" data-feather="arrow-left"></i>
                                             Back to All Issues
                                         </a>
@@ -312,10 +312,12 @@
                     <div class="container-fluid px-4">
                         <form action="#" th:action="@{/issues/save}" th:object="${issue}" method="post" class="row gx-4">
                             <div class="col-lg-9">
-                                <div class="card mb-4">
-                                    <label for="id" class="card-header">Issue ID</label>
-                                    <div class="card-body"><input th:field="*{id}" readonly="readonly" class="form-control" id="id" type="text"/></div>
-                                </div>
+                                <label for="id" hidden>
+                                    <input th:field="*{id}" id="id" readonly>
+                                </label>
+                                <label for="issueKey" hidden>
+                                    <input th:field="*{issueKey}" id="issueKey" readonly>
+                                </label>
                                 <div class="card mb-4">
                                     <label for="title" class="card-header">Title</label>
                                     <div class="card-body"><input th:field="*{title}" class="form-control" id="title" type="text" placeholder="Enter your title..." /></div>
@@ -352,7 +354,7 @@
                                             <label for="chooseProject" class="card-header">Project</label>
                                             <div class="card-body">
                                                 <select class="form-control" name="project" id="chooseProject" required>
-                                                    <option th:each="project : ${currentProject}" th:value="${project.id}"
+                                                    <option th:each="project : ${currentUserProjects}" th:value="${project.id}"
                                                             th:text="${project.name}" th:selected="${project.id==currentProject.id}"></option>
                                                 </select>
                                             </div>

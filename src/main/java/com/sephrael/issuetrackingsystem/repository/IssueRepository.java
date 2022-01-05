@@ -14,6 +14,7 @@ import java.util.List;
 public interface IssueRepository extends CrudRepository<Issue, Long> {
 
     List<Issue> findByUser(User user);
+    Issue findByIssueKey(String issueKey);
     List<Issue> findByOrganization(Organization organization);
     List<Issue> findByProject(Project project);
     Issue findIssueByTitle(String title);

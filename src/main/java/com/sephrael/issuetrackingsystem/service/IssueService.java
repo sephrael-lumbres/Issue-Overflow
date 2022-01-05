@@ -1,12 +1,15 @@
 package com.sephrael.issuetrackingsystem.service;
 
 import com.sephrael.issuetrackingsystem.entity.Issue;
+import com.sephrael.issuetrackingsystem.entity.IssueKeySequence;
 import com.sephrael.issuetrackingsystem.entity.Project;
 import com.sephrael.issuetrackingsystem.entity.User;
+import com.sephrael.issuetrackingsystem.repository.IssueKeySequenceRepository;
 import com.sephrael.issuetrackingsystem.repository.IssueRepository;
 import com.sephrael.issuetrackingsystem.repository.ProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -19,6 +22,8 @@ public class IssueService {
     private IssueRepository issueRepository;
     @Autowired
     private ProjectRepository projectRepository;
+    @Autowired
+    private IssueKeySequenceRepository issueKeySequenceRepository;
 
     public List<Issue> listAll() {
         return (List<Issue>) issueRepository.findAll();
@@ -103,5 +108,26 @@ public class IssueService {
         if(filterField == "") { filterField = null; }
 
         return filterField;
+    }
+
+    // this sets the Issue Key
+    public String setIssueKey(String projectIdentifier) {
+        Project project = projectRepository.findByIdentifier(projectIdentifier);
+        String issueKey = "";
+
+        if(project.getIssues().size() == 0) {
+            IssueKeySequence issueKeySequence = new IssueKeySequence();
+            issueKeySequence.setProjectIdentifier(projectIdentifier);
+            issueKeySequence.setIssueKeyCounter(1);
+            issueKeySequenceRepository.save(issueKeySequence);
+            issueKey = projectIdentifier + "-" + issueKeySequence.getIssueKeyCounter();
+        } else {
+            IssueKeySequence currentSequence = issueKeySequenceRepository.findByProjectIdentifier(projectIdentifier);
+            currentSequence.setIssueKeyCounter(currentSequence.getIssueKeyCounter() + 1);
+
+            issueKey = projectIdentifier + "-" + currentSequence.getIssueKeyCounter();
+        }
+
+        return issueKey;
     }
 }

@@ -340,11 +340,16 @@
                                         </tr>
                                     </tfoot>
                                     <tbody>
-                                        <tr th:each="project : ${currentUser.projects}" th:href="@{'/projects/' + ${project.identifier}}"
-                                            onclick="rowClicked(this.getAttribute('href'))" style="cursor: pointer">
-                                            <td class="align-middle" th:text="${project.name} + ' (' + ${project.identifier} + ')'"></td>
-                                            <td class="align-middle text-center" th:text="${project.getUsers().size()}"></td>
-                                            <td class="align-middle text-center" th:text="${#temporals.format(project.dateCreated, 'dd MMM yyyy')}"></td>
+                                        <tr th:each="project : ${currentUser.projects}" th:href="@{'/projects/' + ${project.identifier}}">
+                                            <td class="align-middle" th:text="${project.name} + ' (' + ${project.identifier} + ')'"
+                                                onclick="rowClicked(this.getAttribute('href'))" style="cursor: pointer">
+                                            </td>
+                                            <td class="align-middle text-center" th:text="${project.getUsers().size()}"
+                                                onclick="rowClicked(this.getAttribute('href'))" style="cursor: pointer">
+                                            </td>
+                                            <td class="align-middle text-center" th:text="${#temporals.format(project.dateCreated, 'dd MMM yyyy')}"
+                                                onclick="rowClicked(this.getAttribute('href'))" style="cursor: pointer">
+                                            </td>
                                             <td class="align-middle text-center">
                                                 <button th:if="${currentUser.getRole().name == 'Project Manager' || currentUser.getRole().name == 'Admin'}"
                                                         class="btn btn-datatable btn-icon btn-transparent-dark me-2"

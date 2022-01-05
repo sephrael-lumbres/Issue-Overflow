@@ -14,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Objects;
 
@@ -57,6 +58,7 @@ public class ProjectController {
         model.addAttribute("currentUser", currentUser);
         model.addAttribute("newProject", new Project());
         model.addAttribute("issueService", issueService);
+        model.addAttribute("seconds", ChronoUnit.SECONDS);
         model.addAttribute("currentProject", currentProject);
         model.addAttribute("issueRepository", issueRepository);
         model.addAttribute("currentUserProjects", currentUser.getProjects());

@@ -26,6 +26,8 @@ public class Issue {
 
     private String status;
 
+    private String issueKey;
+
     @CreationTimestamp
     @JsonFormat(pattern = "dd MMM yyyy HH:mm:ss")
     @Column(updatable = false)
@@ -150,6 +152,14 @@ public class Issue {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getIssueKey() {
+        return issueKey;
+    }
+
+    public void setIssueKey(String issueKey) {
+        this.issueKey = issueKey;
     }
 
     public LocalDateTime getDateCreated() {

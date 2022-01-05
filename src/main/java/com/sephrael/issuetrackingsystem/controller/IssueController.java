@@ -166,17 +166,22 @@ public class IssueController {
         issue.setAssignedTo(assignedTo);
         String identifier = projectRepository.findProjectById(id).getIdentifier();
 
+        // set Issue Key
+        if(issue.getIssueKey() == null || !issue.getIssueKey().contains(issue.getProject().getIdentifier())) {
+            issue.setIssueKey(issueService.setIssueKey(identifier));
+        }
+
         issueService.save(issue);
 
         if(userRepository.findByEmail(principal.getName()).getOrganization() == null) {
             return "/organization/select-organization";
         }
-        return ("redirect:/issues/" + identifier + "/view/" + identifier + "-" + issue.getId());
+        return ("redirect:/issues/" + identifier + "/view/" + issue.getIssueKey());
     }
 
-    @RequestMapping("/{identifier}/view/{identifier}-{id}")
-    public String showViewIssuePage(@PathVariable("id") long id, @PathVariable(name = "identifier") String identifier, Model model, Principal principal) {
-        Issue issue = issueService.find(id);
+    @RequestMapping("/{identifier}/view/{issueKey}")
+    public String showViewIssuePage(@PathVariable("issueKey") String issueKey, @PathVariable(name = "identifier") String identifier, Model model, Principal principal) {
+        Issue issue = issueRepository.findByIssueKey(issueKey);
         model.addAttribute("newComment", new Comment());
         model.addAttribute("comments", issue.getComments());
         model.addAttribute("issue", issue);
@@ -190,10 +195,9 @@ public class IssueController {
         return "/issues/view-issue";
     }
 
-    @GetMapping("/{identifier}/edit/{id}")
-    public String showEditIssuePage(@PathVariable("id") long id, @PathVariable(name = "identifier") String identifier, Model model, Principal principal) {
-        Issue issue = issueService.find(id);
-        model.addAttribute("issue", issue);
+    @GetMapping("/{identifier}/edit/{issueKey}")
+    public String showEditIssuePage(@PathVariable("issueKey") String issueKey, @PathVariable(name = "identifier") String identifier, Model model, Principal principal) {
+        model.addAttribute("issue", issueRepository.findByIssueKey(issueKey));
         model.addAttribute("currentUser", userRepository.findByEmail(principal.getName()));
         model.addAttribute("currentProject", projectRepository.findByIdentifier(identifier));
         model.addAttribute("currentUserProjects", userRepository.findByEmail(principal.getName()).getProjects());
@@ -204,9 +208,9 @@ public class IssueController {
         return "/issues/edit-issue";
     }
 
-    @RequestMapping("/{identifier}/delete/{id}")
-    public String deleteIssue(@PathVariable(name = "id") int id, @PathVariable(name = "identifier") String identifier, Principal principal) {
-        issueService.delete(id);
+    @RequestMapping("/{identifier}/delete/{issueKey}")
+    public String deleteIssue(@PathVariable(name = "issueKey") String issueKey, @PathVariable(name = "identifier") String identifier, Principal principal) {
+        issueService.delete(issueRepository.findByIssueKey(issueKey).getId());
 
         if(userRepository.findByEmail(principal.getName()).getOrganization() == null) {
             return "/organization/select-organization";

@@ -33,43 +33,33 @@ dynamic buttons with numbers that display how many Issues have an
 are clicked on, it displays all the issues with that Status within the
 Project, there is also a button that displays more buttons to: Create a
 New Project, Join an existing Project, or to View All Projects
-
 - The Dashboard also dynamically displays all the Recent Issue Activity
 within the Organization, but only displays Issues that the Current User
 is a part of, it also displays the Issue's Key which can be clicked on
 to go view the full details of that Issue
-
 - The Dashboard also dynamically displays a Progress Bar which shows
 the Percentage of how many Issues have been closed within a Project
-
 - The Dashboard also has dynamic buttons that display the number of
 issues for each Status and when clicked, it displays all the Issues
 with that Status within the Organization and that the Current User
 is a part of
-
 - The Dashboard also displays a table of all of an Organization's Users
 with their name, email, role, Projects they're a part of and 'Edit' and
 'Delete' buttons if the Current User is a 'Project Manager'
-
 - Add a Project Home Page that displays the Recent Activity for its
 Issues, Progress Bar, a list of its Members, buttons with the number of
 Issues by Status that, when clicked, displays the Issues of that Status
-
 - Update Sidenav to display all the Current User's Projects and when
 clicked, goes to its Home Page
-
 - Add a variable for a Project's 'Color' that is required when creating
 a Project. This will be used to distinguish from other Projects
 throughout the website
-
 - Add a page to View all the Issues of an Organization that the Current
 User is a part of, this table can also be Filtered by Project, Type,
 Assigned To, Created By, Priority, and Status, this table also displays
 each Issue's Key
-
 - Add Column in Users table which displays all the Projects a User is a
 part of
-
 - Fix local file pathing in all HTML files
 
 
@@ -85,3 +75,20 @@ formatted comment, 'Cancel', and 'Submit' buttons
 - fix bug where when creating a new issue showed as an updated issue on
 the ‘Recent Activity’ because ‘dateCreated’ and ‘dateUpdated’ had a
 tiny difference in nanoseconds
+
+
+
+Replace Placeholder Issue Key
+
+- Added a variable to the 'Issue' entity that replaces the placeholder
+'Issue Key' (previously, the 'Issue Key' would just be the Issue's
+Project Identifier concatenated with the Issue's ID)
+- Created a database table that will hold all Project Identifiers and a
+counter variable that would represent the next Issue Key of the next
+Issue to be created in a Project
+- Fixed bug where changing an Issue’s Project does not update it’s
+Issue Key
+- Fix bug where ‘Actions’ buttons in the Projects List page redirected
+the User to its Home page instead of performing the corresponding
+‘Actions’ button
+- Updated all URL paths to accommodate for the 'Issue Key' changes

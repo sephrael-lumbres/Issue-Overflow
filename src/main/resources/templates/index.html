@@ -442,15 +442,15 @@
                                                 </div>
                                                 <div th:if="${issue.dateCreated.until(issue.getDateUpdated(), seconds) == 0}" class="timeline-item-content">
                                                     New issue opened!
-                                                    <a th:href="@{'/issues/' + ${issue.project.identifier} + '/view/' + ${issue.project.identifier} + '-' + ${issue.id}}"
-                                                       th:text="${issue.project.identifier} + '-' + ${issue.id}" class="fw-bold text-dark">
+                                                    <a th:href="@{'/issues/' + ${issue.project.identifier} + '/view/' + ${issue.issueKey}}"
+                                                       th:text="${issue.issueKey}" class="fw-bold text-dark">
                                                     </a>
                                                     has been opened by <strong th:text="${issue.user.firstName} + ' ' + ${issue.user.lastName}"></strong>.
                                                 </div>
                                                 <div th:unless="${issue.dateCreated.until(issue.getDateUpdated(), seconds) == 0}" class="timeline-item-content">
                                                     Details for
-                                                    <a th:href="@{'/issues/' + ${issue.project.identifier} + '/view/' + ${issue.project.identifier} + '-' + ${issue.id}}"
-                                                       th:text="' ' + ${issue.project.identifier} + '-' + ${issue.id}" class="fw-bold text-dark">
+                                                    <a th:href="@{'/issues/' + ${issue.project.identifier} + '/view/' + ${issue.issueKey}}"
+                                                       th:text="' ' + ${issue.issueKey}" class="fw-bold text-dark">
                                                     </a>
                                                     have been updated.
                                                 </div>
