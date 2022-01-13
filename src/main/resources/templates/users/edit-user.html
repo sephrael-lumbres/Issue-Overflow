@@ -6,7 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>Edit User - SB Admin Pro</title>
+        <title>Edit User - Issue Tracking System</title>
         <link href="/css/styles.css" rel="stylesheet" />
         <link rel="icon" type="image/x-icon" href="/assets/img/favicon.png" />
         <script data-search-pseudo-elements defer src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js" crossorigin="anonymous"></script>
@@ -320,6 +320,11 @@
                                         <div class="small font-italic text-muted mb-4">JPG or PNG no larger than 5 MB</div>
                                         <!-- Profile picture upload button-->
                                         <button class="btn btn-primary" type="button">Upload new image</button>
+
+<!--                                        <label>Profile Picture:-->
+<!--                                            <input type="file" th:name="profilePicture" accept="image/png, image/jpeg">-->
+<!--                                        </label>-->
+
                                     </div>
                                 </div>
                             </div>
@@ -328,46 +333,43 @@
                                 <div class="card mb-4">
                                     <div class="card-header">Account Details</div>
                                     <div class="card-body">
-                                        <form action="#" th:action="@{/users/save}" th:object="${user}" method="post">
-                                            <!-- Form Row-->
+                                        <form action="#" th:action="@{'/users/update/' + ${user.id}}" th:object="${user}" method="post">
                                             <div class="row gx-3 mb-3">
                                                 <!-- Form Group (first name)-->
                                                 <div class="col-md-6">
                                                     <label class="small mb-1" for="editFirstName">First name</label>
-                                                    <input th:field="*{firstName}" class="form-control" id="editFirstName" type="text" readonly/>
+                                                    <div th:text="${user.firstName}" id="editFirstName" class="form-control" type="text" readonly></div>
                                                 </div>
                                                 <!-- Form Group (last name)-->
                                                 <div class="col-md-6">
                                                     <label class="small mb-1" for="editLastName">Last name</label>
-                                                    <input th:field="*{lastName}" class="form-control" id="editLastName" type="text" readonly/>
+                                                    <div th:text="${user.lastName}" id="editLastName" class="form-control" type="text" readonly></div>
                                                 </div>
                                             </div>
                                             <!-- Form Group (email address)-->
                                             <div class="mb-3">
                                                 <label class="small mb-1" for="inputEmailAddress">Email address</label>
-                                                <input th:field="*{email}" class="form-control" id="inputEmailAddress" type="email" readonly/>
+                                                <div th:text="${user.email}" id="inputEmailAddress" class="form-control" type="email" readonly></div>
                                             </div>
                                             <!-- Form Group (Project Selection Checkboxes)-->
                                             <div class="mb-3">
                                                 <label class="small mb-1">Project(s)</label>
                                                 <div th:each="project : ${allProjectsInOrganization}" class="form-check">
-                                                    <input id="projects" class="form-check-input" type="checkbox" th:value="${project.id}"
+                                                    <input th:name="projects" id="projects" class="form-check-input" type="checkbox" th:value="${project.id}"
                                                            th:checked="${project.users.contains(editUser)}" />
                                                     <label th:text="${project.name}" class="form-check-label" for="projects"></label>
                                                 </div>
                                             </div>
-
                                             <!-- Form Group (Roles)-->
                                             <div class="mb-3">
                                                 <label class="small mb-1">Role</label>
-                                                <select class="form-select" aria-label="Default select example">
+                                                <select th:name="role" class="form-select" aria-label="Default select example">
                                                     <option selected disabled>Select a role:</option>
                                                     <option th:each="role: ${listRoles}" th:text="${role.name}"
                                                             th:value="${role.id}" th:selected="${role.id==user.getRole().id}">
                                                     </option>
                                                 </select>
                                             </div>
-                                            <!-- Submit button-->
                                             <button class="btn btn-primary" type="submit">Save changes</button>
                                         </form>
                                     </div>

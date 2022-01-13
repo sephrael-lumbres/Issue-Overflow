@@ -2,7 +2,7 @@
 
 package com.sephrael.issuetrackingsystem.controller;
 
-import com.sephrael.issuetrackingsystem.entity.Role;
+import com.sephrael.issuetrackingsystem.entity.Project;
 import com.sephrael.issuetrackingsystem.entity.User;
 import com.sephrael.issuetrackingsystem.repository.ProjectRepository;
 import com.sephrael.issuetrackingsystem.repository.RoleRepository;
@@ -68,7 +68,7 @@ public class UserController {
         if(userRepository.findByEmail(principal.getName()).getOrganization() == null) {
             return "/organization/select-organization";
         }
-        return "/users/users";
+        return "/users/users-by-organization";
     }
 
     // DOES NOT WORK DUE TO USER PASSWORD
@@ -88,16 +88,49 @@ public class UserController {
         return "/users/edit-user";
     }
 
-    // DOES NOT WORK DUE TO USER PASSWORD
-//    @PostMapping(value = "/users/save")
-//    public String saveUserChanges(User user) {
-//        userRepository.save(user);
-//
-//        return "redirect:/users";
-//    }
+    // Allows for updating a User's Role and Projects(only Project Managers are allowed to make these changes)
+    @PostMapping(value = "/users/update/{id}")
+    public String saveUserChanges(@PathVariable("id") Long id, @RequestParam("role") long roleId,
+                                  @RequestParam(value = "projects", required = false) List<Project> projects, User user) {
+
+        // persists User Data that should only be able to be changed by its Owner
+        User userBeforeUpdate = userRepository.findUserById(id);
+        user.setFirstName(userBeforeUpdate.getFirstName());
+        user.setLastName(userBeforeUpdate.getLastName());
+        user.setEmail(userBeforeUpdate.getEmail());
+        user.setPassword(userBeforeUpdate.getPassword());
+        user.setOrganization(userBeforeUpdate.getOrganization());
+        user.setEnabled(userBeforeUpdate.isEnabled());
+
+        // changes a User's Role
+        roleRepository.findRoleById(roleId).addToUser(user);
+
+        if(projects != null) {
+            // decides whether or not to add or remove a User from a Project
+            userService.manageUserProjects(userBeforeUpdate, user, projects);
+        } else {
+            // if all checkboxes for Projects are unchecked
+            userService.removeUserFromAllProjects(userBeforeUpdate);
+        }
+
+        userRepository.save(user);
+
+        return "redirect:/users";
+    }
 
     @RequestMapping("/users/delete/{id}")
     public String deleteUser(@PathVariable(name = "id") long id, Principal principal) {
+
+        User userBeforeDeletion = userRepository.findUserById(id);
+
+        // unassigns a User from all Issues that they were previously assigned to
+        userService.unassignAllIssuesBeforeUserDeletion(userBeforeDeletion);
+
+        // if a User is involved with any Projects, this removes them from all those Projects before deleting the User
+        if(userBeforeDeletion.getProjects() != null) {
+            userService.removeUserFromAllProjects(userBeforeDeletion);
+        }
+
         userRepository.deleteById(id);
 
         if(userRepository.findByEmail(principal.getName()).getOrganization() == null) {

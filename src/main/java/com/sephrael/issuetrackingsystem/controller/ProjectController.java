@@ -40,7 +40,7 @@ public class ProjectController {
         if(userRepository.findByEmail(principal.getName()).getOrganization() == null) {
             return "/organization/select-organization";
         }
-        return "/projects/projects";
+        return "/projects/projects-list";
     }
 
     @RequestMapping("/{identifier}")
@@ -88,7 +88,7 @@ public class ProjectController {
         if(userRepository.findByEmail(principal.getName()).getOrganization() == null) {
             return "/organization/select-organization";
         }
-        return "redirect:/projects";
+        return "redirect:/projects/all";
     }
 
     @PostMapping("/join")
@@ -121,7 +121,7 @@ public class ProjectController {
         if(userRepository.findByEmail(principal.getName()).getOrganization() == null) {
             return "/organization/select-organization";
         }
-        return "redirect:/projects";
+        return "redirect:/projects/" + currentProject.getIdentifier();
     }
 
     @PostMapping("/save")
@@ -141,7 +141,7 @@ public class ProjectController {
         if(userRepository.findByEmail(principal.getName()).getOrganization() == null) {
             return "/organization/select-organization";
         }
-        return "redirect:/projects";
+        return "redirect:/projects/all";
     }
 
     @RequestMapping("/delete/{id}")
@@ -151,7 +151,7 @@ public class ProjectController {
         if(userRepository.findByEmail(principal.getName()).getOrganization() == null) {
             return "/organization/select-organization";
         }
-        return "redirect:/projects";
+        return "redirect:/projects/all";
     }
 
     // this returns the json of all the projects

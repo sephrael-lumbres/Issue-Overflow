@@ -2,7 +2,11 @@
 
 package com.sephrael.issuetrackingsystem.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,17 +18,29 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true, length = 45)
+    @Column(unique = true)
+    @NotNull(message = "Email is required")
+    @NotEmpty(message = "Email may not be empty")
     private String email;
 
-    @Column(nullable = false, length = 64)
+    @Column
+    @JsonIgnore
+    @NotNull(message = "Password is required")
+    @NotEmpty(message = "Password may not be empty")
     private String password;
 
-    @Column(nullable = false, length = 20)
+    @Column
+    @NotNull(message = "First name is required")
+    @NotEmpty(message = "First name may not be empty")
     private String firstName;
 
-    @Column(nullable = false, length = 20)
+    @Column
+    @NotNull(message = "Last name is required")
+    @NotEmpty(message = "Last name may not be empty")
     private String lastName;
+
+//    @Column(length = 64)
+//    private String profilePicture;
 
     private boolean enabled;
 
@@ -75,14 +91,14 @@ public class User {
         this.organization = organization;
     }
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Issue> issues;
 
     public void addToIssue(Issue issue) {
         issue.setUser(this);
     }
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Comment> comments;
 
     public void addToComment(Comment comment) {
@@ -128,4 +144,12 @@ public class User {
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
+
+//    public String getProfilePicture() {
+//        return profilePicture;
+//    }
+//
+//    public void setProfilePicture(String profilePicture) {
+//        this.profilePicture = profilePicture;
+//    }
 }

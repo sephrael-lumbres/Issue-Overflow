@@ -31,7 +31,7 @@ public class OrganizationController {
     @RequestMapping("")
     public ModelAndView viewOrganizationDetails(Model model, Principal principal) {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("/organization/organization");
+        modelAndView.setViewName("/organization/organization-details");
 
         User currentUser = userRepository.findByEmail(principal.getName());
         String organizationName = currentUser.getOrganization().getName();

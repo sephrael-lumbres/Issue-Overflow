@@ -55,7 +55,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/organization/joining", "/organization/join").authenticated()
 
                 // update users allowed to Project Managers
-                .antMatchers("/users/edit/**", "/users/save").hasAnyAuthority("Project Manager")
+                .antMatchers("/users/edit/**", "/users/update/**").hasAnyAuthority("Project Manager")
 
                 // create, update, and delete projects allowed to Project Managers and Admins
                 .antMatchers("/projects/new", "/projects/save", "/projects/delete/**")

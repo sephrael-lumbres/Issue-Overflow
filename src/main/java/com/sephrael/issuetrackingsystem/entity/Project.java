@@ -3,12 +3,11 @@ package com.sephrael.issuetrackingsystem.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.CreationTimestamp;
-import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -17,18 +16,22 @@ public class Project {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull
     private String name;
 
     @CreationTimestamp
     @Column(updatable = false)
     private LocalDate dateCreated;
 
-    @Column(unique = true)
+    @Column
+    @NotNull
     private String accessKey;
 
-    @Column(unique = true)
+    @Column
+    @NotNull
     private String identifier;
 
+    @NotNull
     private String color;
 
     @JsonIgnore
@@ -62,6 +65,10 @@ public class Project {
     public void addUser(User user) {
         this.users.add(user);
 //        user.getProjects().add(this);
+    }
+
+    public void removeUserFromProject(User user) {
+        this.users.remove(user);
     }
 
     public Long getId() {

@@ -99,7 +99,7 @@ public class IssueController {
         if(userRepository.findByEmail(principal.getName()).getOrganization() == null) {
             return "/organization/select-organization";
         }
-        return("/issues/issues");
+        return("/issues/issues-by-project");
     }
 
     @GetMapping("/{identifier}/results")
@@ -134,7 +134,7 @@ public class IssueController {
         model.addAttribute("currentUser", userRepository.findByEmail(principal.getName()));
         model.addAttribute("currentUserProjects", userRepository.findByEmail(principal.getName()).getProjects());
 
-        return ("/issues/issues");
+        return ("/issues/issues-by-project");
     }
 
     @RequestMapping("/{identifier}/new")
@@ -192,7 +192,7 @@ public class IssueController {
         if(userRepository.findByEmail(principal.getName()).getOrganization() == null) {
             return "/organization/select-organization";
         }
-        return "/issues/view-issue";
+        return "/issues/issue-details";
     }
 
     @GetMapping("/{identifier}/edit/{issueKey}")

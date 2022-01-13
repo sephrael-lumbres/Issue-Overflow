@@ -92,3 +92,15 @@ Issue Key
 the User to its Home page instead of performing the corresponding
 ‘Actions’ button
 - Updated all URL paths to accommodate for the 'Issue Key' changes
+
+
+
+Allow User Project Involvement And Role Changes
+
+- Project Managers can now update a User's Role and add or remove a
+User from a Project
+- Fix bug where "Edit User" page not saving after making changes
+- Fix bugs where User would not be deleted if they were involved with
+any Projects, if there were any Issues assigned to them, and/or if they
+had written any comments
+- Updated HTML filenames for readability
