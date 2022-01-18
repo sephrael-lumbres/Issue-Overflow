@@ -167,17 +167,23 @@
                 </li>
                 <!-- User Dropdown-->
                 <li class="nav-item dropdown no-caret dropdown-user me-3 me-lg-4">
-                    <a class="btn btn-icon btn-transparent-dark dropdown-toggle" id="navbarDropdownUserImage" href="javascript:void(0);" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img class="img-fluid" src="/assets/img/illustrations/profiles/profile-1.png" /></a>
-                    <div class="dropdown-menu dropdown-menu-end border-0 shadow animated--fade-in-up" aria-labelledby="navbarDropdownUserImage">
+                    <a class="btn btn-icon btn-transparent-dark dropdown-toggle" id="navbarDropdownUserImage" href="javascript:void(0);" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <img th:if="${currentUser.hasProfilePicture()}" th:src="@{'/files/' +${currentUser.id} + '/true'}"
+                             src="/assets/img/demo/user-placeholder.svg" class="img-fluid" alt="">
+                        <img th:unless="${currentUser.hasProfilePicture()}" src="/assets/img/demo/user-placeholder.svg" class="img-fluid" alt="">
+                    </a>                    <div class="dropdown-menu dropdown-menu-end border-0 shadow animated--fade-in-up" aria-labelledby="navbarDropdownUserImage">
                         <div class="h6 dropdown-header d-flex align-items-center">
-                            <img class="dropdown-user-img" src="/assets/img/illustrations/profiles/profile-1.png" />
+                            <img th:if="${currentUser.hasProfilePicture()}" th:src="@{'/files/' +${currentUser.id} + '/true'}"
+                                 src="/assets/img/demo/user-placeholder.svg" class="dropdown-user-img" alt="">
+                            <img th:unless="${currentUser.hasProfilePicture()}" src="/assets/img/demo/user-placeholder.svg"
+                                 class="dropdown-user-img" alt="">
                             <div class="dropdown-user-details">
                                 <div th:text="${currentUser.firstName} + ' ' + ${currentUser.lastName}" class="dropdown-user-details-name"></div>
                                 <div th:text="${currentUser.email}" class="dropdown-user-details-email"></div>
                             </div>
                         </div>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="#!">
+                        <a class="dropdown-item" th:href="@{'/account/profile/' + ${currentUser.id}}">
                             <div class="dropdown-item-icon"><i data-feather="settings"></i></div>
                             Account
                         </a>
@@ -273,6 +279,11 @@
                                 <div class="nav-link-icon"><i data-feather="users"></i></div>
                                 Users
                             </a>
+                            <!-- Sidenav Link (Account) -->
+                            <a class="nav-link" th:href="@{'/account/profile/' + ${currentUser.id}}">
+                                <div class="nav-link-icon"><i data-feather="settings"></i></div>
+                                Account
+                            </a>
 
                         </div>
                     </div>
@@ -298,7 +309,7 @@
                                         </h1>
                                     </div>
                                     <div class="col-12 col-xl-auto mb-3">
-                                        <a class="btn btn-sm btn-light text-primary" href="/projects">
+                                        <a class="btn btn-sm btn-light text-primary" href="/projects/all">
                                             <i class="me-1" data-feather="users"></i>
                                             Manage Projects
                                         </a>
@@ -318,8 +329,7 @@
                                 <table id="datatablesSimple">
                                     <thead>
                                     <tr>
-                                        <th class="align-middle text-center">User ID</th>
-                                        <th class="align-middle text-center">Name</th>
+                                        <th class="align-middle text-center">User</th>
                                         <th class="align-middle text-center">Email</th>
                                         <th class="align-middle text-center">Role</th>
                                         <th class="align-middle text-center">Projects</th>
@@ -328,8 +338,7 @@
                                     </thead>
                                     <tfoot>
                                     <tr>
-                                        <th>User ID</th>
-                                        <th>Name</th>
+                                        <th>User</th>
                                         <th>Email</th>
                                         <th>Role</th>
                                         <th>Projects</th>
@@ -338,16 +347,25 @@
                                     </tfoot>
                                     <tbody>
                                     <tr th:each="user: ${listUsers}">
-                                        <td th:text="${user.id}"></td>
-                                        <td th:text="${user.firstName} + ' ' + ${user.lastName}"></td>
-                                        <td th:text="${user.email}"></td>
-                                        <td th:text="${user.role.name}"></td>
                                         <td>
+                                            <div class="d-flex align-items-center">
+                                                <div class="avatar me-2">
+                                                    <img th:if="${user.hasProfilePicture()}" th:src="@{'/files/' +${user.id} + '/true'}"
+                                                         src="/assets/img/demo/user-placeholder.svg" class="avatar-img img-fluid" alt="">
+                                                    <img th:unless="${user.hasProfilePicture()}" src="/assets/img/demo/user-placeholder.svg"
+                                                         class="avatar-img img-fluid" alt="">
+                                                </div>
+                                                <span th:text="${user.firstName} + ' ' + ${user.lastName}"></span>
+                                            </div>
+                                        </td>
+                                        <td th:text="${user.email}" class="align-middle"></td>
+                                        <td th:text="${user.role.name}" class="align-middle"></td>
+                                        <td class="align-middle">
                                             <span th:each="project : ${currentUser.organization.getProjects()}">
                                                 <span th:if="${project.users.contains(user)}" th:text="${project.name}" th:classappend="'bg-' + ${project.color} + '-soft' + ' text-' + ${project.color}" class="badge"></span>
                                             </span>
                                         </td>
-                                        <td th:if="${currentUser.role.name == 'Project Manager'}">
+                                        <td th:if="${currentUser.role.name == 'Project Manager'}" class="align-middle">
                                             <a class="btn btn-datatable btn-icon btn-transparent-dark me-2"
                                                th:href="@{'/users/edit/' + ${user.id}}"><i data-feather="edit"></i></a>
                                             <a class="btn btn-datatable btn-icon btn-transparent-dark"

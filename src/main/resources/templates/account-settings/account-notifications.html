@@ -6,7 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>Organization Details - Issue Tracking System</title>
+        <title>Account Settings - Notifications - Issue Tracking System</title>
         <link href="/css/styles.css" rel="stylesheet" />
         <link rel="icon" type="image/x-icon" href="/assets/img/favicon.png" />
         <script data-search-pseudo-elements defer src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js" crossorigin="anonymous"></script>
@@ -15,12 +15,12 @@
     <body class="nav-fixed">
         <nav class="topnav navbar navbar-expand shadow justify-content-between justify-content-sm-start navbar-light bg-white" id="sidenavAccordion">
             <!-- Sidenav Toggle Button-->
-            <button class="btn btn-icon btn-transparent-dark order-0 ms-2 me-0" id="sidebarToggle"><i data-feather="menu"></i></button>
+            <button class="btn btn-icon btn-transparent-dark order-1 order-lg-0 me-2 ms-lg-2 me-lg-0" id="sidebarToggle"><i data-feather="menu"></i></button>
             <!-- Navbar Brand-->
             <!-- * * Tip * * You can use text or an image for your navbar brand.-->
             <!-- * * * * * * When using an image, we recommend the SVG format.-->
             <!-- * * * * * * Dimensions: Maximum height: 32px, maximum width: 240px-->
-            <a class="navbar-brand pe-3 ps-0 ps-lg-2" href="/dashboard">Issue Tracking System</a>
+            <a class="navbar-brand pe-3 ps-4 ps-lg-2" href="index.html">Issue Tracking System</a>
             <!-- Navbar Search Input-->
             <!-- * * Note: * * Visible only on and above the lg breakpoint-->
             <form class="form-inline me-auto d-none d-lg-block me-3">
@@ -171,7 +171,7 @@
                              src="/assets/img/demo/user-placeholder.svg" class="img-fluid" alt="">
                         <img th:unless="${currentUser.hasProfilePicture()}" src="/assets/img/demo/user-placeholder.svg" class="img-fluid" alt="">
                     </a>                    <div class="dropdown-menu dropdown-menu-end border-0 shadow animated--fade-in-up" aria-labelledby="navbarDropdownUserImage">
-                        <div class="h6 dropdown-header d-flex align-items-center">
+                        <h6 class="dropdown-header d-flex align-items-center">
                             <img th:if="${currentUser.hasProfilePicture()}" th:src="@{'/files/' +${currentUser.id} + '/true'}"
                                  src="/assets/img/demo/user-placeholder.svg" class="dropdown-user-img" alt="">
                             <img th:unless="${currentUser.hasProfilePicture()}" src="/assets/img/demo/user-placeholder.svg"
@@ -180,7 +180,7 @@
                                 <div th:text="${currentUser.firstName} + ' ' + ${currentUser.lastName}" class="dropdown-user-details-name"></div>
                                 <div th:text="${currentUser.email}" class="dropdown-user-details-email"></div>
                             </div>
-                        </div>
+                        </h6>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" th:href="@{'/account/profile/' + ${currentUser.id}}">
                             <div class="dropdown-item-icon"><i data-feather="settings"></i></div>
@@ -256,7 +256,7 @@
                                 </nav>
                             </div>
                             <!-- Sidenav Link (Organization)-->
-                            <a class="nav-link active" href="/organization">
+                            <a class="nav-link" href="/organization">
                                 <div class="nav-link-icon"><i data-feather="globe"></i></div>
                                 Organization
                             </a>
@@ -279,7 +279,7 @@
                                 Users
                             </a>
                             <!-- Sidenav Link (Account) -->
-                            <a class="nav-link" th:href="@{'/account/profile/' + ${currentUser.id}}">
+                            <a class="nav-link active" th:href="@{'/account/profile/' + ${currentUser.id}}">
                                 <div class="nav-link-icon"><i data-feather="settings"></i></div>
                                 Account
                             </a>
@@ -298,159 +298,150 @@
             <div id="layoutSidenav_content">
                 <main>
                     <header class="page-header page-header-compact page-header-light border-bottom bg-white mb-4">
-                        <div class="container-fluid px-4">
+                        <div class="container-xl px-4">
                             <div class="page-header-content">
                                 <div class="row align-items-center justify-content-between pt-3">
                                     <div class="col-auto mb-3">
                                         <h1 class="page-header-title">
-                                            <div class="page-header-icon"><i data-feather="globe"></i></div>
-                                            Organization Details
+                                            <div class="page-header-icon"><i data-feather="user"></i></div>
+                                            Account Settings - Notifications
                                         </h1>
                                     </div>
-                                    <div class="col-12 col-xl-auto mb-3">
-                                        <a class="btn btn-sm btn-light text-primary" href="/users">
-                                            <i class="me-1" data-feather="user"></i>
-                                            Manage Users
+                                    <div class="col-12 col-xl-auto mb-3" style="visibility: hidden;">
+                                        <a class="btn btn-sm btn-light text-primary" href="/dashboard">
+                                            <i class="me-1" data-feather="activity"></i>
+                                            Dashboard
                                         </a>
-                                        <a class="btn btn-sm btn-light text-primary" href="/projects">
-                                            <i class="me-1" data-feather="users"></i>
-                                            Manage Projects
-                                        </a>
-
-                                        <a class="btn btn-sm btn-light text-primary" data-bs-toggle="modal" data-bs-target="#viewAccessKeyModal">
-                                            <i class="me-1" data-feather="key"></i>
-                                            View Access Key
-                                        </a>
-
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </header>
                     <!-- Main page content-->
-                    <div class="container-fluid px-4">
-                        <div class="card bg-gradient-primary-to-secondary mb-4">
-                            <div class="card-body">
-                                <div class="d-flex align-items-center justify-content-between">
-                                    <div class="me-3">
-                                        <div class="small text-white-50">Organization Name:</div>
-                                        <div th:text="${currentUser.organization.name}" class="h1 text-white"></div>
-                                    </div>
-                                    <div class="text-white"><span th:text="${currentUser.organization.getUsers().size()}"></span> Member(s)</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card mb-2">
-                            <div class="card-body">
-                                <div class="small text-muted mb-2">Project Managers:</div>
-                                <div class="row">
-                                    <div th:each="projectManager, list : ${projectManagers}" class="col-lg-4"
-                                         th:classappend="${list.index < list.size - 3 ? 'mb-3' : 'mb-xs-3 mb-sm-3 mb-lg-0'}">
-                                        <div class="d-flex align-items-center">
-                                            <div class="avatar avatar-lg">
-                                                <img th:if="${projectManager.hasProfilePicture()}" th:src="@{'/files/' +${projectManager.id} + '/true'}"
-                                                     src="/assets/img/demo/user-placeholder.svg" class="avatar-img img-fluid" alt="">
-                                                <img th:unless="${projectManager.hasProfilePicture()}" src="/assets/img/demo/user-placeholder.svg" class="avatar-img img-fluid" alt="">
-                                            </div>
-                                            <div class="ms-3">
-                                                <div th:text="${projectManager.firstName} + ' ' + ${projectManager.lastName}" class="fs-4 text-dark fw-500"></div>
-                                                <div th:text="${projectManager.role.name}" class="small text-muted"></div>
-                                            </div>
+                    <div class="container-xl px-4 mt-n3">
+                        <!-- Account page navigation-->
+                        <nav class="nav nav-borders">
+                            <a class="nav-link ms-0" th:href="@{'/account/profile/' + ${currentUser.id}}">Profile</a>
+                            <a class="nav-link" th:href="@{'/account/security/' + ${currentUser.id}}">Security</a>
+                            <a class="nav-link active" th:href="@{'/account/notifications/' + ${currentUser.id}}">Notifications</a>
+                        </nav>
+                        <hr class="mt-0 mb-4" />
+                        <div class="row">
+                            <div class="col-lg-8">
+                                <!-- Email notifications preferences card-->
+                                <div class="card card-header-actions mb-4">
+                                    <div class="card-header">
+                                        Email Notifications
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" id="flexSwitchCheckChecked" type="checkbox" checked />
+                                            <label class="form-check-label" for="flexSwitchCheckChecked"></label>
                                         </div>
                                     </div>
+                                    <div class="card-body">
+                                        <form>
+                                            <!-- Form Group (default email)-->
+                                            <div class="mb-3">
+                                                <label class="small mb-1" for="inputNotificationEmail">Default notification email</label>
+                                                <input class="form-control" id="inputNotificationEmail" type="email" value="name@example.com" disabled />
+                                            </div>
+                                            <!-- Form Group (email updates checkboxes)-->
+                                            <div class="mb-0">
+                                                <label class="small mb-2">Choose which types of email updates you receive</label>
+                                                <div class="form-check mb-2">
+                                                    <input class="form-check-input" id="checkAccountChanges" type="checkbox" checked />
+                                                    <label class="form-check-label" for="checkAccountChanges">Changes made to your account</label>
+                                                </div>
+                                                <div class="form-check mb-2">
+                                                    <input class="form-check-input" id="checkAccountGroups" type="checkbox" checked />
+                                                    <label class="form-check-label" for="checkAccountGroups">Changes are made to groups you're part of</label>
+                                                </div>
+                                                <div class="form-check mb-2">
+                                                    <input class="form-check-input" id="checkProductUpdates" type="checkbox" checked />
+                                                    <label class="form-check-label" for="checkProductUpdates">Product updates for products you've purchased or starred</label>
+                                                </div>
+                                                <div class="form-check mb-2">
+                                                    <input class="form-check-input" id="checkProductNew" type="checkbox" checked />
+                                                    <label class="form-check-label" for="checkProductNew">Information on new products and services</label>
+                                                </div>
+                                                <div class="form-check mb-2">
+                                                    <input class="form-check-input" id="checkPromotional" type="checkbox" />
+                                                    <label class="form-check-label" for="checkPromotional">Marketing and promotional offers</label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" id="checkSecurity" type="checkbox" checked disabled />
+                                                    <label class="form-check-label" for="checkSecurity">Security alerts</label>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                                <!-- SMS push notifications card-->
+                                <div class="card card-header-actions mb-4">
+                                    <div class="card-header">
+                                        Push Notifications
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" id="smsToggleSwitch" type="checkbox" checked />
+                                            <label class="form-check-label" for="smsToggleSwitch"></label>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <form>
+                                            <!-- Form Group (default SMS number)-->
+                                            <div class="mb-3">
+                                                <label class="small mb-1" for="inputNotificationSms">Default SMS number</label>
+                                                <input class="form-control" id="inputNotificationSms" type="tel" value="123-456-7890" disabled />
+                                            </div>
+                                            <!-- Form Group (SMS updates checkboxes)-->
+                                            <div class="mb-0">
+                                                <label class="small mb-2">Choose which types of push notifications you receive</label>
+                                                <div class="form-check mb-2">
+                                                    <input class="form-check-input" id="checkSmsComment" type="checkbox" checked />
+                                                    <label class="form-check-label" for="checkSmsComment">Someone comments on your post</label>
+                                                </div>
+                                                <div class="form-check mb-2">
+                                                    <input class="form-check-input" id="checkSmsShare" type="checkbox" />
+                                                    <label class="form-check-label" for="checkSmsShare">Someone shares your post</label>
+                                                </div>
+                                                <div class="form-check mb-2">
+                                                    <input class="form-check-input" id="checkSmsFollow" type="checkbox" checked />
+                                                    <label class="form-check-label" for="checkSmsFollow">A user follows your account</label>
+                                                </div>
+                                                <div class="form-check mb-2">
+                                                    <input class="form-check-input" id="checkSmsGroup" type="checkbox" />
+                                                    <label class="form-check-label" for="checkSmsGroup">New posts are made in groups you're part of</label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" id="checkSmsPrivateMessage" type="checkbox" checked />
+                                                    <label class="form-check-label" for="checkSmsPrivateMessage">You receive a private message</label>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-
-                        <div class="card mb-2">
-                            <div class="card-body">
-                                <div class="small text-muted mb-2">Administrators:</div>
-                                <div class="row">
-                                    <div th:each="admin, list : ${admins}" class="col-lg-4"
-                                         th:classappend="${list.index < list.size - 3 ? 'mb-3' : 'mb-xs-3 mb-sm-3 mb-lg-0'}">
-                                        <div class="d-flex align-items-center">
-                                            <div class="avatar avatar-lg">
-                                                <img th:if="${admin.hasProfilePicture()}" th:src="@{'/files/' +${admin.id} + '/true'}"
-                                                     src="/assets/img/demo/user-placeholder.svg" class="avatar-img img-fluid" alt="">
-                                                <img th:unless="${admin.hasProfilePicture()}" src="/assets/img/demo/user-placeholder.svg" class="avatar-img img-fluid" alt="">
+                            <div class="col-lg-4">
+                                <!-- Notifications preferences card-->
+                                <div class="card">
+                                    <div class="card-header">Notification Preferences</div>
+                                    <div class="card-body">
+                                        <form>
+                                            <!-- Form Group (notification preference checkboxes)-->
+                                            <div class="form-check mb-2">
+                                                <input class="form-check-input" id="checkAutoGroup" type="checkbox" checked />
+                                                <label class="form-check-label" for="checkAutoGroup">Automatically subscribe to group notifications</label>
                                             </div>
-                                            <div class="ms-3">
-                                                <div th:text="${admin.firstName} + ' ' + ${admin.lastName}" class="fs-4 text-dark fw-500"></div>
-                                                <div th:text="${admin.role.name}" class="small text-muted"></div>
+                                            <div class="form-check mb-3">
+                                                <input class="form-check-input" id="checkAutoProduct" type="checkbox" />
+                                                <label class="form-check-label" for="checkAutoProduct">Automatically subscribe to new product notifications</label>
                                             </div>
-                                        </div>
+                                            <!-- Submit button-->
+                                            <button class="btn btn-danger-soft text-danger">Unsubscribe from all notifications</button>
+                                        </form>
                                     </div>
                                 </div>
                             </div>
                         </div>
-
-                        <div class="card mb-2">
-                            <div class="card-body">
-                                <div class="small text-muted mb-2">Developers:</div>
-                                <div class="row">
-                                    <div th:each="developer, list : ${developers}" class="col-lg-4"
-                                         th:classappend="${list.index < list.size - 3 ? 'mb-3' : 'mb-xs-3 mb-sm-3 mb-lg-0'}">
-                                        <div class="d-flex align-items-center">
-                                            <div class="avatar avatar-lg">
-                                                <img th:if="${developer.hasProfilePicture()}" th:src="@{'/files/' +${developer.id} + '/true'}"
-                                                     src="/assets/img/demo/user-placeholder.svg" class="avatar-img img-fluid" alt="">
-                                                <img th:unless="${developer.hasProfilePicture()}" src="/assets/img/demo/user-placeholder.svg" class="avatar-img img-fluid" alt="">
-                                            </div>
-                                            <div class="ms-3">
-                                                <div th:text="${developer.firstName} + ' ' + ${developer.lastName}" class="fs-4 text-dark fw-500"></div>
-                                                <div th:text="${developer.role.name}" class="small text-muted"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="card mb-2">
-                            <div class="card-body">
-                                <div class="small text-muted mb-2">Members:</div>
-                                <div class="row">
-                                    <div th:each="member, list : ${members}" class="col-lg-4"
-                                         th:classappend="${list.index < list.size - 3 ? 'mb-3' : 'mb-xs-3 mb-sm-3 mb-lg-0'}">
-                                        <div class="d-flex align-items-center">
-                                            <div class="avatar avatar-lg">
-                                                <img th:if="${member.hasProfilePicture()}" th:src="@{'/files/' +${member.id} + '/true'}"
-                                                     src="/assets/img/demo/user-placeholder.svg" class="avatar-img img-fluid" alt="">
-                                                <img th:unless="${member.hasProfilePicture()}" src="/assets/img/demo/user-placeholder.svg" class="avatar-img img-fluid" alt="">
-                                            </div>
-                                            <div class="ms-3">
-                                                <div th:text="${member.firstName} + ' ' + ${member.lastName}" class="fs-4 text-dark fw-500"></div>
-                                                <div th:text="${member.role.name}" class="small text-muted"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
                     </div>
-
-                    <!-- View Access Key Modal -->
-                    <div class="modal fade" id="viewAccessKeyModal" tabindex="-1" role="dialog" aria-labelledby="viewAccessKeyModalLabel" aria-hidden="true">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 th:text="${currentUser.organization.name} + ' Access Key'" class="modal-title" id="viewAccessKeyModalLabel"></h5>
-                                    <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                                    <div class="modal-body">
-                                        <div class="mb-0">
-                                            <label class="mb-1 small text-muted" for="viewAccessKey">Organization Access Key</label>
-                                            <div class="d-flex">
-                                                <input th:value="${currentUser.organization.getAccessKey()}" class="form-control" id="viewAccessKey" type="text" readonly/>
-                                                <button class="btn btn-primary ms-2" onclick="copyToClipboard()"><i data-feather="clipboard"></i></button>
-                                            </div>
-                                        </div>
-                                    </div>
-                            </div>
-                        </div>
-                    </div>
-
                 </main>
                 <footer class="footer-admin mt-auto footer-light">
                     <div class="container-xl px-4">
@@ -466,17 +457,7 @@
                 </footer>
             </div>
         </div>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
         <script src="/js/scripts.js"></script>
-        <script type="text/javascript">
-            function copyToClipboard() {
-                let textToCopy = document.getElementById('viewAccessKey');
-
-                textToCopy.select();
-                textToCopy.setSelectionRange(0, 99999);
-
-                navigator.clipboard.writeText(textToCopy.value);
-            }
-        </script>
     </body>
 </html>

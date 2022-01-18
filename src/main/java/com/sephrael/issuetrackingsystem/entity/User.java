@@ -39,18 +39,9 @@ public class User {
     @NotEmpty(message = "Last name may not be empty")
     private String lastName;
 
-//    @Column(length = 64)
-//    private String profilePicture;
+    private boolean hasProfilePicture;
 
     private boolean enabled;
-
-    public boolean isEnabled() {
-        return enabled;
-    }
-
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-    }
 
     @ManyToOne
     private Role role;
@@ -105,6 +96,13 @@ public class User {
         comment.setUser(this);
     }
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<File> files;
+
+    public void addToFiles(File file) {
+        file.setUser(this);
+    }
+
     public Long getId() {
         return id;
     }
@@ -145,11 +143,19 @@ public class User {
         this.lastName = lastName;
     }
 
-//    public String getProfilePicture() {
-//        return profilePicture;
-//    }
-//
-//    public void setProfilePicture(String profilePicture) {
-//        this.profilePicture = profilePicture;
-//    }
+    public boolean hasProfilePicture() {
+        return hasProfilePicture;
+    }
+
+    public void setHasProfilePicture(boolean hasProfilePicture) {
+        this.hasProfilePicture = hasProfilePicture;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
 }

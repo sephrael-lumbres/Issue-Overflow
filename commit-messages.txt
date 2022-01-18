@@ -104,3 +104,23 @@ User from a Project
 any Projects, if there were any Issues assigned to them, and/or if they
 had written any comments
 - Updated HTML filenames for readability
+
+
+
+Add Database Table To Store Files and Much More
+
+- Added Database Table with new Entity 'File' that will hold all Files
+- Also added a Controller, Repository, and Service to handle:
+Uploading, Storing, Finding, Rendering, and Deleting of Files
+- Added a new Account Settings - Profile page where the User can now
+update their Name and Email Address
+- Also, the User can now Upload their own Profile Picture that would be
+displayed throughout the website, where applicable (this is possible by
+utilizing the new 'File' Entity)
+- Added Sidenav button 'Account' that sends the User to their
+'Account Settings - Profile' page
+- Also 'Account' button in the User Dropdown Menu now works and sends
+the User to their 'Account Settings - Profile' page
+- Added 'Account Settings' pages: 'Security' and 'Notifications' but
+does not have any functionality yet
+- Simplified the code/process of a Project Manager updating a User

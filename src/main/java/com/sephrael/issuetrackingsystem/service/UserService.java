@@ -23,7 +23,7 @@ public class UserService {
     private IssueRepository issueRepository;
 
     public List<User> listAll() {
-        return (List<User>) userRepository.findAll();
+        return userRepository.findAll();
     }
 
     public void registerDefaultUser(User user) {
@@ -34,19 +34,19 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public void manageUserProjects(User userBeforeUpdate, User userPendingUpdate, List<Project> projects) {
+    public void manageUserProjects(User userToBeUpdated, User userBeforeUpdate, List<Project> projects) {
         // adds User to selected Projects if the User was not already involved
         for(Project project : projects) {
 
-            if(!project.getUsers().contains(userBeforeUpdate)) {
-                project.addUser(userBeforeUpdate);
+            if(!project.getUsers().contains(userToBeUpdated)) {
+                project.addUser(userToBeUpdated);
             }
         }
 
         // removes User from unselected Projects if the User was previously involved
-        for(Project project : userPendingUpdate.getOrganization().getProjects()) {
-            if(!projects.contains(project) && project.getUsers().contains(userBeforeUpdate)) {
-                project.removeUserFromProject(userBeforeUpdate);
+        for(Project project : userBeforeUpdate.getOrganization().getProjects()) {
+            if(!projects.contains(project) && project.getUsers().contains(userToBeUpdated)) {
+                project.removeUserFromProject(userToBeUpdated);
             }
         }
     }

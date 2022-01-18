@@ -91,29 +91,23 @@ public class UserController {
     // Allows for updating a User's Role and Projects(only Project Managers are allowed to make these changes)
     @PostMapping(value = "/users/update/{id}")
     public String saveUserChanges(@PathVariable("id") Long id, @RequestParam("role") long roleId,
-                                  @RequestParam(value = "projects", required = false) List<Project> projects, User user) {
+                                  @RequestParam(value = "projects", required = false) List<Project> projects, User userBeforeUpdate) {
 
-        // persists User Data that should only be able to be changed by its Owner
-        User userBeforeUpdate = userRepository.findUserById(id);
-        user.setFirstName(userBeforeUpdate.getFirstName());
-        user.setLastName(userBeforeUpdate.getLastName());
-        user.setEmail(userBeforeUpdate.getEmail());
-        user.setPassword(userBeforeUpdate.getPassword());
-        user.setOrganization(userBeforeUpdate.getOrganization());
-        user.setEnabled(userBeforeUpdate.isEnabled());
+        User userToBeUpdated = userRepository.findUserById(id);
 
         // changes a User's Role
-        roleRepository.findRoleById(roleId).addToUser(user);
+        roleRepository.findRoleById(roleId).addToUser(userToBeUpdated);
 
         if(projects != null) {
             // decides whether or not to add or remove a User from a Project
-            userService.manageUserProjects(userBeforeUpdate, user, projects);
+            userBeforeUpdate.setOrganization(userToBeUpdated.getOrganization());
+            userService.manageUserProjects(userToBeUpdated, userBeforeUpdate, projects);
         } else {
             // if all checkboxes for Projects are unchecked
-            userService.removeUserFromAllProjects(userBeforeUpdate);
+            userService.removeUserFromAllProjects(userToBeUpdated);
         }
 
-        userRepository.save(user);
+        userRepository.save(userToBeUpdated);
 
         return "redirect:/users";
     }
