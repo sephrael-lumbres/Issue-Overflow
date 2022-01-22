@@ -431,8 +431,34 @@
                             </ul>
                         </div>
 
+                        <!-- List of the Attachments -->
+                        <div th:if="${!attachments.isEmpty()}" class="card mb-4">
+                            <label for="attachments" class="card-header">Attachments (<span th:text="${attachments.size()}"></span>)</label>
+                            <div class="card-body">
+                                <div th:each="attachment : ${attachments}">
+                                    <span th:switch="${attachment.type}">
+                                        <i th:case="'application/vnd.openxmlformats-officedocument.presentationml.presentation'" class="me-1 mt-1" data-feather="file-text"></i>
+                                        <i th:case="'application/vnd.openxmlformats-officedocument.wordprocessingml.document'" class="me-1 mt-1" data-feather="file-text"></i>
+                                        <i th:case="'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'" class="me-1 mt-1" data-feather="file-text"></i>
+                                        <i th:case="'application/pdf'" class="me-1 mt-1" data-feather="file-text"></i>
+                                        <i th:case="'text/plain'" class="me-1 mt-1" data-feather="file-text"></i>
+                                        <i th:case="'image/jpeg'" class="me-1 mt-1" data-feather="image"></i>
+                                        <i th:case="*" class="me-1 mt-1" data-feather="file"></i>
+                                    </span>
+                                    <a th:href="@{'/files/' + ${attachment.id}}" th:text="${attachment.name}" id="attachments"></a>
+                                    <span th:if="${attachment.size < 1000000}" th:text="'(' + ${attachment.size / 1000} + ' KB, ' + ${#temporals.format(attachment.dateCreated, 'dd MMM yyyy HH:mm:ss')} + ')'" style="font-size: 12px;"></span>
+                                    <span th:if="${attachment.size > 999999}" th:text="'(' + ${#numbers.formatDecimal((attachment.size * 1.0) / 1000000, 1, 1)} + ' MB, ' + ${#temporals.format(attachment.dateCreated, 'dd MMM yyyy HH:mm:ss')} + ')'" style="font-size: 12px;"></span>
+                                    <a class="btn-transparent-dark"
+                                       th:href="@{'/files/' + ${currentProject.identifier} + '/' + ${issue.issueKey} + '/delete/' + ${attachment.id}}"
+                                       th:attr="onclick=|return confirm('Are you sure you want to delete &quot;${attachment.name}&quot;?')|">
+                                        <i data-feather="trash-2" class="mt-1"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
                         <!-- LIST OF THE COMMENTS -->
-                        <div class="card mb-4">
+                        <div th:if="${!issue.getComments().isEmpty()}" class="card mb-4">
                             <!-- BE ABLE TO SHOW THE CORRECT NUMBER OF COMMENTS -->
                             <div class="card-header">Comments (<span th:text="${issue.getComments().size()}"></span>)</div>
                             <div class="card-body ms-n3">
@@ -489,9 +515,9 @@
                                 <label for="markdownCommentEditor"></label>
                                 <textarea th:field="*{newComment.message}" id="markdownCommentEditor" form="addComment" class="form-control" placeholder="Write a comment..."></textarea>
                                 <button type="submit" class="btn btn-primary btn me-2 mt-n4" form="addComment">Add Comment</button>
-                                <button class="btn btn-light btn me-2 mt-n4" disabled>
+                                <button class="btn btn-light btn me-2 mt-n4" data-bs-toggle="modal" data-bs-target="#attachFileModal">
                                     <i class="fas fa-paperclip me-2"></i>
-                                    Attach a File
+                                    Attach File(s)
                                 </button>
                                 <button onclick="markIssueAsClosed()" class="btn btn-light btn mt-n4" type="submit" form="markIssueAsResolvedOrClosed"
                                         th:if="${currentUser.role.name == 'Project Manager' || currentUser.role.name == 'Admin'}">
@@ -503,8 +529,39 @@
                                     <i class="fas fa-check-circle me-2"></i>
                                     Mark as Resolved
                                 </button>
+
+                                <!-- Attach File(s) Modal -->
+                                <div class="modal fade" id="attachFileModal" tabindex="-1" role="dialog" aria-labelledby="attachFileModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="attachFileModalLabel">Attach File(s)</h5>
+                                                <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="mb-0">
+                                                    <form action="#" th:action="@{/issues/update}" th:object="${issue}" method="post"
+                                                          enctype="multipart/form-data">
+                                                        <label class="mb-1 small text-muted" for="files" hidden></label>
+                                                        <div class="d-flex">
+                                                            <input th:name="files" class="form-control" id="files" type="file" multiple/>
+                                                            <label hidden>
+                                                                <input th:field="*{id}" readonly>
+                                                            </label>
+                                                            <label for="isAttachFileForm" hidden>
+                                                                <input th:name="isAttachFileForm" id="isAttachFileForm" value="true" readonly>
+                                                            </label>
+                                                            <button class="btn btn-primary ms-2" type="submit">Upload</button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <!-- THIS CHANGES THE ISSUE STATUS TO: RESOLVED -->
-                                <form action="#" th:action="@{/issues/save}" th:object="${issue}" id="markIssueAsResolvedOrClosed" method="post">
+                                <form action="#" th:action="@{/issues/update}" th:object="${issue}" id="markIssueAsResolvedOrClosed" method="post">
                                     <span hidden th:if="${currentUser == issue.user || currentUser.role.name == 'Project Manager' || currentUser.role.name == 'Admin'}">
                                         <label for="issueId"><input th:field="*{id}" id="issueId" form="markIssueAsResolvedOrClosed" readonly/></label>
                                         <label for="issueKey"><input th:field="*{issueKey}" id="issueKey" type="text" readonly></label>

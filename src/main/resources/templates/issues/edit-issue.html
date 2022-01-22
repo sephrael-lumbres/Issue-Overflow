@@ -321,14 +321,13 @@
 
                     <!-- Main page content-->
                     <div class="container-fluid px-4">
-                        <form action="#" th:action="@{/issues/save}" th:object="${issue}" method="post" class="row gx-4">
+                        <form action="#" th:action="@{/issues/update}" th:object="${issue}" method="post"
+                              enctype="multipart/form-data" class="row gx-4">
                             <div class="col-lg-9">
-                                <label for="id" hidden>
-                                    <input th:field="*{id}" id="id" readonly>
-                                </label>
-                                <label for="issueKey" hidden>
-                                    <input th:field="*{issueKey}" id="issueKey" readonly>
-                                </label>
+
+                                <label for="id" hidden><input th:field="*{id}" id="id" readonly></label>
+                                <label for="issueKey" hidden><input th:field="*{issueKey}" id="issueKey" readonly></label>
+
                                 <div class="card mb-4">
                                     <label for="title" class="card-header">Title</label>
                                     <div class="card-body"><input th:field="*{title}" class="form-control" id="title" type="text" placeholder="Enter your title..." /></div>
@@ -348,11 +347,12 @@
                                     <div class="card-body">
                                         <select class="form-control" name="assignedTo" id="assignedTo" required>
                                             <option th:field="*{assignedTo}" value=" "> </option>
-                                            <option th:each="assignedUser : ${currentProject.getUsers()}" th:value="${assignedUser.id}"
+                                            <option th:field="*{assignedTo}" th:each="assignedUser : ${currentProject.getUsers()}" th:value="${assignedUser.id}"
                                                     th:text="${assignedUser.firstName} + ' ' + ${assignedUser.lastName}"
                                                     th:if="${assignedUser.getRole().name == 'Project Manager' ||
                                                         assignedUser.getRole().name == 'Admin' || assignedUser.getRole().name == 'Developer'}"
-                                                    th:selected="${assignedUser==issue.assignedTo}"></option>
+                                                    th:selected="${assignedUser==issue.assignedTo}">
+                                            </option>
                                         </select>
                                     </div>
                                 </div>
@@ -364,7 +364,7 @@
                                         <div class="card">
                                             <label for="chooseProject" class="card-header">Project</label>
                                             <div class="card-body">
-                                                <select class="form-control" name="project" id="chooseProject" required>
+                                                <select th:field="*{project}" class="form-control" id="chooseProject" required>
                                                     <option th:each="project : ${currentUserProjects}" th:value="${project.id}"
                                                             th:text="${project.name}" th:selected="${project.id==currentProject.id}"></option>
                                                 </select>
@@ -385,7 +385,7 @@
                                         </div>
                                     </div>
                                     <div class="col">
-                                        <div class="card">
+                                        <div class="card mb-4">
                                             <label for="priorityInput" class="card-header">Priority</label>
                                             <div class="card-body">
                                                 <select th:field="*{priority}" class="form-control" id="priorityInput">
@@ -397,7 +397,7 @@
                                         </div>
                                     </div>
                                     <div class="col">
-                                        <div class="card">
+                                        <div class="card mb-4">
                                             <label for="statusInput" class="card-header">Status</label>
                                             <div class="card-body">
                                                 <select th:field="*{status}" class="form-control" id="statusInput">
@@ -412,6 +412,14 @@
                                         </div>
                                     </div>
                                 </div>
+
+                                <div class="card mb-4">
+                                    <label for="files" class="card-header">Attach File(s)</label>
+                                    <div class="card-body">
+                                        <input th:name="files" class="form-control" id="files" type="file" multiple/>
+                                    </div>
+                                </div>
+
                             </div>
                             <div class="col-lg-3">
                                 <div class="nav-sticky card card-header-actions">

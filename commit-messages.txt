@@ -124,3 +124,22 @@ the User to their 'Account Settings - Profile' page
 - Added 'Account Settings' pages: 'Security' and 'Notifications' but
 does not have any functionality yet
 - Simplified the code/process of a Project Manager updating a User
+
+
+
+Add Ability to Attach Files to an Issue and More
+
+- Added functionality to attach one or more files to an 'Issue' all at
+once
+- Added a 'Size' variable in the 'File' Entity to hold the file size
+in bytes
+- The Issue Details page now displays the files that have been attached
+with each of their names, size, date uploaded, and a delete button
+- Separated the '/issues/save' POST request into two parts: Creating
+an Issue and Updating an Issue
+- The Attachments and Comments Lists in the Issue Details page is now
+hidden if an Issue does not contain any Attachments and/or Comments
+- Fix bug where Authorization/Privileges were not working in
+'WebSecurityConfig.java'
+- Fix bug in the Issue Key Generator when deleting an 'Issue' that was
+the only 'Issue' in a Project

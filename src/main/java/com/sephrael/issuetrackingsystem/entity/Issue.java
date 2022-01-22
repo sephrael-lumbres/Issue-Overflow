@@ -37,6 +37,13 @@ public class Issue {
     @JsonFormat(pattern = "dd MMM yyyy HH:mm:ss")
     private LocalDateTime dateUpdated;
 
+    @OneToMany(mappedBy = "issue", cascade = CascadeType.ALL)
+    private List<File> files;
+
+    public void addToFiles(File file) {
+        file.setIssue(this);
+    }
+
 //    @Enumerated(EnumType.STRING)
 //    private IssueStatus issueStatus;
 
@@ -176,6 +183,10 @@ public class Issue {
 
     public void setDateUpdated(LocalDateTime dateUpdated) {
         this.dateUpdated = dateUpdated;
+    }
+
+    public List<File> getFiles() {
+        return files;
     }
 
     //    public IssueStatus getIssueStatus() {

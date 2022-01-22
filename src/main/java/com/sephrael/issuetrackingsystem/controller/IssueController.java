@@ -4,16 +4,15 @@ import com.sephrael.issuetrackingsystem.entity.Comment;
 import com.sephrael.issuetrackingsystem.entity.Issue;
 import com.sephrael.issuetrackingsystem.entity.Project;
 import com.sephrael.issuetrackingsystem.entity.User;
-import com.sephrael.issuetrackingsystem.repository.CommentRepository;
-import com.sephrael.issuetrackingsystem.repository.IssueRepository;
-import com.sephrael.issuetrackingsystem.repository.ProjectRepository;
-import com.sephrael.issuetrackingsystem.repository.UserRepository;
+import com.sephrael.issuetrackingsystem.repository.*;
+import com.sephrael.issuetrackingsystem.service.FileService;
 import com.sephrael.issuetrackingsystem.service.IssueService;
 import com.sephrael.issuetrackingsystem.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.security.Principal;
 import java.util.List;
@@ -28,6 +27,8 @@ public class IssueController {
     @Autowired
     private IssueService issueService;
     @Autowired
+    private IssueKeySequenceRepository issueKeySequenceRepository;
+    @Autowired
     private UserRepository userRepository;
     @Autowired
     private UserService userService;
@@ -35,6 +36,8 @@ public class IssueController {
     private CommentRepository commentRepository;
     @Autowired
     private ProjectRepository projectRepository;
+    @Autowired
+    private FileService fileService;
 
     @GetMapping("/all")
     public String showIssuesByOrganization(Principal principal, Model model) {
@@ -155,28 +158,65 @@ public class IssueController {
         return("/issues/create-issue");
     }
 
-    @PostMapping(value = "/save")
-    public String saveIssue(@RequestParam("project") Long id, @RequestParam(value = "assignedTo", required = false)User assignedTo, @ModelAttribute("issue") Issue issue, Principal principal) {
-        // this connects the newly created Issue to the current User that created the Issue
-        userRepository.findByEmail(principal.getName()).addToIssue(issue);
+    @PostMapping(value = "/new")
+    public String saveIssue(@ModelAttribute("issue") Issue issue, Principal principal,
+                            @RequestParam(value = "files", required = false)MultipartFile[] files) {
+        User currentUser = userRepository.findByEmail(principal.getName());
 
-        // this connects the issue to the current user's Organization
-        userRepository.findByEmail(principal.getName()).getOrganization().addToIssue(issue);
-
-        issue.setAssignedTo(assignedTo);
-        String identifier = projectRepository.findProjectById(id).getIdentifier();
-
-        // set Issue Key
-        if(issue.getIssueKey() == null || !issue.getIssueKey().contains(issue.getProject().getIdentifier())) {
-            issue.setIssueKey(issueService.setIssueKey(identifier));
-        }
+        // sets the Issue Key
+        issueService.setIssueKey(issue, issue.getProject());
+        // connects the newly created Issue to the current User that created the Issue
+        currentUser.addToIssue(issue);
+        // connects the issue to the current user's Organization
+        currentUser.getOrganization().addToIssue(issue);
 
         issueService.save(issue);
+
+        // checks if 'Attach File(s)' Field is Empty
+        if(!files[0].isEmpty()) {
+            for (MultipartFile file : files) {
+                fileService.uploadIssueAttachments(currentUser, file, false, issue);
+            }
+        }
+
+        if(currentUser.getOrganization() == null) {
+            return "/organization/select-organization";
+        }
+        return ("redirect:/issues/" + issue.getProject().getIdentifier() + "/view/" + issue.getIssueKey());
+    }
+
+    @PostMapping(value = "/update")
+    public String updateIssue(@ModelAttribute("issue") Issue nextIssue, Principal principal,
+                              @RequestParam(value = "files", required = false)MultipartFile[] files,
+                              @RequestParam(value = "isAttachFileForm", required = false) boolean isAttachFileForm) {
+
+        User currentUser = userRepository.findByEmail(principal.getName());
+        Issue previousIssue = issueRepository.findIssueById(nextIssue.getId());
+
+        if(!isAttachFileForm) {
+            previousIssue.setTitle(nextIssue.getTitle());
+            previousIssue.setDescription(nextIssue.getDescription());
+            previousIssue.setType(nextIssue.getType());
+            previousIssue.setPriority(nextIssue.getPriority());
+            previousIssue.setStatus(nextIssue.getStatus());
+            issueService.setIssueKey(previousIssue, nextIssue.getProject());
+            previousIssue.setAssignedTo(nextIssue.getAssignedTo());
+            previousIssue.setProject(nextIssue.getProject());
+
+            issueService.save(previousIssue);
+        }
+
+        // checks if 'Attach File(s)' Field is Empty
+        if(files != null && !files[0].isEmpty()) {
+            for (MultipartFile file : files) {
+                fileService.uploadIssueAttachments(currentUser, file, false, previousIssue);
+            }
+        }
 
         if(userRepository.findByEmail(principal.getName()).getOrganization() == null) {
             return "/organization/select-organization";
         }
-        return ("redirect:/issues/" + identifier + "/view/" + issue.getIssueKey());
+        return ("redirect:/issues/" + previousIssue.getProject().getIdentifier() + "/view/" + previousIssue.getIssueKey());
     }
 
     @RequestMapping("/{identifier}/view/{issueKey}")
@@ -185,6 +225,7 @@ public class IssueController {
         model.addAttribute("newComment", new Comment());
         model.addAttribute("comments", issue.getComments());
         model.addAttribute("issue", issue);
+        model.addAttribute("attachments", issue.getFiles());
         model.addAttribute("currentUser", userRepository.findByEmail(principal.getName()));
         model.addAttribute("currentProject", projectRepository.findByIdentifier(identifier));
         model.addAttribute("currentUserProjects", userRepository.findByEmail(principal.getName()).getProjects());
@@ -211,6 +252,10 @@ public class IssueController {
     @RequestMapping("/{identifier}/delete/{issueKey}")
     public String deleteIssue(@PathVariable(name = "issueKey") String issueKey, @PathVariable(name = "identifier") String identifier, Principal principal) {
         issueService.delete(issueRepository.findByIssueKey(issueKey).getId());
+
+        if(projectRepository.findByIdentifier(identifier).getIssues().isEmpty()) {
+            issueKeySequenceRepository.delete(issueKeySequenceRepository.findByProjectIdentifier(identifier));
+        }
 
         if(userRepository.findByEmail(principal.getName()).getOrganization() == null) {
             return "/organization/select-organization";

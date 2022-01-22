@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -64,6 +65,17 @@ public class FileController {
             fileService.uploadFile(user, file, isProfilePicture);
 
         return "redirect:/account/profile/" + userId;
+    }
+
+    @RequestMapping("/{identifier}/{issueKey}/delete/{id}")
+    public String deleteFile(@PathVariable("id") long id, @PathVariable("identifier") String identifier,
+                             @PathVariable("issueKey") String issueKey, Principal principal) {
+        fileRepository.deleteById(id);
+
+        if(userRepository.findByEmail(principal.getName()).getOrganization() == null) {
+            return "/organization/select-organization";
+        }
+        return String.format("redirect:/issues/%s/view/%s", identifier, issueKey);
     }
 
     @GetMapping("/all")

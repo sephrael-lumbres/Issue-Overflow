@@ -13,6 +13,7 @@ import java.util.List;
 @Repository
 public interface IssueRepository extends CrudRepository<Issue, Long> {
 
+    Issue findIssueById(Long id);
     List<Issue> findByUser(User user);
     Issue findByIssueKey(String issueKey);
     List<Issue> findByOrganization(Organization organization);

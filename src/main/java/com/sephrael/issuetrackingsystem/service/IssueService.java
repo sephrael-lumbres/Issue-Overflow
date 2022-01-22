@@ -14,6 +14,7 @@ import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @Transactional
@@ -111,23 +112,31 @@ public class IssueService {
     }
 
     // this sets the Issue Key
-    public String setIssueKey(String projectIdentifier) {
-        Project project = projectRepository.findByIdentifier(projectIdentifier);
+    public void setIssueKey(Issue issue, Project nextProject) {
+        Project previousProject = issue.getProject();
         String issueKey = "";
 
-        if(project.getIssues().size() == 0) {
-            IssueKeySequence issueKeySequence = new IssueKeySequence();
-            issueKeySequence.setProjectIdentifier(projectIdentifier);
-            issueKeySequence.setIssueKeyCounter(1);
-            issueKeySequenceRepository.save(issueKeySequence);
-            issueKey = projectIdentifier + "-" + issueKeySequence.getIssueKeyCounter();
-        } else {
-            IssueKeySequence currentSequence = issueKeySequenceRepository.findByProjectIdentifier(projectIdentifier);
-            currentSequence.setIssueKeyCounter(currentSequence.getIssueKeyCounter() + 1);
+        // if issue does not have an issue key or if the issue is being moved to a different project
+        if(issue.getIssueKey() == null || !Objects.equals(previousProject.getId(), nextProject.getId())) {
+            if(nextProject.getIssues().size() == 0) {
+                IssueKeySequence issueKeySequence = new IssueKeySequence();
+                issueKeySequence.setProjectIdentifier(nextProject.getIdentifier());
+                issueKeySequence.setIssueKeyCounter(1);
+                issueKeySequenceRepository.save(issueKeySequence);
+                issueKey = nextProject.getIdentifier() + "-" + issueKeySequence.getIssueKeyCounter();
+            } else {
+                IssueKeySequence currentSequence = issueKeySequenceRepository.findByProjectIdentifier(nextProject.getIdentifier());
+                currentSequence.setIssueKeyCounter(currentSequence.getIssueKeyCounter() + 1);
 
-            issueKey = projectIdentifier + "-" + currentSequence.getIssueKeyCounter();
+                issueKey = nextProject.getIdentifier() + "-" + currentSequence.getIssueKeyCounter();
+            }
+
+            // if the previous project will no longer have any issues after switching its only issue to a different project
+            if(previousProject != null && previousProject != nextProject && previousProject.getIssues().size() <= 1) {
+                issueKeySequenceRepository.delete(issueKeySequenceRepository.findByProjectIdentifier(previousProject.getIdentifier()));
+            }
+
+            issue.setIssueKey(issueKey);
         }
-
-        return issueKey;
     }
 }

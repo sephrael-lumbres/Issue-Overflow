@@ -1,6 +1,7 @@
 package com.sephrael.issuetrackingsystem.service;
 
 import com.sephrael.issuetrackingsystem.entity.File;
+import com.sephrael.issuetrackingsystem.entity.Issue;
 import com.sephrael.issuetrackingsystem.entity.User;
 import com.sephrael.issuetrackingsystem.repository.FileRepository;
 import com.sephrael.issuetrackingsystem.repository.UserRepository;
@@ -46,10 +47,29 @@ public class FileService {
 
     public File store(MultipartFile multipartFile, User user, boolean isProfilePicture) throws IOException {
         String fileName = StringUtils.cleanPath(Objects.requireNonNull(multipartFile.getOriginalFilename()));
-        File file = new File(fileName, multipartFile.getContentType(), isProfilePicture, multipartFile.getBytes());
+        File file = new File(fileName, multipartFile.getContentType(), multipartFile.getSize(), isProfilePicture, multipartFile.getBytes());
         user.addToFiles(file);
 
         return fileRepository.save(file);
+    }
+
+    public void uploadIssueAttachments(User user, MultipartFile file, boolean isProfilePicture, Issue issue) {
+        try {
+            storeIssueAttachments(file, user, isProfilePicture, issue);
+        } catch(IOException ioException) {
+            //TODO exception handling please?
+            log.error("Saving file to db failed: " + ioException);
+            ioException.printStackTrace();
+        }
+    }
+
+    public void storeIssueAttachments(MultipartFile multipartFile, User user, boolean isProfilePicture, Issue issue) throws IOException {
+        String fileName = StringUtils.cleanPath(Objects.requireNonNull(multipartFile.getOriginalFilename()));
+        File file = new File(fileName, multipartFile.getContentType(), multipartFile.getSize(), isProfilePicture, multipartFile.getBytes());
+        user.addToFiles(file);
+        issue.addToFiles(file);
+
+        fileRepository.save(file);
     }
 
     public File getFile(Long id) {

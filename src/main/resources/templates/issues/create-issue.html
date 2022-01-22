@@ -318,7 +318,8 @@
                     </header>
                     <!-- Main page content-->
                     <div class="container-fluid px-4">
-                        <form action="#" th:action="@{/issues/save}" th:object="${issue}" method="post" class="row gx-4">
+                        <form action="#" th:action="@{/issues/new}" th:object="${issue}" method="post"
+                              enctype="multipart/form-data" class="row gx-4">
                             <!--  THIS ASSIGNS EACH ISSUE TO ITS CREATOR, THIS SHIT TOOK 30-40 HOURS TO FIGURE IT OUT-->
 <!--                            <div hidden>-->
 <!--                                <label for="createdBy"></label>-->
@@ -347,8 +348,8 @@
                                 <div class="card mb-4">
                                     <label for="assignedTo" class="card-header">Assign To</label>
                                     <div class="card-body">
-                                        <select class="form-control" name="assignedTo" id="assignedTo" required>
-                                            <option th:field="*{assignedTo}" value=" " selected> </option>
+                                        <select th:field="*{assignedTo}" class="form-control" name="assignedTo" id="assignedTo" required>
+                                            <option value=" " selected> </option>
                                             <option th:each="assignedUser : ${currentProject.getUsers()}" th:value="${assignedUser.id}"
                                                     th:text="${assignedUser.firstName} + ' ' + ${assignedUser.lastName}"
                                                     th:if="${assignedUser.getRole().name == 'Project Manager' ||
@@ -364,7 +365,7 @@
                                         <div class="card">
                                             <label for="chooseProject" class="card-header">Project</label>
                                             <div class="card-body">
-                                                <select class="form-control" name="project" id="chooseProject" required>
+                                                <select name="project" class="form-control" id="chooseProject" required>
                                                     <option th:each="project : ${currentUserProjects}" th:value="${project.id}"
                                                             th:text="${project.name}" th:selected="${project.id==currentProject.id}"></option>
                                                 </select>
@@ -385,7 +386,7 @@
                                         </div>
                                     </div>
                                     <div class="col">
-                                        <div class="card">
+                                        <div class="card mb-4">
                                             <label for="priorityInput" class="card-header">Priority</label>
                                             <div class="card-body">
                                                 <select th:field="*{priority}" class="form-control" id="priorityInput">
@@ -397,7 +398,7 @@
                                         </div>
                                     </div>
                                     <div class="col">
-                                        <div class="card">
+                                        <div class="card mb-4">
                                             <label for="statusInput" class="card-header">Status</label>
                                             <div class="card-body">
                                                 <select th:field="*{status}" class="form-control" id="statusInput">
@@ -410,6 +411,13 @@
                                                 </select>
                                             </div>
                                         </div>
+                                    </div>
+                                </div>
+
+                                <div class="card mb-4">
+                                    <label for="files" class="card-header">Attach File(s)</label>
+                                    <div class="card-body">
+                                        <input th:name="files" class="form-control" id="files" type="file" multiple/>
                                     </div>
                                 </div>
 
