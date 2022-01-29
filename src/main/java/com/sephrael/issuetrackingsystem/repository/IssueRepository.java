@@ -6,12 +6,13 @@ import com.sephrael.issuetrackingsystem.entity.Project;
 import com.sephrael.issuetrackingsystem.entity.User;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.history.RevisionRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
-public interface IssueRepository extends CrudRepository<Issue, Long> {
+public interface IssueRepository extends RevisionRepository<Issue, Long, Integer>, CrudRepository<Issue, Long> {
 
     Issue findIssueById(Long id);
     List<Issue> findByUser(User user);

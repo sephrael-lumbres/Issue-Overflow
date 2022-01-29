@@ -194,6 +194,7 @@ public class IssueController {
         Issue previousIssue = issueRepository.findIssueById(nextIssue.getId());
 
         if(!isAttachFileForm) {
+            previousIssue.setUpdatedBy(currentUser);
             previousIssue.setTitle(nextIssue.getTitle());
             previousIssue.setDescription(nextIssue.getDescription());
             previousIssue.setType(nextIssue.getType());
@@ -226,6 +227,8 @@ public class IssueController {
         model.addAttribute("comments", issue.getComments());
         model.addAttribute("issue", issue);
         model.addAttribute("attachments", issue.getFiles());
+        model.addAttribute("issueChangeHistoryList", issueService.getIssueChangeHistoryList(issue.getId()));
+        model.addAttribute("findRevisions", issueRepository.findRevisions(issue.getId()));
         model.addAttribute("currentUser", userRepository.findByEmail(principal.getName()));
         model.addAttribute("currentProject", projectRepository.findByIdentifier(identifier));
         model.addAttribute("currentUserProjects", userRepository.findByEmail(principal.getName()).getProjects());
@@ -249,8 +252,9 @@ public class IssueController {
         return "/issues/edit-issue";
     }
 
-    @RequestMapping("/{identifier}/delete/{issueKey}")
-    public String deleteIssue(@PathVariable(name = "issueKey") String issueKey, @PathVariable(name = "identifier") String identifier, Principal principal) {
+    @RequestMapping("/{identifier}/delete/{issueKey}/{isOrganizationList}")
+    public String deleteIssue(@PathVariable(name = "issueKey") String issueKey, @PathVariable(name = "identifier") String identifier,
+                              @PathVariable("isOrganizationList") boolean isOrganizationList, Principal principal) {
         issueService.delete(issueRepository.findByIssueKey(issueKey).getId());
 
         if(projectRepository.findByIdentifier(identifier).getIssues().isEmpty()) {
@@ -260,7 +264,11 @@ public class IssueController {
         if(userRepository.findByEmail(principal.getName()).getOrganization() == null) {
             return "/organization/select-organization";
         }
-        return "redirect:/issues/" + identifier;
+
+        if(isOrganizationList)
+            return "redirect:/issues/all";
+        else
+            return "redirect:/issues/" + identifier;
     }
 
     // this shows the json format of all the Issues

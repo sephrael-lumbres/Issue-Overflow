@@ -371,7 +371,7 @@
                                                     <a th:href="@{'/issues/' + ${issue.project.identifier} + '/view/' + ${issue.issueKey}}"
                                                        th:text="' ' + ${issue.issueKey}" class="fw-bold text-dark">
                                                     </a>
-                                                    have been updated.
+                                                    have been updated by <strong th:text="${issue.updatedBy.firstName} + ' ' + ${issue.updatedBy.lastName}"></strong>.
                                                 </div>
                                             </div>
                                         </div>

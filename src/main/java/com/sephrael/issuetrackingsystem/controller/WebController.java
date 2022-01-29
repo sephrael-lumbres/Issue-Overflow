@@ -15,14 +15,6 @@ public class WebController {
     @Autowired
     private UserRepository userRepository;
 
-    @RequestMapping(value = "/index.html", method = RequestMethod.GET)
-    public String index(Model model, Principal principal) {
-        model.addAttribute("currentUser", userRepository.findByEmail(principal.getName()));
-        model.addAttribute("currentUserProjects", userRepository.findByEmail(principal.getName()).getProjects());
-
-        return "old-index";
-    }
-
     @RequestMapping(value = "/auth-password-social.html", method = RequestMethod.GET)
     public String authPasswordSocial() {return "reset-password";}
 

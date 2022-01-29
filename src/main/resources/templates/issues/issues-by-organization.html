@@ -478,8 +478,8 @@
                                                 <i data-feather="edit"></i>
                                             </a>
                                             <a class="btn btn-datatable btn-icon btn-transparent-dark"
-                                               th:href="@{'/issues/' + ${issue.project.identifier} + '/delete/' + ${issue.issueKey}}"
-                                               onclick="return confirm('Are you sure you want to delete this issue?');">
+                                               th:href="@{'/issues/' + ${issue.project.identifier} + '/delete/' + ${issue.issueKey} + '/true'}"
+                                               th:attr="onclick=|return confirm('Are you sure you want to delete Issue &quot;${issue.issueKey}&quot;?')|">
                                                 <i data-feather="trash-2"></i>
                                             </a>
                                         </td>

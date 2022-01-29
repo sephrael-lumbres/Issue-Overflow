@@ -3,6 +3,8 @@ package com.sephrael.issuetrackingsystem.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -11,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Audited
 public class Project {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,6 +24,7 @@ public class Project {
 
     @CreationTimestamp
     @Column(updatable = false)
+    @NotAudited
     private LocalDate dateCreated;
 
     @Column
@@ -44,10 +48,12 @@ public class Project {
 
     @ManyToOne
     @JsonIgnore
+    @NotAudited
     private Organization organization;
 
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
     @JsonIgnore
+    @NotAudited
     private List<Issue> issues;
 
     public List<Issue> getIssues() {

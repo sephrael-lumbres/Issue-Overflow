@@ -3,6 +3,8 @@
 package com.sephrael.issuetrackingsystem.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
@@ -11,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Audited
 public class User {
     // variables to add: userRole, dateCreated, dateModified, assignedProject, assignedOrganization
 
@@ -41,9 +44,11 @@ public class User {
 
     private boolean hasProfilePicture;
 
+    @NotAudited
     private boolean enabled;
 
     @ManyToOne
+    @NotAudited
     private Role role;
 
     public Role getRole() {
@@ -55,6 +60,7 @@ public class User {
     }
 
     @ManyToMany(mappedBy = "users")
+    @NotAudited
     private List<Project> projects = new ArrayList<>();
 
     // I think these lines of code are not being used (Delete if everything works after thoroughly testing)
@@ -72,6 +78,7 @@ public class User {
     }
 
     @ManyToOne
+    @NotAudited
     private Organization organization;
 
     public Organization getOrganization() {
@@ -83,6 +90,7 @@ public class User {
     }
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @NotAudited
     private List<Issue> issues;
 
     public void addToIssue(Issue issue) {
@@ -90,6 +98,7 @@ public class User {
     }
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @NotAudited
     private List<Comment> comments;
 
     public void addToComment(Comment comment) {
@@ -97,6 +106,7 @@ public class User {
     }
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @NotAudited
     private List<File> files;
 
     public void addToFiles(File file) {

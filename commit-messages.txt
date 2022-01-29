@@ -143,3 +143,12 @@ hidden if an Issue does not contain any Attachments and/or Comments
 'WebSecurityConfig.java'
 - Fix bug in the Issue Key Generator when deleting an 'Issue' that was
 the only 'Issue' in a Project
+
+
+
+Add 'Issue' Change History to its Details Page
+
+- Added 'property', 'oldValue', 'newValue', and 'updatedBy' fields to
+the 'Issue' Entity to store Change History values to be displayed in
+'Issue Details' page where 'property' would store what field of the
+'Issue' that was changed, such as 'Title', 'Project', 'Priority', etc.

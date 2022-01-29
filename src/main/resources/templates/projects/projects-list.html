@@ -380,7 +380,7 @@
                                                 </a>
                                                 <a th:if="${currentUser.getRole().name == 'Project Manager' || currentUser.getRole().name == 'Admin'}" class="btn btn-datatable btn-icon btn-transparent-dark"
                                                    th:href="@{'/projects/delete/' + ${project.id}}"
-                                                   onclick="return confirm('Are you sure you want to delete this project?');">
+                                                   th:attr="onclick=|return confirm('Are you sure you want to delete Project &quot;${project.name}&quot;?')|">
                                                     <i data-feather="trash-2"></i>
                                                 </a>
                                             </td>

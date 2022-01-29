@@ -4,6 +4,9 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
+import org.springframework.data.history.RevisionMetadata;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -11,6 +14,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
+@Audited
 public class Issue {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,6 +22,7 @@ public class Issue {
 
     private String title;
 
+    @Column(columnDefinition = "TEXT")
     private String description;
 
     private String type;
@@ -28,15 +33,30 @@ public class Issue {
 
     private String issueKey;
 
+    @Transient
+    private RevisionMetadata<Integer> changeVersion;
+
+    @Transient
+    private String property;
+
+    @Transient
+    private String oldValue;
+
+    @Transient
+    private String newValue;
+
     @CreationTimestamp
     @JsonFormat(pattern = "dd MMM yyyy HH:mm:ss")
     @Column(updatable = false)
+    @NotAudited
     private LocalDateTime dateCreated;
 
     @UpdateTimestamp
+    @NotAudited
     @JsonFormat(pattern = "dd MMM yyyy HH:mm:ss")
     private LocalDateTime dateUpdated;
 
+    @NotAudited
     @OneToMany(mappedBy = "issue", cascade = CascadeType.ALL)
     private List<File> files;
 
@@ -47,6 +67,7 @@ public class Issue {
 //    @Enumerated(EnumType.STRING)
 //    private IssueStatus issueStatus;
 
+    @NotAudited
     @ManyToOne
     private Organization organization;
 
@@ -62,6 +83,7 @@ public class Issue {
     @NotNull
     @JoinColumn(updatable = false)
     @JsonIgnore
+    @NotAudited
     private User user;
 
     public User getUser() {
@@ -70,6 +92,18 @@ public class Issue {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    @ManyToOne
+    @JsonIgnore
+    private User updatedBy;
+
+    public User getUpdatedBy() {
+        return updatedBy;
+    }
+
+    public void setUpdatedBy(User updatedBy) {
+        this.updatedBy = updatedBy;
     }
 
     @ManyToOne
@@ -97,6 +131,7 @@ public class Issue {
         this.project = project;
     }
 
+    @NotAudited
     @OneToMany(mappedBy = "issue", cascade = CascadeType.ALL)
     private List<Comment> comments;
 
@@ -167,6 +202,38 @@ public class Issue {
 
     public void setIssueKey(String issueKey) {
         this.issueKey = issueKey;
+    }
+
+    public RevisionMetadata<Integer> getChangeVersion() {
+        return changeVersion;
+    }
+
+    public void setChangeVersion(RevisionMetadata<Integer> changeVersion) {
+        this.changeVersion = changeVersion;
+    }
+
+    public String getProperty() {
+        return property;
+    }
+
+    public void setProperty(String property) {
+        this.property = property;
+    }
+
+    public String getOldValue() {
+        return oldValue;
+    }
+
+    public void setOldValue(String oldValue) {
+        this.oldValue = oldValue;
+    }
+
+    public String getNewValue() {
+        return newValue;
+    }
+
+    public void setNewValue(String newValue) {
+        this.newValue = newValue;
     }
 
     public LocalDateTime getDateCreated() {
