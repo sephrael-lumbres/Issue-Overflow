@@ -202,24 +202,6 @@
                 <nav class="sidenav shadow-right sidenav-light">
                     <div class="sidenav-menu">
                         <div class="nav accordion" id="accordionSidenav">
-                            <!-- Sidenav Menu Heading (Account)-->
-                            <!-- * * Note: * * Visible only on and above the sm breakpoint-->
-                            <div class="sidenav-menu-heading d-sm-none">Account</div>
-                            <!-- Sidenav Link (Alerts)-->
-                            <!-- * * Note: * * Visible only on and above the sm breakpoint-->
-                            <a class="nav-link d-sm-none" href="#!">
-                                <div class="nav-link-icon"><i data-feather="bell"></i></div>
-                                Alerts
-                                <span class="badge bg-warning-soft text-warning ms-auto">4 New!</span>
-                            </a>
-                            <!-- Sidenav Link (Messages)-->
-                            <!-- * * Note: * * Visible only on and above the sm breakpoint-->
-                            <a class="nav-link d-sm-none" href="#!">
-                                <div class="nav-link-icon"><i data-feather="mail"></i></div>
-                                Messages
-                                <span class="badge bg-success-soft text-success ms-auto">2 New!</span>
-                            </a>
-
                             <!-- START OF THE NORMAL SIDENAV -->
                             <!-- Sidenav Link (Dashboard)-->
                             <a class="nav-link active" href="/dashboard">
@@ -305,9 +287,9 @@
                                     <div class="col-auto mt-4">
                                         <h1 class="page-header-title">
                                             <div class="page-header-icon"><i data-feather="activity"></i></div>
-                                            Dashboard
+                                            <span th:text="${currentUser.getOrganization().getName()}"></span>
                                         </h1>
-                                        <div class="page-header-subtitle">Example dashboard overview and content summary</div>
+<!--                                        <div class="page-header-subtitle">Example dashboard overview and content summary</div>-->
                                     </div>
                                 </div>
                             </div>
@@ -360,7 +342,7 @@
 
                                                             <label class="mb-1" for="createFormProjectAccessKey" style="font-size: 14px">Project Access Key<span style="color: red">*</span></label>
                                                             <input th:field="*{accessKey}" class="form-control" id="createFormProjectAccessKey" type="text" placeholder="Enter project access key..." required/>
-                                                            <p class="form-text mb-auto" style="font-size: 12px">The project access key is a password that could be shared to allow other users in an Organization to join a project.</p>
+                                                            <p class="form-text mb-3" style="font-size: 12px">The project access key is a password that could be shared to allow other users in an Organization to join a project.</p>
 
                                                             <label class="mb-1" for="color" style="font-size: 14px;">Project Color<span style="color: red">*</span></label>
                                                             <select th:field="*{color}" name="color" class="form-control mb-auto" id="color">
@@ -567,7 +549,7 @@
                         </div>
                         <!-- Users Table -->
                         <div class="card mb-4">
-                            <div class="card-header">Users</div>
+                            <div class="card-header">Members</div>
                             <div class="card-body">
                                 <table id="datatablesSimple">
                                     <thead>
@@ -590,15 +572,25 @@
                                     </tfoot>
                                     <tbody>
                                     <tr th:each="user: ${usersByOrganization}">
-                                        <td th:text="${user.firstName} + ' ' + ${user.lastName}"></td>
-                                        <td th:text="${user.email}"></td>
-                                        <td th:text="${user.role.name}"></td>
-                                        <td>
+                                        <td class="align-middle">
+                                            <div class="d-flex align-items-center">
+                                                <div class="avatar me-2">
+                                                    <img th:if="${user.hasProfilePicture()}" th:src="@{'/files/' +${user.id} + '/true'}"
+                                                         src="/assets/img/demo/user-placeholder.svg" class="avatar-img img-fluid" alt="">
+                                                    <img th:unless="${user.hasProfilePicture()}" src="/assets/img/demo/user-placeholder.svg"
+                                                         class="avatar-img img-fluid" alt="">
+                                                </div>
+                                                <span th:text="${user.firstName} + ' ' + ${user.lastName}"></span>
+                                            </div>
+                                        </td>
+                                        <td th:text="${user.email}" class="align-middle"></td>
+                                        <td th:text="${user.role.name}" class="align-middle"></td>
+                                        <td class="align-middle">
                                             <span th:each="project : ${currentUser.organization.getProjects()}">
                                                 <span th:if="${project.users.contains(user)}" th:text="${project.name}" th:classappend="'bg-' + ${project.color} + '-soft' + ' text-' + ${project.color}" class="badge"></span>
                                             </span>
                                         </td>
-                                        <td th:if="${currentUser.role.name == 'Project Manager'}">
+                                        <td th:if="${currentUser.role.name == 'Project Manager'}" class="align-middle text-center">
                                             <a class="btn btn-datatable btn-icon btn-transparent-dark me-2"
                                                th:href="@{'/users/edit/' + ${user.id}}"><i data-feather="edit"></i></a>
                                             <a class="btn btn-datatable btn-icon btn-transparent-dark"
@@ -630,9 +622,6 @@
         </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
         <script src="/js/scripts.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js" crossorigin="anonymous"></script>
-        <script src="/assets/demo/chart-area-demo.js"></script>
-        <script src="/assets/demo/chart-bar-demo.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" crossorigin="anonymous"></script>
         <script src="/js/datatables/datatables-simple-demo.js"></script>
         <script type="text/javascript">

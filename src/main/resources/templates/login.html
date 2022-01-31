@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
     <head>
         <meta charset="utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -19,6 +19,11 @@
                     <div class="container-xl px-4">
                         <div class="row justify-content-center">
                             <div class="col-xl-5 col-lg-6 col-md-8 col-sm-11">
+
+                                <div th:text="${success}" th:if="${success}" id="popupAlerts" class="alert alert-success alert-dismissible fade show text-center mt-4" role="alert"></div>
+                                <div th:text="${accountDeletionSuccess}" th:if="${accountDeletionSuccess}" id="popupAlerts" class="alert alert-success alert-dismissible fade show text-center mt-4" role="alert"></div>
+                                <div th:text="${error}" th:if="${error}" id="popupAlerts" class="alert alert-danger alert-dismissible fade show text-center mt-4" role="alert"></div>
+
                                 <!-- Social login form-->
                                 <div class="card my-5">
                                     <div class="card-body p-5 text-center">
@@ -45,12 +50,12 @@
                                             </div>
 
                                             <!-- Form Group (forgot password link)-->
-                                            <div class="mb-3"><a class="small" href="reset-password.html">Forgot your password?</a></div>
+                                            <div class="mb-3"><a class="small" th:href="@{'/reset-password'}">Forgot your password?</a></div>
                                             <!-- Form Group (login box)-->
                                             <div class="d-flex align-items-center justify-content-between mb-0">
                                                 <div class="form-check">
-                                                    <input class="form-check-input" id="checkRememberPassword" type="checkbox" value="" />
-                                                    <label class="form-check-label" for="checkRememberPassword">Remember password</label>
+<!--                                                    <input class="form-check-input" id="checkRememberPassword" type="checkbox" value="" />-->
+<!--                                                    <label class="form-check-label" for="checkRememberPassword">Remember password</label>-->
                                                 </div>
                                                 <button class="btn btn-primary" name="Submit" value="Login" type="Submit" th:text="Login"></button>
                                             </div>
@@ -86,5 +91,13 @@
         </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
         <script src="/js/scripts.js"></script>
+        <script>
+                let buttonElement = document.createElement("button");
+                buttonElement.className = "btn-close";
+                buttonElement.setAttribute("data-bs-dismiss", "alert");
+                buttonElement.setAttribute("aria-label", "Close");
+                buttonElement.setAttribute("type", "button");
+                document.getElementById("popupAlerts").appendChild(buttonElement);
+        </script>
     </body>
 </html>

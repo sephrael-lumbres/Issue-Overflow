@@ -61,7 +61,7 @@ public class IssueService {
         Issue newIssue;
         User updatedBy;
 
-        if(issue1.getChangeVersion().getRevisionType() == RevisionMetadata.RevisionType.UPDATE) {
+        if(issue1.getUpdatedBy() != null && issue1.getChangeVersion().getRevisionType() == RevisionMetadata.RevisionType.UPDATE) {
             updatedBy = userRepository.findUserById(issue1.getUpdatedBy().getId());
         } else {
             updatedBy = null;
@@ -91,15 +91,18 @@ public class IssueService {
 
             newIssue = new Issue();
             newIssue.setProperty("Assigned To");
-            if(issue2.getAssignedTo() == null)
+            // if the Issue's 'Assigned To' is empty or does not exist
+            if(issue2.getAssignedTo() == null || userRepository.findUserById(issue2.getAssignedTo().getId()) == null)
                 newIssue.setOldValue(null);
             else {
                 User issue2User = userRepository.findUserById(issue2.getAssignedTo().getId());
                 newIssue.setOldValue(issue2User.getFirstName() + " " + issue2User.getLastName());
             }
-            if(issue1.getAssignedTo() == null)
+            // if the Issue's 'Assigned To' is empty or does not exist
+            if(issue1.getAssignedTo() == null || userRepository.findUserById(issue1.getAssignedTo().getId()) == null)
                 newIssue.setNewValue(null);
             else {
+                System.out.println(issue1.getAssignedTo());
                 User issue1User = userRepository.findUserById(issue1.getAssignedTo().getId());
                 newIssue.setNewValue(issue1User.getFirstName() + " " + issue1User.getLastName());
             }

@@ -202,23 +202,7 @@
                 <nav class="sidenav shadow-right sidenav-light">
                     <div class="sidenav-menu">
                         <div class="nav accordion" id="accordionSidenav">
-                            <!-- Sidenav Menu Heading (Account)-->
-                            <!-- * * Note: * * Visible only on and above the sm breakpoint-->
-                            <div class="sidenav-menu-heading d-sm-none">Account</div>
-                            <!-- Sidenav Link (Alerts)-->
-                            <!-- * * Note: * * Visible only on and above the sm breakpoint-->
-                            <a class="nav-link d-sm-none" href="#!">
-                                <div class="nav-link-icon"><i data-feather="bell"></i></div>
-                                Alerts
-                                <span class="badge bg-warning-soft text-warning ms-auto">4 New!</span>
-                            </a>
-                            <!-- Sidenav Link (Messages)-->
-                            <!-- * * Note: * * Visible only on and above the sm breakpoint-->
-                            <a class="nav-link d-sm-none" href="#!">
-                                <div class="nav-link-icon"><i data-feather="mail"></i></div>
-                                Messages
-                                <span class="badge bg-success-soft text-success ms-auto">2 New!</span>
-                            </a>
+
 
                             <!-- START OF THE NORMAL SIDENAV -->
                             <!-- Sidenav Link (Dashboard)-->
@@ -430,7 +414,7 @@
 
                                                                     <label class="mb-1" for="accessKey" style="font-size: 14px;">Project Access Key<span style="color: red">*</span></label>
                                                                     <input th:value="${project.accessKey}" name="accessKey" class="form-control" id="accessKey" type="text" placeholder="Enter project access key..." required/>
-                                                                    <p class="form-text mb-auto" style="font-size: 12px">The project access key is a password that could be shared to allow other users in an Organization to join a project.</p>
+                                                                    <p class="form-text mb-3" style="font-size: 12px">The project access key is a password that could be shared to allow other users in an Organization to join a project.</p>
 
                                                                     <label class="mb-1" for="color" style="font-size: 14px;">Project Color<span style="color: red">*</span></label>
                                                                     <select th:value="${project.color}" name="color" class="form-control mb-auto" id="color">
@@ -486,7 +470,7 @@
 
                                             <label class="mb-1" for="createFormProjectAccessKey" style="font-size: 14px">Project Access Key<span style="color: red">*</span></label>
                                             <input th:field="*{accessKey}" class="form-control" id="createFormProjectAccessKey" type="text" placeholder="Enter project access key..." required/>
-                                            <p class="form-text mb-auto" style="font-size: 12px">The project access key is a password that could be shared to allow other users in an Organization to join a project.</p>
+                                            <p class="form-text mb-3" style="font-size: 12px">The project access key is a password that could be shared to allow other users in an Organization to join a project.</p>
 
                                             <label class="mb-1" for="createFormProjectColor" style="font-size: 14px;">Project Color<span style="color: red">*</span></label>
                                             <select th:field="*{color}" name="color" class="form-control mb-auto" id="createFormProjectColor">

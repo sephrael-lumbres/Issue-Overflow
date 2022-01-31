@@ -15,9 +15,6 @@ public class WebController {
     @Autowired
     private UserRepository userRepository;
 
-    @RequestMapping(value = "/auth-password-social.html", method = RequestMethod.GET)
-    public String authPasswordSocial() {return "reset-password";}
-
     @RequestMapping(value = "/auth-redirect.html", method = RequestMethod.GET)
     public String authRedirect() {return "auth-redirect";}
 

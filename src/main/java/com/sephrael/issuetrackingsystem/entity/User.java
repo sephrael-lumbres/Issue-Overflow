@@ -42,6 +42,9 @@ public class User {
     @NotEmpty(message = "Last name may not be empty")
     private String lastName;
 
+    @Column(unique = true)
+    private String resetPasswordToken;
+
     private boolean hasProfilePicture;
 
     @NotAudited
@@ -151,6 +154,14 @@ public class User {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public String getResetPasswordToken() {
+        return resetPasswordToken;
+    }
+
+    public void setResetPasswordToken(String resetPasswordToken) {
+        this.resetPasswordToken = resetPasswordToken;
     }
 
     public boolean hasProfilePicture() {

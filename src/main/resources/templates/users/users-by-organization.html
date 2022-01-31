@@ -202,23 +202,7 @@
                 <nav class="sidenav shadow-right sidenav-light">
                     <div class="sidenav-menu">
                         <div class="nav accordion" id="accordionSidenav">
-                            <!-- Sidenav Menu Heading (Account)-->
-                            <!-- * * Note: * * Visible only on and above the sm breakpoint-->
-                            <div class="sidenav-menu-heading d-sm-none">Account</div>
-                            <!-- Sidenav Link (Alerts)-->
-                            <!-- * * Note: * * Visible only on and above the sm breakpoint-->
-                            <a class="nav-link d-sm-none" href="#!">
-                                <div class="nav-link-icon"><i data-feather="bell"></i></div>
-                                Alerts
-                                <span class="badge bg-warning-soft text-warning ms-auto">4 New!</span>
-                            </a>
-                            <!-- Sidenav Link (Messages)-->
-                            <!-- * * Note: * * Visible only on and above the sm breakpoint-->
-                            <a class="nav-link d-sm-none" href="#!">
-                                <div class="nav-link-icon"><i data-feather="mail"></i></div>
-                                Messages
-                                <span class="badge bg-success-soft text-success ms-auto">2 New!</span>
-                            </a>
+
 
                             <!-- START OF THE NORMAL SIDENAV -->
                             <!-- Sidenav Link (Dashboard)-->
@@ -329,16 +313,16 @@
                                 <table id="datatablesSimple">
                                     <thead>
                                     <tr>
-                                        <th class="align-middle text-center">User</th>
+                                        <th class="align-middle text-center">Name</th>
                                         <th class="align-middle text-center">Email</th>
                                         <th class="align-middle text-center">Role</th>
                                         <th class="align-middle text-center">Projects</th>
-                                        <th class="align-middle text-center" th:if="${currentUser.role.name == 'Project Manager'}">Actions</th>
+                                        <th th:if="${currentUser.role.name == 'Project Manager'}" class="align-middle text-center">Actions</th>
                                     </tr>
                                     </thead>
                                     <tfoot>
                                     <tr>
-                                        <th>User</th>
+                                        <th>Name</th>
                                         <th>Email</th>
                                         <th>Role</th>
                                         <th>Projects</th>
@@ -347,7 +331,7 @@
                                     </tfoot>
                                     <tbody>
                                     <tr th:each="user: ${listUsers}">
-                                        <td>
+                                        <td class="align-middle">
                                             <div class="d-flex align-items-center">
                                                 <div class="avatar me-2">
                                                     <img th:if="${user.hasProfilePicture()}" th:src="@{'/files/' +${user.id} + '/true'}"
@@ -361,11 +345,11 @@
                                         <td th:text="${user.email}" class="align-middle"></td>
                                         <td th:text="${user.role.name}" class="align-middle"></td>
                                         <td class="align-middle">
-                                            <span th:each="project : ${currentUser.organization.getProjects()}">
+                                            <span th:each="project : ${user.organization.getProjects()}">
                                                 <span th:if="${project.users.contains(user)}" th:text="${project.name}" th:classappend="'bg-' + ${project.color} + '-soft' + ' text-' + ${project.color}" class="badge"></span>
                                             </span>
                                         </td>
-                                        <td th:if="${currentUser.role.name == 'Project Manager'}" class="align-middle">
+                                        <td th:if="${currentUser.role.name == 'Project Manager'}" class="align-middle text-center">
                                             <a class="btn btn-datatable btn-icon btn-transparent-dark me-2"
                                                th:href="@{'/users/edit/' + ${user.id}}"><i data-feather="edit"></i></a>
                                             <a class="btn btn-datatable btn-icon btn-transparent-dark"

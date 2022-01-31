@@ -201,23 +201,7 @@
                 <nav class="sidenav shadow-right sidenav-light">
                     <div class="sidenav-menu">
                         <div class="nav accordion" id="accordionSidenav">
-                            <!-- Sidenav Menu Heading (Account)-->
-                            <!-- * * Note: * * Visible only on and above the sm breakpoint-->
-                            <div class="sidenav-menu-heading d-sm-none">Account</div>
-                            <!-- Sidenav Link (Alerts)-->
-                            <!-- * * Note: * * Visible only on and above the sm breakpoint-->
-                            <a class="nav-link d-sm-none" href="#!">
-                                <div class="nav-link-icon"><i data-feather="bell"></i></div>
-                                Alerts
-                                <span class="badge bg-warning-soft text-warning ms-auto">4 New!</span>
-                            </a>
-                            <!-- Sidenav Link (Messages)-->
-                            <!-- * * Note: * * Visible only on and above the sm breakpoint-->
-                            <a class="nav-link d-sm-none" href="#!">
-                                <div class="nav-link-icon"><i data-feather="mail"></i></div>
-                                Messages
-                                <span class="badge bg-success-soft text-success ms-auto">2 New!</span>
-                            </a>
+
 
                             <!-- START OF THE NORMAL SIDENAV -->
                             <!-- Sidenav Link (Dashboard)-->
@@ -312,7 +296,7 @@
                                             <i class="me-1" data-feather="user"></i>
                                             Manage Users
                                         </a>
-                                        <a class="btn btn-sm btn-light text-primary" href="/projects">
+                                        <a class="btn btn-sm btn-light text-primary" href="/projects/all">
                                             <i class="me-1" data-feather="users"></i>
                                             Manage Projects
                                         </a>
@@ -340,7 +324,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="card mb-2">
+                        <div th:if="${!projectManagers.isEmpty()}" class="card mb-2">
                             <div class="card-body">
                                 <div class="small text-muted mb-2">Project Managers:</div>
                                 <div class="row">
@@ -362,7 +346,7 @@
                             </div>
                         </div>
 
-                        <div class="card mb-2">
+                        <div th:if="${!admins.isEmpty()}" class="card mb-2">
                             <div class="card-body">
                                 <div class="small text-muted mb-2">Administrators:</div>
                                 <div class="row">
@@ -384,7 +368,7 @@
                             </div>
                         </div>
 
-                        <div class="card mb-2">
+                        <div th:if="${!developers.isEmpty()}" class="card mb-2">
                             <div class="card-body">
                                 <div class="small text-muted mb-2">Developers:</div>
                                 <div class="row">
@@ -406,7 +390,7 @@
                             </div>
                         </div>
 
-                        <div class="card mb-2">
+                        <div th:if="${!members.isEmpty()}" class="card mb-2">
                             <div class="card-body">
                                 <div class="small text-muted mb-2">Members:</div>
                                 <div class="row">

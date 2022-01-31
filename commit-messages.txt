@@ -152,3 +152,24 @@ Add 'Issue' Change History to its Details Page
 the 'Issue' Entity to store Change History values to be displayed in
 'Issue Details' page where 'property' would store what field of the
 'Issue' that was changed, such as 'Title', 'Project', 'Priority', etc.
+
+
+
+Add Reset and Change User Password Functionality
+
+- Added a new Field to the 'User' Entity, 'resetPasswordToken' that
+would be set to a random string of characters, which would then be used
+to create a Link to Reset a User's Password
+- Added functionality to be able to send Emails to a User's email
+address
+- Users can now Reset their 'Password' which would send an Email of a
+link to Reset and Change their 'Password'
+- Users can now also Change their 'Password' on their Account Settings
+page by entering their current password, and a new 'Password'
+- Added Popup Alerts of Success or Error for Resetting Password,
+Changing Password, and for a User deleting their own Account
+- Fixed a bug where when deleting a ‘User’ that had been assigned to an
+‘Issue’ it would crash that corresponding ‘Issue Details’ page
+- Fixed a bug where when deleting a ‘User’ that had made changes to any
+‘Issue’ it would crash its corresponding ‘Issue Details’ pages
+- Deleted some files and code that were not being used
