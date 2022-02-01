@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
     <head>
         <meta charset="utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -211,8 +211,9 @@
                                 Dashboard
                             </a>
                             <!-- Sidenav Link (Add Issue)-->
-                            <div th:if="${currentUser.getRole().name == 'Project Manager' ||
-                                        currentUser.getRole().name == 'Admin' || currentUser.getRole().name == 'Developer'}">
+                            <!-- IF CURRENT USER IS INVOLVED IN MULTIPLE PROJECTS -->
+                            <div sec:authorize="hasAnyAuthority('Project Manager', 'Admin', 'Developer')"
+                                 th:if="${currentUserProjects.size() > 1}">
                                 <a class="nav-link collapsed" href="javascript:void(0);" data-bs-toggle="collapse"
                                    data-bs-target="#collapseAddIssue" aria-expanded="false" aria-controls="collapseAddIssue">
                                     <div class="nav-link-icon"><i data-feather="plus"></i></div>
@@ -227,18 +228,36 @@
                                     </nav>
                                 </div>
                             </div>
+                            <!-- IF CURRENT USER IS ONLY INVOLVED WITH A SINGLE PROJECT -->
+                            <div sec:authorize="hasAnyAuthority('Project Manager', 'Admin', 'Developer')"
+                                 th:if="${currentUserProjects.size() == 1}">
+                                <a th:href="@{'/issues/' + ${currentUserProjects.get(0).identifier} + '/new'}" class="nav-link">
+                                    <div class="nav-link-icon"><i data-feather="plus"></i></div>
+                                    Add Issue
+                                </a>
+                            </div>
                             <!-- Sidenav Link (Issues List)-->
-                            <a class="nav-link collapsed" href="javascript:void(0);" data-bs-toggle="collapse"
-                               data-bs-target="#collapseDashboards" aria-expanded="false" aria-controls="collapseDashboards">
-                                <div class="nav-link-icon"><i data-feather="list"></i></div>
-                                Issues
-                                <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                            </a>
-                            <div class="collapse" id="collapseDashboards" data-bs-parent="#accordionSidenav">
-                                <a class="nav-link" th:href="@{'/issues/all'}">All Issues</a>
-                                <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavPages">
-                                    <a class="nav-link" th:href="@{'/issues/' + ${project.identifier}}" th:each="project : ${currentUserProjects}" th:value="${project.id}" th:text="${project.name}"></a>
-                                </nav>
+                            <!-- IF CURRENT USER IS INVOLVED IN MULTIPLE PROJECTS -->
+                            <div th:if="${currentUserProjects.size() > 1}">
+                                <a class="nav-link collapsed" href="javascript:void(0);" data-bs-toggle="collapse"
+                                   data-bs-target="#collapseDashboards" aria-expanded="false" aria-controls="collapseDashboards">
+                                    <div class="nav-link-icon"><i data-feather="list"></i></div>
+                                    Issues
+                                    <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                                </a>
+                                <div class="collapse" id="collapseDashboards" data-bs-parent="#accordionSidenav">
+                                    <a class="nav-link" th:href="@{'/issues/all'}">All Issues</a>
+                                    <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavPages">
+                                        <a class="nav-link" th:href="@{'/issues/' + ${project.identifier}}" th:each="project : ${currentUserProjects}" th:value="${project.id}" th:text="${project.name}"></a>
+                                    </nav>
+                                </div>
+                            </div>
+                            <!-- IF CURRENT USER IS ONLY INVOLVED WITH A SINGLE PROJECT -->
+                            <div th:if="${currentUserProjects.size() == 1}">
+                                <a th:href="@{'/issues/' + ${currentUserProjects.get(0).identifier}}" class="nav-link">
+                                    <div class="nav-link-icon"><i data-feather="list"></i></div>
+                                    Issues
+                                </a>
                             </div>
                             <!-- Sidenav Link (Organization)-->
                             <a class="nav-link" href="/organization">
@@ -293,11 +312,11 @@
                                         </h1>
                                     </div>
                                     <div class="col-12 col-xl-auto mb-3">
-                                        <a th:if="${currentUser.getRole().name == 'Project Manager'}" class="btn btn-sm btn-light text-primary" href="/users">
+                                        <a sec:authorize="hasAuthority('Project Manager')" class="btn btn-sm btn-light text-primary" href="/users">
                                             <i class="me-1" data-feather="user"></i>
                                             Manage Users
                                         </a>
-                                        <button th:if="${currentUser.getRole().name == 'Project Manager' || currentUser.getRole().name == 'Admin'}"
+                                        <button sec:authorize="hasAnyAuthority('Project Manager', 'Admin')"
                                                 class="btn btn-sm btn-light text-primary" type="button" data-bs-toggle="modal" data-bs-target="#createProjectModal">
                                             <i class="me-1" data-feather="plus"></i>
                                             Create New Project
@@ -331,41 +350,44 @@
                                             <th>Project Name</th>
                                             <th>Total Members</th>
                                             <th>Created</th>
-                                            <th th:if="${currentUser.getRole().name == 'Project Manager' || currentUser.getRole().name == 'Admin'}">Actions</th>
+                                            <th>Actions</th>
                                         </tr>
                                     </tfoot>
                                     <tbody>
-                                        <tr th:each="project : ${currentUser.projects}" th:href="@{'/projects/' + ${project.identifier}}">
-                                            <td class="align-middle" th:text="${project.name} + ' (' + ${project.identifier} + ')'"
+                                        <tr th:each="project : ${currentUser.projects}">
+                                            <!-- Project Name -->
+                                            <td th:text="${project.name} + ' (' + ${project.identifier} + ')'"
+                                                th:href="@{'/projects/' + ${project.identifier}}" class="align-middle"
                                                 onclick="rowClicked(this.getAttribute('href'))" style="cursor: pointer">
                                             </td>
-                                            <td class="align-middle text-center" th:text="${project.getUsers().size()}"
+                                            <!-- Number of Members involved -->
+                                            <td th:text="${project.getUsers().size()}" class="align-middle text-center"
+                                                th:href="@{'/projects/' + ${project.identifier}}"
                                                 onclick="rowClicked(this.getAttribute('href'))" style="cursor: pointer">
                                             </td>
-                                            <td class="align-middle text-center" th:text="${#temporals.format(project.dateCreated, 'dd MMM yyyy')}"
+                                            <!-- Date Created -->
+                                            <td th:text="${#temporals.format(project.dateCreated, 'dd MMM yyyy')}"
+                                                th:href="@{'/projects/' + ${project.identifier}}" class="align-middle text-center"
                                                 onclick="rowClicked(this.getAttribute('href'))" style="cursor: pointer">
                                             </td>
+                                            <!-- Actions (Edit and Delete, or View Access Key) -->
                                             <td class="align-middle text-center">
-                                                <button th:if="${currentUser.getRole().name == 'Project Manager' || currentUser.getRole().name == 'Admin'}"
+                                                <button sec:authorize="hasAnyAuthority('Project Manager', 'Admin')"
                                                         class="btn btn-datatable btn-icon btn-transparent-dark me-2"
                                                         type="button" data-bs-toggle="modal" data-bs-target="#editProjectModal"
                                                         th:attrappend="data-bs-target=${project.id}">
                                                     <i data-feather="edit"></i>
                                                 </button>
-                                                <a th:if="${currentUser.getRole().name == 'Project Manager' || currentUser.getRole().name == 'Admin'}" class="btn btn-datatable btn-icon btn-transparent-dark me-2" data-bs-toggle="modal"
-                                                   data-bs-target="#viewAccessKeyModal" th:attrappend="data-bs-target=${project.id}">
-                                                    <i data-feather="key"></i>
-                                                </a>
-                                                <a th:unless="${currentUser.getRole().name == 'Project Manager' || currentUser.getRole().name == 'Admin'}"
-                                                   class="btn btn-xs btn-transparent-dark" data-bs-toggle="modal"
-                                                   data-bs-target="#viewAccessKeyModal" th:attrappend="data-bs-target=${project.id}">
-                                                    View Access Key
-                                                    <i class="ms-1" data-feather="key"></i>
-                                                </a>
-                                                <a th:if="${currentUser.getRole().name == 'Project Manager' || currentUser.getRole().name == 'Admin'}" class="btn btn-datatable btn-icon btn-transparent-dark"
+                                                <a sec:authorize="hasAnyAuthority('Project Manager', 'Admin')" class="btn btn-datatable btn-icon btn-transparent-dark"
                                                    th:href="@{'/projects/delete/' + ${project.id}}"
                                                    th:attr="onclick=|return confirm('Are you sure you want to delete Project &quot;${project.name}&quot;?')|">
                                                     <i data-feather="trash-2"></i>
+                                                </a>
+                                                <a sec:authorize="hasAnyAuthority('Developer', 'Guest')" data-bs-toggle="modal"
+                                                   class="btn btn-xs btn-transparent-dark" data-bs-target="#viewAccessKeyModal"
+                                                   th:attrappend="data-bs-target=${project.id}">
+                                                    View Access Key
+                                                    <i class="ms-1" data-feather="key"></i>
                                                 </a>
                                             </td>
 

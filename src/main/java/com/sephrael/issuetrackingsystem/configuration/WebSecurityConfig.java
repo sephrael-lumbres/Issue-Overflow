@@ -65,10 +65,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .hasAnyAuthority("Project Manager", "Admin", "Developer")
 
                 // view issues allowed to all Roles
-                .antMatchers("/issues/**/view/**").hasAnyAuthority("Project Manager", "Admin", "Developer", "Member")
+                .antMatchers("/issues/**/view/**").hasAnyAuthority("Project Manager", "Admin", "Developer", "Guest")
 
                 // create and delete comments allowed to all Roles
-                .antMatchers("/issues/**/view/**/comment/**").hasAnyAuthority("Project Manager", "Admin", "Developer", "Member")
+                .antMatchers("/issues/**/view/**/comment/**").hasAnyAuthority("Project Manager", "Admin", "Developer", "Guest")
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()

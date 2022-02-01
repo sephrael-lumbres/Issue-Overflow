@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
     <head>
         <meta charset="utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -212,8 +212,9 @@
                                 Dashboard
                             </a>
                             <!-- Sidenav Link (Add Issue)-->
-                            <div th:if="${currentUser.getRole().name == 'Project Manager' ||
-                                        currentUser.getRole().name == 'Admin' || currentUser.getRole().name == 'Developer'}">
+                            <!-- IF CURRENT USER IS INVOLVED IN MULTIPLE PROJECTS -->
+                            <div sec:authorize="hasAnyAuthority('Project Manager', 'Admin', 'Developer')"
+                                 th:if="${currentUserProjects.size() > 1}">
                                 <a class="nav-link collapsed" href="javascript:void(0);" data-bs-toggle="collapse"
                                    data-bs-target="#collapseAddIssue" aria-expanded="false" aria-controls="collapseAddIssue">
                                     <div class="nav-link-icon"><i data-feather="plus"></i></div>
@@ -228,19 +229,36 @@
                                     </nav>
                                 </div>
                             </div>
-
+                            <!-- IF CURRENT USER IS ONLY INVOLVED WITH A SINGLE PROJECT -->
+                            <div sec:authorize="hasAnyAuthority('Project Manager', 'Admin', 'Developer')"
+                                 th:if="${currentUserProjects.size() == 1}">
+                                <a th:href="@{'/issues/' + ${currentUserProjects.get(0).identifier} + '/new'}" class="nav-link">
+                                    <div class="nav-link-icon"><i data-feather="plus"></i></div>
+                                    Add Issue
+                                </a>
+                            </div>
                             <!-- Sidenav Link (Issues List)-->
-                            <a class="nav-link active" href="javascript:void(0);" data-bs-toggle="collapse"
-                               data-bs-target="#collapseIssues" aria-expanded="false" aria-controls="collapseIssues">
-                                <div class="nav-link-icon"><i data-feather="list"></i></div>
-                                Issues
-                                <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                            </a>
-                            <div class="collapse show" id="collapseIssues" data-bs-parent="#accordionSidenav">
-                                <a class="nav-link" th:href="@{'/issues/all'}">All Issues</a>
-                                <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavIssues">
-                                    <a class="nav-link" th:each="project : ${currentUserProjects}" th:classappend="${project.id==currentProject.id} ? active" th:href="@{'/issues/' + ${project.identifier}}" th:value="${project.id}" th:text="${project.name}"></a>
-                                </nav>
+                            <!-- IF CURRENT USER IS INVOLVED IN MULTIPLE PROJECTS -->
+                            <div th:if="${currentUserProjects.size() > 1}">
+                                <a class="nav-link active" href="javascript:void(0);" data-bs-toggle="collapse"
+                                   data-bs-target="#collapseIssues" aria-expanded="false" aria-controls="collapseIssues">
+                                    <div class="nav-link-icon"><i data-feather="list"></i></div>
+                                    Issues
+                                    <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                                </a>
+                                <div class="collapse show" id="collapseIssues" data-bs-parent="#accordionSidenav">
+                                    <a class="nav-link" th:href="@{'/issues/all'}">All Issues</a>
+                                    <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavIssues">
+                                        <a class="nav-link" th:each="project : ${currentUserProjects}" th:classappend="${project.id==currentProject.id} ? active" th:href="@{'/issues/' + ${project.identifier}}" th:value="${project.id}" th:text="${project.name}"></a>
+                                    </nav>
+                                </div>
+                            </div>
+                            <!-- IF CURRENT USER IS ONLY INVOLVED WITH A SINGLE PROJECT -->
+                            <div th:if="${currentUserProjects.size() == 1}">
+                                <a th:href="@{'/issues/' + ${currentUserProjects.get(0).identifier}}" class="nav-link active">
+                                    <div class="nav-link-icon"><i data-feather="list"></i></div>
+                                    Issues
+                                </a>
                             </div>
                             <!-- Sidenav Link (Organization)-->
                             <a class="nav-link" href="/organization">
@@ -300,12 +318,12 @@
                                             <i class="me-1" data-feather="arrow-left"></i>
                                             Back to All Issues
                                         </a>
-                                        <a th:if="${currentUser.getRole().name == 'Project Manager' || currentUser.getRole().name == 'Admin' || currentUser.getRole().name == 'Developer'}"
+                                        <a sec:authorize="hasAnyAuthority('Project Manager', 'Admin', 'Developer')"
                                            th:href="@{'/issues/' + ${currentProject.identifier} +'/new'}" class="btn btn-sm btn-light text-primary">
                                             <i class="me-1" data-feather="plus"></i>
                                             Create New Issue
                                         </a>
-                                        <a th:if="${issue.user == currentUser || currentUser.role.name == 'Project Manager' || currentUser.role.name == 'Admin'}"
+                                        <a th:if="${issue.user == currentUser || #authorization.expression('hasAnyAuthority(''Project Manager'', ''Admin'')')}"
                                            th:href="@{'/issues/' + ${currentProject.identifier} + '/edit/' + ${issue.issueKey}}"
                                            class="btn btn-sm btn-light text-primary">
                                             <i class="me-1" data-feather="edit"></i>
@@ -608,12 +626,12 @@
                                     Attach File(s)
                                 </button>
                                 <button onclick="markIssueAsResolved()" class="btn btn-light btn mt-n4" type="submit" form="updateIssue"
-                                        th:if="${currentUser == issue.user || currentUser.role.name == 'Project Manager' || currentUser.role.name == 'Admin'}">
+                                        sec:authorize="hasAnyAuthority('Project Manager', 'Admin', 'Developer')">
                                     <i class="fas fa-check-circle me-2"></i>
                                     Mark as Resolved
                                 </button>
                                 <button onclick="markIssueAsClosed()" class="btn btn-light btn mt-n4" type="submit" form="updateIssue"
-                                        th:if="${currentUser.role.name == 'Project Manager' || currentUser.role.name == 'Admin'}">
+                                        sec:authorize="hasAnyAuthority('Project Manager', 'Admin')">
                                     <i class="me-2" data-feather="x-circle"></i>
                                     Mark as Closed
                                 </button>
@@ -648,9 +666,9 @@
                                     </div>
                                 </div>
 
-                                <!-- THIS CHANGES THE ISSUE STATUS TO: RESOLVED -->
+                                <!-- THIS ALLOWS FOR CHANGES OF THE ISSUE STATUS TO: RESOLVED OR CLOSED -->
                                 <form action="#" th:action="@{/issues/update}" th:object="${issue}" id="updateIssue" method="post">
-                                    <span hidden th:if="${currentUser == issue.user || currentUser.role.name == 'Project Manager' || currentUser.role.name == 'Admin'}">
+                                    <span sec:authorize="hasAnyAuthority('Project Manager', 'Admin', 'Developer')" hidden>
                                         <label for="issueId"><input th:field="*{id}" id="issueId" form="updateIssue" readonly/></label>
                                         <label for="issueKey"><input th:field="*{issueKey}" id="issueKey" type="text" readonly></label>
                                         <label for="issueTitle"><input th:field="*{title}" id="issueTitle" type="text" readonly/></label>

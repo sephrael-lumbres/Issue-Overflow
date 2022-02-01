@@ -36,7 +36,7 @@ public class UserService {
     }
 
     public void registerDefaultUser(User user) {
-        Role role = roleRepository.findByName("Member");
+        Role role = roleRepository.findByName("Guest");
         role.addToUser(user);
         user.setEnabled(true);
 

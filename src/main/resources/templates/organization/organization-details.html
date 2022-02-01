@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
     <head>
         <meta charset="utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -210,8 +210,9 @@
                                 Dashboard
                             </a>
                             <!-- Sidenav Link (Add Issue)-->
-                            <div th:if="${currentUser.getRole().name == 'Project Manager' ||
-                                        currentUser.getRole().name == 'Admin' || currentUser.getRole().name == 'Developer'}">
+                            <!-- IF CURRENT USER IS INVOLVED IN MULTIPLE PROJECTS -->
+                            <div sec:authorize="hasAnyAuthority('Project Manager', 'Admin', 'Developer')"
+                                 th:if="${currentUserProjects.size() > 1}">
                                 <a class="nav-link collapsed" href="javascript:void(0);" data-bs-toggle="collapse"
                                    data-bs-target="#collapseAddIssue" aria-expanded="false" aria-controls="collapseAddIssue">
                                     <div class="nav-link-icon"><i data-feather="plus"></i></div>
@@ -226,18 +227,36 @@
                                     </nav>
                                 </div>
                             </div>
+                            <!-- IF CURRENT USER IS ONLY INVOLVED WITH A SINGLE PROJECT -->
+                            <div sec:authorize="hasAnyAuthority('Project Manager', 'Admin', 'Developer')"
+                                 th:if="${currentUserProjects.size() == 1}">
+                                <a th:href="@{'/issues/' + ${currentUserProjects.get(0).identifier} + '/new'}" class="nav-link">
+                                    <div class="nav-link-icon"><i data-feather="plus"></i></div>
+                                    Add Issue
+                                </a>
+                            </div>
                             <!-- Sidenav Link (Issues List)-->
-                            <a class="nav-link collapsed" href="javascript:void(0);" data-bs-toggle="collapse"
-                               data-bs-target="#collapseDashboards" aria-expanded="false" aria-controls="collapseDashboards">
-                                <div class="nav-link-icon"><i data-feather="list"></i></div>
-                                Issues
-                                <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                            </a>
-                            <div class="collapse" id="collapseDashboards" data-bs-parent="#accordionSidenav">
-                                <a class="nav-link" th:href="@{'/issues/all'}">All Issues</a>
-                                <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavPages">
-                                    <a class="nav-link" th:href="@{'/issues/' + ${project.identifier}}" th:each="project : ${currentUserProjects}" th:value="${project.id}" th:text="${project.name}"></a>
-                                </nav>
+                            <!-- IF CURRENT USER IS INVOLVED IN MULTIPLE PROJECTS -->
+                            <div th:if="${currentUserProjects.size() > 1}">
+                                <a class="nav-link collapsed" href="javascript:void(0);" data-bs-toggle="collapse"
+                                   data-bs-target="#collapseDashboards" aria-expanded="false" aria-controls="collapseDashboards">
+                                    <div class="nav-link-icon"><i data-feather="list"></i></div>
+                                    Issues
+                                    <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                                </a>
+                                <div class="collapse" id="collapseDashboards" data-bs-parent="#accordionSidenav">
+                                    <a class="nav-link" th:href="@{'/issues/all'}">All Issues</a>
+                                    <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavPages">
+                                        <a class="nav-link" th:href="@{'/issues/' + ${project.identifier}}" th:each="project : ${currentUserProjects}" th:value="${project.id}" th:text="${project.name}"></a>
+                                    </nav>
+                                </div>
+                            </div>
+                            <!-- IF CURRENT USER IS ONLY INVOLVED WITH A SINGLE PROJECT -->
+                            <div th:if="${currentUserProjects.size() == 1}">
+                                <a th:href="@{'/issues/' + ${currentUserProjects.get(0).identifier}}" class="nav-link">
+                                    <div class="nav-link-icon"><i data-feather="list"></i></div>
+                                    Issues
+                                </a>
                             </div>
                             <!-- Sidenav Link (Organization)-->
                             <a class="nav-link active" href="/organization">
@@ -390,21 +409,21 @@
                             </div>
                         </div>
 
-                        <div th:if="${!members.isEmpty()}" class="card mb-2">
+                        <div th:if="${!guests.isEmpty()}" class="card mb-2">
                             <div class="card-body">
-                                <div class="small text-muted mb-2">Members:</div>
+                                <div class="small text-muted mb-2">Guests:</div>
                                 <div class="row">
-                                    <div th:each="member, list : ${members}" class="col-lg-4"
+                                    <div th:each="guest, list : ${guests}" class="col-lg-4"
                                          th:classappend="${list.index < list.size - 3 ? 'mb-3' : 'mb-xs-3 mb-sm-3 mb-lg-0'}">
                                         <div class="d-flex align-items-center">
                                             <div class="avatar avatar-lg">
-                                                <img th:if="${member.hasProfilePicture()}" th:src="@{'/files/' +${member.id} + '/true'}"
+                                                <img th:if="${guest.hasProfilePicture()}" th:src="@{'/files/' +${guest.id} + '/true'}"
                                                      src="/assets/img/demo/user-placeholder.svg" class="avatar-img img-fluid" alt="">
-                                                <img th:unless="${member.hasProfilePicture()}" src="/assets/img/demo/user-placeholder.svg" class="avatar-img img-fluid" alt="">
+                                                <img th:unless="${guest.hasProfilePicture()}" src="/assets/img/demo/user-placeholder.svg" class="avatar-img img-fluid" alt="">
                                             </div>
                                             <div class="ms-3">
-                                                <div th:text="${member.firstName} + ' ' + ${member.lastName}" class="fs-4 text-dark fw-500"></div>
-                                                <div th:text="${member.role.name}" class="small text-muted"></div>
+                                                <div th:text="${guest.firstName} + ' ' + ${guest.lastName}" class="fs-4 text-dark fw-500"></div>
+                                                <div th:text="${guest.role.name}" class="small text-muted"></div>
                                             </div>
                                         </div>
                                     </div>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
     <head>
         <meta charset="utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -211,32 +211,52 @@
                                 Dashboard
                             </a>
                             <!-- Sidenav Link (Add Issue)-->
-                            <a class="nav-link active" href="javascript:void(0);" data-bs-toggle="collapse"
-                               data-bs-target="#collapseAddIssue" aria-expanded="false" aria-controls="collapseAddIssue">
-                                <div class="nav-link-icon"><i data-feather="plus"></i></div>
-                                Add Issue
-                                <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                            </a>
-                            <div class="collapse show" id="collapseAddIssue" data-bs-parent="#accordionSidenav">
-                                <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavAddIssue">
-                                    <a class="nav-link" th:classappend="${project.id==currentProject.id} ? active"
-                                       th:href="@{'/issues/' + ${project.identifier} +'/new'}"
-                                       th:each="project : ${currentUserProjects}" th:value="${project.id}" th:text="${project.name}">
-                                    </a>
-                                </nav>
+                            <!-- IF CURRENT USER IS INVOLVED IN MULTIPLE PROJECTS -->
+                            <div th:if="${currentUserProjects.size() > 1}">
+                                <a class="nav-link active" href="javascript:void(0);" data-bs-toggle="collapse"
+                                   data-bs-target="#collapseAddIssue" aria-expanded="false" aria-controls="collapseAddIssue">
+                                    <div class="nav-link-icon"><i data-feather="plus"></i></div>
+                                    Add Issue
+                                    <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                                </a>
+                                <div class="collapse show" id="collapseAddIssue" data-bs-parent="#accordionSidenav">
+                                    <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavAddIssue">
+                                        <a class="nav-link" th:classappend="${project.id==currentProject.id} ? active"
+                                           th:href="@{'/issues/' + ${project.identifier} +'/new'}"
+                                           th:each="project : ${currentUserProjects}" th:value="${project.id}" th:text="${project.name}">
+                                        </a>
+                                    </nav>
+                                </div>
+                            </div>
+                            <!-- IF CURRENT USER IS ONLY INVOLVED WITH A SINGLE PROJECT -->
+                            <div th:if="${currentUserProjects.size() == 1}">
+                                <a th:href="@{'/issues/' + ${currentUserProjects.get(0).identifier} + '/new'}" class="nav-link active">
+                                    <div class="nav-link-icon"><i data-feather="plus"></i></div>
+                                    Add Issue
+                                </a>
                             </div>
                             <!-- Sidenav Link (Issues List)-->
-                            <a class="nav-link collapsed" href="javascript:void(0);" data-bs-toggle="collapse"
-                               data-bs-target="#collapseDashboards" aria-expanded="false" aria-controls="collapseDashboards">
-                                <div class="nav-link-icon"><i data-feather="list"></i></div>
-                                Issues
-                                <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                            </a>
-                            <div class="collapse" id="collapseDashboards" data-bs-parent="#accordionSidenav">
-                                <a class="nav-link" th:href="@{'/issues/all'}">All Issues</a>
-                                <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavPages">
-                                    <a class="nav-link" th:href="@{'/issues/' + ${project.identifier}}" th:each="project : ${currentUserProjects}" th:value="${project.id}" th:text="${project.name}"></a>
-                                </nav>
+                            <!-- IF CURRENT USER IS INVOLVED IN MULTIPLE PROJECTS -->
+                            <div th:if="${currentUserProjects.size() > 1}">
+                                <a class="nav-link collapsed" href="javascript:void(0);" data-bs-toggle="collapse"
+                                   data-bs-target="#collapseDashboards" aria-expanded="false" aria-controls="collapseDashboards">
+                                    <div class="nav-link-icon"><i data-feather="list"></i></div>
+                                    Issues
+                                    <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                                </a>
+                                <div class="collapse" id="collapseDashboards" data-bs-parent="#accordionSidenav">
+                                    <a class="nav-link" th:href="@{'/issues/all'}">All Issues</a>
+                                    <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavPages">
+                                        <a class="nav-link" th:href="@{'/issues/' + ${project.identifier}}" th:each="project : ${currentUserProjects}" th:value="${project.id}" th:text="${project.name}"></a>
+                                    </nav>
+                                </div>
+                            </div>
+                            <!-- IF CURRENT USER IS ONLY INVOLVED WITH A SINGLE PROJECT -->
+                            <div th:if="${currentUserProjects.size() == 1}">
+                                <a th:href="@{'/issues/' + ${currentUserProjects.get(0).identifier}}" class="nav-link">
+                                    <div class="nav-link-icon"><i data-feather="list"></i></div>
+                                    Issues
+                                </a>
                             </div>
                             <!-- Sidenav Link (Organization)-->
                             <a class="nav-link" href="/organization">
@@ -388,10 +408,8 @@
                                                 <select th:field="*{status}" class="form-control" id="statusInput">
                                                     <option value="Open">Open</option>
                                                     <option value="In-Progress">In Progress</option>
-                                                    <option th:if="${currentUser.getRole().name == 'Project Manager' ||
-                                                        currentUser.getRole().name == 'Admin'}" value="Resolved">Resolved</option>
-                                                    <option th:if="${currentUser.getRole().name == 'Project Manager' ||
-                                                        currentUser.getRole().name == 'Admin'}" value="Closed">Closed</option>
+                                                    <option sec:authorize="hasAnyAuthority('Project Manager', 'Admin', 'Developer')" value="Resolved">Resolved</option>
+                                                    <option sec:authorize="hasAnyAuthority('Project Manager', 'Admin')" value="Closed">Closed</option>
                                                 </select>
                                             </div>
                                         </div>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
     <head>
         <meta charset="utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -212,8 +212,9 @@
                             </a>
 
                             <!-- Sidenav Link (Add Issue)-->
-                            <div th:if="${currentUser.getRole().name == 'Project Manager' ||
-                                                currentUser.getRole().name == 'Admin' || currentUser.getRole().name == 'Developer'}">
+                            <!-- IF CURRENT USER IS INVOLVED IN MULTIPLE PROJECTS -->
+                            <div sec:authorize="hasAnyAuthority('Project Manager', 'Admin', 'Developer')"
+                                 th:if="${currentUserProjects.size() > 1}">
                                 <a class="nav-link collapsed" href="javascript:void(0);" data-bs-toggle="collapse"
                                    data-bs-target="#collapseAddIssue" aria-expanded="false" aria-controls="collapseAddIssue">
                                     <div class="nav-link-icon"><i data-feather="plus"></i></div>
@@ -228,19 +229,37 @@
                                     </nav>
                                 </div>
                             </div>
+                            <!-- IF CURRENT USER IS ONLY INVOLVED WITH A SINGLE PROJECT -->
+                            <div sec:authorize="hasAnyAuthority('Project Manager', 'Admin', 'Developer')"
+                                 th:if="${currentUserProjects.size() == 1}">
+                                <a th:href="@{'/issues/' + ${currentUserProjects.get(0).identifier} + '/new'}" class="nav-link">
+                                    <div class="nav-link-icon"><i data-feather="plus"></i></div>
+                                    Add Issue
+                                </a>
+                            </div>
 
                             <!-- Sidenav Link (Issues List)-->
-                            <a class="nav-link active" href="javascript:void(0);" data-bs-toggle="collapse"
-                               data-bs-target="#collapseIssues" aria-expanded="false" aria-controls="collapseIssues">
-                                <div class="nav-link-icon"><i data-feather="list"></i></div>
-                                Issues
-                                <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                            </a>
-                            <div class="collapse show" id="collapseIssues" data-bs-parent="#accordionSidenav">
-                                <a class="nav-link active" th:href="@{'/issues/all'}">All Issues</a>
-                                <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavIssues">
-                                    <a class="nav-link" th:each="project : ${currentUserProjects}" th:href="@{'/issues/' + ${project.identifier}}" th:value="${project.id}" th:text="${project.name}"></a>
-                                </nav>
+                            <!-- IF CURRENT USER IS INVOLVED IN MULTIPLE PROJECTS -->
+                            <div th:if="${currentUserProjects.size() > 1}">
+                                <a class="nav-link active" href="javascript:void(0);" data-bs-toggle="collapse"
+                                   data-bs-target="#collapseIssues" aria-expanded="false" aria-controls="collapseIssues">
+                                    <div class="nav-link-icon"><i data-feather="list"></i></div>
+                                    Issues
+                                    <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                                </a>
+                                <div class="collapse show" id="collapseIssues" data-bs-parent="#accordionSidenav">
+                                    <a class="nav-link active" th:href="@{'/issues/all'}">All Issues</a>
+                                    <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavIssues">
+                                        <a class="nav-link" th:each="project : ${currentUserProjects}" th:href="@{'/issues/' + ${project.identifier}}" th:value="${project.id}" th:text="${project.name}"></a>
+                                    </nav>
+                                </div>
+                            </div>
+                            <!-- IF CURRENT USER IS ONLY INVOLVED WITH A SINGLE PROJECT -->
+                            <div th:if="${currentUserProjects.size() == 1}">
+                                <a th:href="@{'/issues/' + ${currentUserProjects.get(0).identifier}}" class="nav-link active">
+                                    <div class="nav-link-icon"><i data-feather="list"></i></div>
+                                    Issues
+                                </a>
                             </div>
                             <!-- Sidenav Link (Organization)-->
                             <a class="nav-link" href="/organization">
@@ -455,8 +474,8 @@
                                             <span th:case="Resolved" class="badge bg-green-soft text-green">Resolved</span>
                                             <span th:case="Closed" class="badge bg-yellow-soft text-yellow">Closed</span>
                                         </td>
-                                        <td th:if="${issue.user == currentUser || currentUser.role.name == 'Project Manager' ||
-                                                                currentUser.role.name == 'Admin'}" class="align-middle text-center">
+                                        <td th:if="${issue.user == currentUser || #authorization.expression('hasAnyAuthority(''Project Manager'', ''Admin'')')}"
+                                            class="align-middle text-center">
                                             <a class="btn btn-datatable btn-icon btn-transparent-dark"
                                                th:href="@{'/issues/' + ${issue.project.identifier} + '/edit/' + ${issue.issueKey}}">
                                                 <i data-feather="edit"></i>
@@ -467,8 +486,8 @@
                                                 <i data-feather="trash-2"></i>
                                             </a>
                                         </td>
-                                        <td th:unless="${issue.user == currentUser || currentUser.role.name == 'Project Manager' ||
-                                                                    currentUser.role.name == 'Admin'}" class="align-middle text-center">
+                                        <td th:if="${issue.user != currentUser && #authorization.expression('hasAnyAuthority(''Developer'', ''Guest'')')}"
+                                            class="align-middle text-center">
                                             <a class="btn btn-xs btn-transparent-dark text-primary"
                                                th:href="@{'/issues/' + ${issue.project.identifier} + '/view/' + ${issue.issueKey}}">
                                                 Details

@@ -43,7 +43,7 @@ public class OrganizationController {
         model.addAttribute("projectManagers", userRepository.findByRoleNameAndOrganizationName("Project Manager", organizationName));
         model.addAttribute("admins", userRepository.findByRoleNameAndOrganizationName("Admin", organizationName));
         model.addAttribute("developers", userRepository.findByRoleNameAndOrganizationName("Developer", organizationName));
-        model.addAttribute("members", userRepository.findByRoleNameAndOrganizationName("Member", organizationName));
+        model.addAttribute("guests", userRepository.findByRoleNameAndOrganizationName("Guest", organizationName));
 
         model.addAttribute("currentUserProjects", currentUser.getProjects());
 

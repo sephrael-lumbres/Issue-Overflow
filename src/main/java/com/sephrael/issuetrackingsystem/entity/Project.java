@@ -38,8 +38,9 @@ public class Project {
     @NotNull
     private String color;
 
-    @JsonIgnore
     @ManyToMany
+    @JsonIgnore
+    @NotAudited
     @JoinTable(
             name = "project_user",
             joinColumns = @JoinColumn(name = "project_id"),

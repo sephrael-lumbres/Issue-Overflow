@@ -173,3 +173,23 @@ Changing Password, and for a User deleting their own Account
 - Fixed a bug where when deleting a ‘User’ that had made changes to any
 ‘Issue’ it would crash its corresponding ‘Issue Details’ pages
 - Deleted some files and code that were not being used
+
+
+
+Modify Two Side Nav Buttons, Fix Bugs and More
+
+- to improve User Experience, a modification to the Side Navigation
+buttons: ‘Add Issue’ and ‘Issues’ were made so that if the ‘User’ only
+belonged to a single ‘Project,’ it would go directly to the webpage
+instead of toggling a list of buttons of the ‘Projects’ that the 'User'
+are involved with
+- created a Java Class that creates the four Roles:'Project Manager',
+'Admin', 'Developer', and 'Guest' on Application Startup if they have
+not yet been created
+- changed the 'Member' Role name to 'Guest'
+- improved the way Authorization is checked within Web Page Elements
+- fixed bug where ‘Roles’ were not being added to the Authorities List,
+which would cause all ‘Users’ to have no Authority to do anything
+regardless of their ‘Role’
+- fixed bug where clicking on a ‘Project’ in the ‘Projects List’ page
+would not redirect the ‘User’ to its corresponding ‘Project Home’ page

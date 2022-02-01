@@ -1,7 +1,5 @@
 package com.sephrael.issuetrackingsystem;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import com.sephrael.issuetrackingsystem.entity.Role;
 import com.sephrael.issuetrackingsystem.repository.RoleRepository;
 import org.junit.jupiter.api.Test;
@@ -11,6 +9,8 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.annotation.Rollback;
 
 import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
@@ -25,14 +25,14 @@ public class RoleRepositoryTests {
         Role projectManager = new Role();
         Role admin = new Role();
         Role developer = new Role();
-        Role member = new Role();
+        Role guest = new Role();
 
         projectManager.setName("Project Manager");
         admin.setName("Admin");
         developer.setName("Developer");
-        member.setName("Member");
+        guest.setName("Guest");
 
-        roleRepository.saveAll(List.of(projectManager, admin, developer, member));
+        roleRepository.saveAll(List.of(projectManager, admin, developer, guest));
 
         List<Role> listRoles = roleRepository.findAll();
 

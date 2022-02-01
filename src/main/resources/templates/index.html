@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
     <head>
         <meta charset="utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -209,8 +209,9 @@
                                 Dashboard
                             </a>
                             <!-- Sidenav Link (Add Issue)-->
-                            <div th:if="${currentUser.getRole().name == 'Project Manager' ||
-                                        currentUser.getRole().name == 'Admin' || currentUser.getRole().name == 'Developer'}">
+                            <!-- IF CURRENT USER IS INVOLVED IN MULTIPLE PROJECTS -->
+                            <div sec:authorize="hasAnyAuthority('Project Manager', 'Admin', 'Developer')"
+                                 th:if="${currentUserProjects.size() > 1}">
                                 <a class="nav-link collapsed" href="javascript:void(0);" data-bs-toggle="collapse"
                                    data-bs-target="#collapseAddIssue" aria-expanded="false" aria-controls="collapseAddIssue">
                                     <div class="nav-link-icon"><i data-feather="plus"></i></div>
@@ -225,21 +226,39 @@
                                     </nav>
                                 </div>
                             </div>
+                            <!-- IF CURRENT USER IS ONLY INVOLVED WITH A SINGLE PROJECT -->
+                            <div sec:authorize="hasAnyAuthority('Project Manager', 'Admin', 'Developer')"
+                                 th:if="${currentUserProjects.size() == 1}">
+                                <a th:href="@{'/issues/' + ${currentUserProjects.get(0).identifier} + '/new'}" class="nav-link">
+                                    <div class="nav-link-icon"><i data-feather="plus"></i></div>
+                                    Add Issue
+                                </a>
+                            </div>
                             <!-- Sidenav Link (Issues List)-->
-                            <a class="nav-link collapsed" href="javascript:void(0);" data-bs-toggle="collapse"
-                               data-bs-target="#collapseDashboards" aria-expanded="false" aria-controls="collapseDashboards">
-                                <div class="nav-link-icon"><i data-feather="list"></i></div>
-                                Issues
-                                <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                            </a>
-                            <div class="collapse" id="collapseDashboards" data-bs-parent="#accordionSidenav">
-                                <a class="nav-link" th:href="@{'/issues/all'}">All Issues</a>
-                                <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavPages">
-                                    <a class="nav-link" th:href="@{'/issues/' + ${project.identifier}}" th:each="project : ${currentUserProjects}" th:value="${project.id}" th:text="${project.name}"></a>
-                                </nav>
+                            <!-- IF CURRENT USER IS INVOLVED IN MULTIPLE PROJECTS -->
+                            <div th:if="${currentUserProjects.size() > 1}">
+                                <a class="nav-link collapsed" href="javascript:void(0);" data-bs-toggle="collapse"
+                                   data-bs-target="#collapseDashboards" aria-expanded="false" aria-controls="collapseDashboards">
+                                    <div class="nav-link-icon"><i data-feather="list"></i></div>
+                                    Issues
+                                    <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                                </a>
+                                <div class="collapse" id="collapseDashboards" data-bs-parent="#accordionSidenav">
+                                    <a class="nav-link" th:href="@{'/issues/all'}">All Issues</a>
+                                    <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavPages">
+                                        <a class="nav-link" th:href="@{'/issues/' + ${project.identifier}}" th:each="project : ${currentUserProjects}" th:value="${project.id}" th:text="${project.name}"></a>
+                                    </nav>
+                                </div>
+                            </div>
+                            <!-- IF CURRENT USER IS ONLY INVOLVED WITH A SINGLE PROJECT -->
+                            <div th:if="${currentUserProjects.size() == 1}">
+                                <a th:href="@{'/issues/' + ${currentUserProjects.get(0).identifier}}" class="nav-link">
+                                    <div class="nav-link-icon"><i data-feather="list"></i></div>
+                                    Issues
+                                </a>
                             </div>
                             <!-- Sidenav Link (Organization)-->
-                            <a class="nav-link" href="/organization">
+                            <a class="nav-link" th:href="@{/organization}">
                                 <div class="nav-link-icon"><i data-feather="globe"></i></div>
                                 Organization
                             </a>
@@ -401,14 +420,26 @@
                                                 <div class="d-flex w-100 justify-content-between align-items-center">
                                                     <h6 th:text="${project.name}" class="mb-0"></h6>
                                                     <span>
-                                                        <a th:href="@{'/issues/' + ${project.identifier} + '/results?status=In-Progress'}" th:text="${issueRepository.findByProjectAndStatus(project, 'In-Progress').size()}" class="badge btn btn-blue rounded-pill"></a>
-                                                        <a th:href="@{'/issues/' + ${project.identifier} + '/results?status=Closed'}" th:text="${issueRepository.findByProjectAndStatus(project, 'Closed').size()}" class="badge btn btn-yellow rounded-pill"></a>
-                                                        <a th:href="@{'/issues/' + ${project.identifier} + '/results?status=Resolved'}" th:text="${issueRepository.findByProjectAndStatus(project, 'Resolved').size()}" class="badge btn btn-green rounded-pill"></a>
-                                                        <a th:href="@{'/issues/' + ${project.identifier} + '/results?status=Open'}" th:text="${issueRepository.findByProjectAndStatus(project, 'Open').size()}" class="badge btn btn-red rounded-pill"></a>
+                                                        <a th:href="@{'/issues/' + ${project.identifier} + '/results?status=In-Progress'}"
+                                                           th:text="${issueRepository.findByProjectAndStatus(project, 'In-Progress').size()}"
+                                                           title="View 'In Progress' Issues" class="badge btn btn-blue rounded-pill">
+                                                        </a>
+                                                        <a th:href="@{'/issues/' + ${project.identifier} + '/results?status=Closed'}"
+                                                           th:text="${issueRepository.findByProjectAndStatus(project, 'Closed').size()}"
+                                                           title="View 'Closed' Issues" class="badge btn btn-yellow rounded-pill"></a>
+                                                        <a th:href="@{'/issues/' + ${project.identifier} + '/results?status=Resolved'}"
+                                                           th:text="${issueRepository.findByProjectAndStatus(project, 'Resolved').size()}"
+                                                           title="View 'Resolved' Issues" class="badge btn btn-green rounded-pill"></a>
+                                                        <a th:href="@{'/issues/' + ${project.identifier} + '/results?status=Open'}"
+                                                           th:text="${issueRepository.findByProjectAndStatus(project, 'Open').size()}"
+                                                           title="View 'Open' Issues" class="badge btn btn-red rounded-pill"></a>
                                                     </span>
                                                 </div>
                                                 <span>
-                                                    <a th:href="@{'/issues/' + ${project.identifier} + '/new'}" class="btn btn-xs btn-outline-blue">Add Issue</a>
+                                                    <a sec:authorize="hasAnyAuthority('Project Manager', 'Admin', 'Developer')"
+                                                       th:href="@{'/issues/' + ${project.identifier} + '/new'}" class="btn btn-xs btn-outline-blue">
+                                                        Add Issue
+                                                    </a>
                                                     <a th:href="@{'/issues/' + ${project.identifier}}" class="btn btn-xs btn-outline-blue">Issues</a>
                                                 </span>
                                             </li>
@@ -436,14 +467,16 @@
                                                 <div th:if="${issue.dateCreated.until(issue.getDateUpdated(), seconds) == 0}" class="timeline-item-content">
                                                     New issue opened!
                                                     <a th:href="@{'/issues/' + ${issue.project.identifier} + '/view/' + ${issue.issueKey}}"
-                                                       th:text="${issue.issueKey}" class="fw-bold text-dark">
+                                                       class="fw-bold text-dark">
+                                                        <u th:text="${issue.issueKey}"></u>
                                                     </a>
                                                     has been opened by <strong th:text="${issue.user.firstName} + ' ' + ${issue.user.lastName}"></strong>.
                                                 </div>
                                                 <div th:unless="${issue.dateCreated.until(issue.getDateUpdated(), seconds) == 0}" class="timeline-item-content">
                                                     Details for
                                                     <a th:href="@{'/issues/' + ${issue.project.identifier} + '/view/' + ${issue.issueKey}}"
-                                                       th:text="' ' + ${issue.issueKey}" class="fw-bold text-dark">
+                                                       class="fw-bold text-dark">
+                                                        <u th:text="${issue.issueKey}"></u>
                                                     </a>
                                                     have been updated.
                                                 </div>
@@ -558,7 +591,7 @@
                                         <th class="align-middle text-center">Email</th>
                                         <th class="align-middle text-center">Role</th>
                                         <th class="align-middle text-center">Projects</th>
-                                        <th class="align-middle text-center" th:if="${currentUser.role.name == 'Project Manager'}">Actions</th>
+                                        <th class="align-middle text-center" sec:authorize="hasAuthority('Project Manager')">Actions</th>
                                     </tr>
                                     </thead>
                                     <tfoot>
@@ -567,7 +600,7 @@
                                         <th>Email</th>
                                         <th>Role</th>
                                         <th>Projects</th>
-                                        <th th:if="${currentUser.role.name == 'Project Manager'}">Actions</th>
+                                        <th sec:authorize="hasAuthority('Project Manager')">Actions</th>
                                     </tr>
                                     </tfoot>
                                     <tbody>
@@ -590,11 +623,13 @@
                                                 <span th:if="${project.users.contains(user)}" th:text="${project.name}" th:classappend="'bg-' + ${project.color} + '-soft' + ' text-' + ${project.color}" class="badge"></span>
                                             </span>
                                         </td>
-                                        <td th:if="${currentUser.role.name == 'Project Manager'}" class="align-middle text-center">
-                                            <a class="btn btn-datatable btn-icon btn-transparent-dark me-2"
-                                               th:href="@{'/users/edit/' + ${user.id}}"><i data-feather="edit"></i></a>
-                                            <a class="btn btn-datatable btn-icon btn-transparent-dark"
-                                               th:href="@{'/users/delete/' + ${user.id}}"
+                                        <td sec:authorize="hasAuthority('Project Manager')" class="align-middle text-center">
+                                            <a th:href="@{'/users/edit/' + ${user.id}}" title="Edit"
+                                               class="btn btn-datatable btn-icon btn-transparent-dark me-2">
+                                                <i data-feather="edit"></i>
+                                            </a>
+                                            <a th:href="@{'/users/delete/' + ${user.id}}" title="Delete"
+                                               class="btn btn-datatable btn-icon btn-transparent-dark"
                                                onclick="return confirm('Are you sure you want to delete this user?');">
                                                 <i data-feather="trash-2"></i>
                                             </a>
