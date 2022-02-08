@@ -61,11 +61,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .hasAnyAuthority("Project Manager", "Admin")
 
                 // create, update, and delete issues allowed to Project Managers, Admins, and Developers
-                .antMatchers("/issues/**/new", "/issues/**/save", "/issues/**/edit/**", "/issues/**/delete/**")
+                .antMatchers("/issues/**/new", "/issues/**/save", "/issues/**/edit/**", "/issues/**/delete/**", "/issues/new", "/issues/update")
                 .hasAnyAuthority("Project Manager", "Admin", "Developer")
 
                 // view issues allowed to all Roles
                 .antMatchers("/issues/**/view/**").hasAnyAuthority("Project Manager", "Admin", "Developer", "Guest")
+
+                // deletion of files only allowed to PMs, Admins, and Developers
+                .antMatchers("/files/**/**/delete/**").hasAnyAuthority("Project Manager", "Admin", "Developer")
 
                 // create and delete comments allowed to all Roles
                 .antMatchers("/issues/**/view/**/comment/**").hasAnyAuthority("Project Manager", "Admin", "Developer", "Guest")

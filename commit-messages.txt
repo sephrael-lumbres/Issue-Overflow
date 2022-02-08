@@ -208,3 +208,49 @@ throughout Website
 the website (i.e. Getting Started, Contact Us, Knowledge Base, etc.)
 - Added Buttons to Top Nav Bar of Dashboard for Help Section Elements
 - Removed Unused Buttons from Top Nav Bar of Dashboard
+
+
+
+Fix MASSIVE Security Bugs, Update Tests and More
+
+- Fixed MASSIVE SECURITY bug where ANY Authenticated User with the
+required Authorized Role and Permissions could perform CRUD operations
+on another Organization's: Users, Projects, Issues, Comments,
+and Files, without having any connection to the Requested Organization
+
+- Fixed Security bug where ANY Authenticated User was allowed to VIEW
+and UPDATE ANY User's 'Account Profile' if they had the correct User
+ID number. Now Users can only access their own 'Account Profile' page
+
+- Also fixed the same bugs for the 'Account Security' and
+'Account Notifications' pages
+
+- Fixed bug where if two or more Projects had the same Identifier, it
+would crash an associated webpage because the Database Query would not
+return a unique result. this was fixed by changing the Query to not
+only the Project Identifier but to an Organization as well. To make
+this work, I also changed the Project Creation to always have UNIQUE
+Project Identifiers and Access Keys within an Organization
+
+- Fixed bug where if two or more Issues had the same Project Identifier
+would crash the 'View Issue details' page because sometimes it would
+not return a UNIQUE result. this was resolved by changing the Query to
+find the Issue by Issue Key AND Organization. also, adding a column to
+the IssueKeySequence DB table to hold the Project's ID created UNIQUE
+Issue Queries
+
+- Updated some Test Cases to accommodate for the Project and Issue
+Query changes
+
+- Changed the way a List of an Organization's Users by Role was being
+queried
+
+- Added permissions of deleting Files only to Project Managers, Admins,
+and Developers
+
+- Removed access to CREATE and/or UPDATE an 'Issue' from Role: 'Guest'
+
+- Added more popup alerts for CRUD operations on Projects
+
+- Also cleaned up some code and added/modified documentation for
+readability and uniformity

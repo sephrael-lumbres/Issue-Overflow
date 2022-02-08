@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
 import java.security.Principal;
 import java.util.Random;
@@ -29,28 +28,24 @@ public class OrganizationController {
     private RoleRepository roleRepository;
 
     @RequestMapping("")
-    public ModelAndView viewOrganizationDetails(Model model, Principal principal) {
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("/organization/organization-details");
-
+    public String viewOrganizationDetails(Model model, Principal principal) {
         User currentUser = userRepository.findByEmail(principal.getName());
-        String organizationName = currentUser.getOrganization().getName();
+        Organization currentOrganization = currentUser.getOrganization();
 
-        // this allowed me to print the Organization that the currently logged-in user belongs to
+        if(currentOrganization == null) {
+            return "/organization/select-organization";
+        }
+
         model.addAttribute("currentUser", currentUser);
 
-        // this allowed me to access the Users of an Organization by User Roles
-        model.addAttribute("projectManagers", userRepository.findByRoleNameAndOrganizationName("Project Manager", organizationName));
-        model.addAttribute("admins", userRepository.findByRoleNameAndOrganizationName("Admin", organizationName));
-        model.addAttribute("developers", userRepository.findByRoleNameAndOrganizationName("Developer", organizationName));
-        model.addAttribute("guests", userRepository.findByRoleNameAndOrganizationName("Guest", organizationName));
-
+        // gets the Users of an Organization by each Role
+        model.addAttribute("projectManagers", userRepository.findByOrganizationAndRole(currentOrganization, roleRepository.findByName("Project Manager")));
+        model.addAttribute("admins", userRepository.findByOrganizationAndRole(currentOrganization, roleRepository.findByName("Admin")));
+        model.addAttribute("developers", userRepository.findByOrganizationAndRole(currentOrganization, roleRepository.findByName("Developer")));
+        model.addAttribute("guests", userRepository.findByOrganizationAndRole(currentOrganization, roleRepository.findByName("Guest")));
         model.addAttribute("currentUserProjects", currentUser.getProjects());
 
-        if(currentUser.getOrganization() == null) {
-            modelAndView.setViewName("/organization/select-organization");
-        }
-        return modelAndView;
+        return "/organization/organization-details";
     }
 
     @RequestMapping("/select")
@@ -64,13 +59,12 @@ public class OrganizationController {
 
     @RequestMapping("/new")
     public String showCreateOrganizationPage(Model model, Principal principal) {
-        model.addAttribute("organization", new Organization());
-        model.addAttribute("users", userService.listAll());
-
         if(userRepository.findByEmail(principal.getName()).getOrganization() != null)
             return("redirect:/organization");
-        else
-            return("/organization/create-organization");
+
+        model.addAttribute("organization", new Organization());
+
+        return("/organization/create-organization");
     }
 
     public static String generateRandomAccessKey(int len) {
@@ -84,14 +78,13 @@ public class OrganizationController {
 
     @PostMapping("/save")
     public String createOrganization(Organization organization, Principal principal) {
+        User currentUser = userRepository.findByEmail(principal.getName());
         String accessKey = generateRandomAccessKey(10);
         organization.setAccessKey(accessKey);
 
         // this connects the current user to the newly created Organization
-        organization.addToUser(userRepository.findByEmail(principal.getName()));
+        organization.addToUser(currentUser);
         organizationRepository.save(organization);
-
-        User currentUser = userRepository.findByEmail(principal.getName());
 
         roleRepository.findByName("Project Manager").addToUser(currentUser);
         userRepository.save(currentUser);
@@ -112,13 +105,11 @@ public class OrganizationController {
     }
 
     @RequestMapping("/join")
-    public String joinOrganization(Model model, Principal principal) {
-        model.addAttribute("organization", organizationRepository.findAll());
-
+    public String joinOrganization(Principal principal) {
         if(userRepository.findByEmail(principal.getName()).getOrganization() != null)
             return("redirect:/organization");
-        else
-            return("/organization/join-organization");
+
+        return("/organization/join-organization");
     }
 
     // this returns the json of all the organizations

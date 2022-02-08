@@ -74,6 +74,7 @@ public class EntityRelationshipIntegrationTests {
         Project project = new Project();
         project.setName("Compression");
         project.setIdentifier("SV");
+        project.setOrganization(organizationRepository.findByAccessKey("PP"));
 
         Project savedProject = projectRepository.save(project);
 
@@ -129,12 +130,13 @@ public class EntityRelationshipIntegrationTests {
     @Test
     @Order(7)
     public void testOrganizationToProjectConnection() {
-        Project project = projectRepository.findByIdentifier("SV");
-        project.setOrganization(organizationRepository.findByAccessKey("PP"));
+        Project project = projectRepository.findByIdentifierAndOrganization("SV",
+                organizationRepository.findByAccessKey("PP"));
 
         projectRepository.save(project);
 
-        Project projectWithOrganization = projectRepository.findByIdentifier("SV");
+        Project projectWithOrganization = projectRepository.findByIdentifierAndOrganization("SV",
+                organizationRepository.findByAccessKey("PP"));
 
         assertThat(projectWithOrganization.getOrganization().getName()).isEqualTo("Pied Piper");
     }
@@ -142,12 +144,14 @@ public class EntityRelationshipIntegrationTests {
     @Test
     @Order(8)
     public void testUserToProjectConnection() {
-        Project project = projectRepository.findByIdentifier("SV");
+        Project project = projectRepository.findByIdentifierAndOrganization("SV",
+                organizationRepository.findByAccessKey("PP"));
         project.addUser(userRepository.findByEmail("ravikumar@gmail.com"));
 
         projectRepository.save(project);
 
-        Project projectWithUser = projectRepository.findByIdentifier("SV");
+        Project projectWithUser = projectRepository.findByIdentifierAndOrganization("SV",
+                organizationRepository.findByAccessKey("PP"));
 
         assertThat(projectWithUser.getUsers().get(0).getEmail()).isEqualTo("ravikumar@gmail.com");
     }
@@ -156,7 +160,8 @@ public class EntityRelationshipIntegrationTests {
     @Order(9)
     public void testProjectToIssueConnection() {
         Issue issue = issueRepository.findIssueByTitle("Data Schema Overwritten");
-        issue.setProject(projectRepository.findByIdentifier("SV"));
+        issue.setProject(projectRepository.findByIdentifierAndOrganization("SV",
+                organizationRepository.findByAccessKey("PP")));
 
         issueRepository.save(issue);
 
@@ -231,11 +236,13 @@ public class EntityRelationshipIntegrationTests {
     @Test
     @Order(15)
     public void testDeleteProject() {
-        Project project = projectRepository.findByIdentifier("SV");
+        Project project = projectRepository.findByIdentifierAndOrganization("SV",
+                organizationRepository.findByAccessKey("PP"));
 
         projectRepository.deleteById(project.getId());
 
-        Project deletedProject = projectRepository.findByIdentifier("SV");
+        Project deletedProject = projectRepository.findByIdentifierAndOrganization("SV",
+                organizationRepository.findByAccessKey("PP"));
 
         assertThat(deletedProject).isNull();
     }

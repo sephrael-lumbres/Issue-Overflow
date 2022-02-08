@@ -6,5 +6,8 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface IssueKeySequenceRepository extends CrudRepository<IssueKeySequence, Long> {
-    IssueKeySequence findByProjectIdentifier(String projectIdentifier);
+    IssueKeySequence findByProjectIdentifierAndProjectId(String projectIdentifier, Long projectId);
+
+    // OLD CODE: caused problems when more than one Project had the same Project Identifier
+    //IssueKeySequence findByProjectIdentifier(String projectIdentifier);
 }

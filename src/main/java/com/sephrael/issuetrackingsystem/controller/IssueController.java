@@ -1,9 +1,6 @@
 package com.sephrael.issuetrackingsystem.controller;
 
-import com.sephrael.issuetrackingsystem.entity.Comment;
-import com.sephrael.issuetrackingsystem.entity.Issue;
-import com.sephrael.issuetrackingsystem.entity.Project;
-import com.sephrael.issuetrackingsystem.entity.User;
+import com.sephrael.issuetrackingsystem.entity.*;
 import com.sephrael.issuetrackingsystem.repository.*;
 import com.sephrael.issuetrackingsystem.service.FileService;
 import com.sephrael.issuetrackingsystem.service.IssueService;
@@ -41,17 +38,17 @@ public class IssueController {
 
     @GetMapping("/all")
     public String showIssuesByOrganization(Principal principal, Model model) {
-        List<Issue> issuesByOrganization = issueRepository.findByOrganization(userRepository.findByEmail(principal.getName()).getOrganization());
         User currentUser = userRepository.findByEmail(principal.getName());
+
+        if(currentUser.getOrganization() == null)
+            return "/organization/select-organization";
+
+        List<Issue> issuesByOrganization = issueRepository.findByOrganization(currentUser.getOrganization());
 
         model.addAttribute("issues", issuesByOrganization);
         model.addAttribute("currentUser", currentUser);
-//        model.addAttribute("currentProject", null);
         model.addAttribute("currentUserProjects", currentUser.getProjects());
 
-        if(userRepository.findByEmail(principal.getName()).getOrganization() == null) {
-            return "/organization/select-organization";
-        }
         return("/issues/issues-by-organization");
     }
     
@@ -64,7 +61,11 @@ public class IssueController {
                                   @RequestParam(value = "assignedTo", required = false) String assignedTo,
                                   @RequestParam(value = "projectIdentifier", required = false) String projectIdentifier) {
 
+        User currentUser = userRepository.findByEmail(principal.getName());
         List<Issue> filteredIssues;
+
+        if(currentUser.getOrganization() == null)
+            return "/organization/select-organization";
 
         // this allows filter fields to be empty
         type = issueService.setEmptyFilterFieldToNull(type);
@@ -76,32 +77,37 @@ public class IssueController {
         // this allows a User to view Issues that are unassigned or assigned to a specific User or all issues that are
         // neither assigned nor unassigned
         if(Objects.equals(assignedTo, "Unassigned")) {
-            filteredIssues = issueRepository.findByProjectAndStatusAndPriorityAndTypeAndUserAndAssignedTo(projectRepository.findByIdentifier(projectIdentifier),
+            filteredIssues = issueRepository.findByProjectAndStatusAndPriorityAndTypeAndUserAndAssignedTo(
+                    projectRepository.findByIdentifierAndOrganization(projectIdentifier, currentUser.getOrganization()),
                     status, priority, type, userRepository.findByEmail(createdBy), null);
         } else {
-            filteredIssues = issueRepository.findByProjectAndStatusAndPriorityAndTypeAndAssignedToAndUser(projectRepository.findByIdentifier(projectIdentifier),
+            filteredIssues = issueRepository.findByProjectAndStatusAndPriorityAndTypeAndAssignedToAndUser(
+                    projectRepository.findByIdentifierAndOrganization(projectIdentifier, currentUser.getOrganization()),
                     status, priority, type, userRepository.findByEmail(assignedTo), userRepository.findByEmail(createdBy));
         }
 
         model.addAttribute("issues", filteredIssues);
-//        model.addAttribute("currentProject", null);
-        model.addAttribute("currentUser", userRepository.findByEmail(principal.getName()));
-        model.addAttribute("currentUserProjects", userRepository.findByEmail(principal.getName()).getProjects());
+        model.addAttribute("currentUser", currentUser);
+        model.addAttribute("currentUserProjects", currentUser.getProjects());
 
         return ("/issues/issues-by-organization");
     }
 
     @GetMapping("/{identifier}")
     public String showIssuesByProject(@PathVariable("identifier") String identifier, Model model, Principal principal) {
-        List<Issue> issuesByProject = issueService.findProjectById(projectRepository.findByIdentifier(identifier).getId());
-        model.addAttribute("issues", issuesByProject);
-        model.addAttribute("currentUser", userRepository.findByEmail(principal.getName()));
-        model.addAttribute("currentProject", projectRepository.findByIdentifier(identifier));
-        model.addAttribute("currentUserProjects", userRepository.findByEmail(principal.getName()).getProjects());
+        User currentUser = userRepository.findByEmail(principal.getName());
+        Organization currentOrganization = currentUser.getOrganization();
 
-        if(userRepository.findByEmail(principal.getName()).getOrganization() == null) {
+        if(currentOrganization == null)
             return "/organization/select-organization";
-        }
+
+        Project currentProject = projectRepository.findByIdentifierAndOrganization(identifier, currentOrganization);
+
+        model.addAttribute("issues", currentProject.getIssues());
+        model.addAttribute("currentUser", currentUser);
+        model.addAttribute("currentProject", currentProject);
+        model.addAttribute("currentUserProjects", currentUser.getProjects());
+
         return("/issues/issues-by-project");
     }
 
@@ -113,7 +119,13 @@ public class IssueController {
                                @RequestParam(value = "assignedTo", required = false) String assignedTo,
                                @PathVariable("identifier") String identifier, Model model, Principal principal) {
 
-        Project currentProject = projectRepository.findByIdentifier(identifier);
+        User currentUser = userRepository.findByEmail(principal.getName());
+        Organization currentOrganization = currentUser.getOrganization();
+
+        if(currentOrganization == null)
+            return "/organization/select-organization";
+
+        Project currentProject = projectRepository.findByIdentifierAndOrganization(identifier, currentOrganization);
         List<Issue> filteredIssues;
 
         // this allows filter fields to be empty
@@ -134,27 +146,29 @@ public class IssueController {
 
         model.addAttribute("issues", filteredIssues);
         model.addAttribute("currentProject", currentProject);
-        model.addAttribute("currentUser", userRepository.findByEmail(principal.getName()));
-        model.addAttribute("currentUserProjects", userRepository.findByEmail(principal.getName()).getProjects());
+        model.addAttribute("currentUser", currentUser);
+        model.addAttribute("currentUserProjects", currentUser.getProjects());
 
         return ("/issues/issues-by-project");
     }
 
     @RequestMapping("/{identifier}/new")
     public String showNewIssuePage(@PathVariable(name = "identifier") String identifier, Model model, Principal principal) {
+        User currentUser = userRepository.findByEmail(principal.getName());
+        Organization currentOrganization = currentUser.getOrganization();
+
+        if(currentOrganization == null)
+            return "/organization/select-organization";
+
         Issue issue = new Issue();
         model.addAttribute("issue", issue);
-        model.addAttribute("currentUser", userRepository.findByEmail(principal.getName()));
-        model.addAttribute("users", userService.listAll());
-        model.addAttribute("currentProject", projectRepository.findByIdentifier(identifier));
-        model.addAttribute("currentUserProjects", userRepository.findByEmail(principal.getName()).getProjects());
+        model.addAttribute("currentUser", currentUser);
+        model.addAttribute("currentProject", projectRepository.findByIdentifierAndOrganization(identifier, currentOrganization));
+        model.addAttribute("currentUserProjects", currentUser.getProjects());
 
-        // THIS ALLOWS ME TO ASSIGN EMAIL TO ISSUE TABLE (create-issue.html)
-//        issue.setUserEmail(principal.getName());
+        // this was previously used to CONNECT an 'Issue' to the 'User' that created the 'Issue'
+        //model.addAttribute("users", userService.listAll());
 
-        if(userRepository.findByEmail(principal.getName()).getOrganization() == null) {
-            return "/organization/select-organization";
-        }
         return("/issues/create-issue");
     }
 
@@ -163,25 +177,27 @@ public class IssueController {
                             @RequestParam(value = "files", required = false)MultipartFile[] files) {
         User currentUser = userRepository.findByEmail(principal.getName());
 
+        if(currentUser.getOrganization() == null)
+            return "/organization/select-organization";
+
         // sets the Issue Key
         issueService.setIssueKey(issue, issue.getProject());
+
         // connects the newly created Issue to the current User that created the Issue
         currentUser.addToIssue(issue);
+
         // connects the issue to the current user's Organization
         currentUser.getOrganization().addToIssue(issue);
 
         issueService.save(issue);
 
-        // checks if 'Attach File(s)' Field is Empty
+        // if 'Attach File(s)' Field is NOT empty, they are uploaded to the DB and are CONNECTED to the requested 'Issue'
         if(!files[0].isEmpty()) {
             for (MultipartFile file : files) {
                 fileService.uploadIssueAttachments(currentUser, file, false, issue);
             }
         }
 
-        if(currentUser.getOrganization() == null) {
-            return "/organization/select-organization";
-        }
         return ("redirect:/issues/" + issue.getProject().getIdentifier() + "/view/" + issue.getIssueKey());
     }
 
@@ -189,8 +205,11 @@ public class IssueController {
     public String updateIssue(@ModelAttribute("issue") Issue nextIssue, Principal principal,
                               @RequestParam(value = "files", required = false)MultipartFile[] files,
                               @RequestParam(value = "isAttachFileForm", required = false) boolean isAttachFileForm) {
-
         User currentUser = userRepository.findByEmail(principal.getName());
+
+        if(currentUser.getOrganization() == null)
+            return "/organization/select-organization";
+
         Issue previousIssue = issueRepository.findIssueById(nextIssue.getId());
 
         if(!isAttachFileForm) {
@@ -207,62 +226,69 @@ public class IssueController {
             issueService.save(previousIssue);
         }
 
-        // checks if 'Attach File(s)' Field is Empty
+        // if 'Attach File(s)' Field is NOT null AND NOT empty, they are uploaded to the DB and are CONNECTED to the requested 'Issue'
         if(files != null && !files[0].isEmpty()) {
             for (MultipartFile file : files) {
                 fileService.uploadIssueAttachments(currentUser, file, false, previousIssue);
             }
         }
 
-        if(userRepository.findByEmail(principal.getName()).getOrganization() == null) {
-            return "/organization/select-organization";
-        }
         return ("redirect:/issues/" + previousIssue.getProject().getIdentifier() + "/view/" + previousIssue.getIssueKey());
     }
 
     @RequestMapping("/{identifier}/view/{issueKey}")
     public String showViewIssuePage(@PathVariable("issueKey") String issueKey, @PathVariable(name = "identifier") String identifier, Model model, Principal principal) {
-        Issue issue = issueRepository.findByIssueKey(issueKey);
+        User currentUser = userRepository.findByEmail(principal.getName());
+        Organization currentOrganization = currentUser.getOrganization();
+
+        if(currentOrganization == null)
+            return "/organization/select-organization";
+
+        Issue issue = issueRepository.findByIssueKeyAndOrganization(issueKey, currentOrganization);
         model.addAttribute("newComment", new Comment());
         model.addAttribute("comments", issue.getComments());
         model.addAttribute("issue", issue);
         model.addAttribute("attachments", issue.getFiles());
         model.addAttribute("issueChangeHistoryList", issueService.getIssueChangeHistoryList(issue.getId()));
         model.addAttribute("findRevisions", issueRepository.findRevisions(issue.getId()));
-        model.addAttribute("currentUser", userRepository.findByEmail(principal.getName()));
-        model.addAttribute("currentProject", projectRepository.findByIdentifier(identifier));
-        model.addAttribute("currentUserProjects", userRepository.findByEmail(principal.getName()).getProjects());
+        model.addAttribute("currentUser", currentUser);
+        model.addAttribute("currentProject", projectRepository.findByIdentifierAndOrganization(identifier, currentOrganization));
+        model.addAttribute("currentUserProjects", currentUser.getProjects());
 
-        if(userRepository.findByEmail(principal.getName()).getOrganization() == null) {
-            return "/organization/select-organization";
-        }
         return "/issues/issue-details";
     }
 
     @GetMapping("/{identifier}/edit/{issueKey}")
     public String showEditIssuePage(@PathVariable("issueKey") String issueKey, @PathVariable(name = "identifier") String identifier, Model model, Principal principal) {
-        model.addAttribute("issue", issueRepository.findByIssueKey(issueKey));
-        model.addAttribute("currentUser", userRepository.findByEmail(principal.getName()));
-        model.addAttribute("currentProject", projectRepository.findByIdentifier(identifier));
-        model.addAttribute("currentUserProjects", userRepository.findByEmail(principal.getName()).getProjects());
+        User currentUser = userRepository.findByEmail(principal.getName());
+        Organization currentOrganization = currentUser.getOrganization();
 
-        if(userRepository.findByEmail(principal.getName()).getOrganization() == null) {
+        if(currentOrganization == null)
             return "/organization/select-organization";
-        }
+
+        model.addAttribute("issue", issueRepository.findByIssueKeyAndOrganization(issueKey, currentOrganization));
+        model.addAttribute("currentUser", currentUser);
+        model.addAttribute("currentProject", projectRepository.findByIdentifierAndOrganization(identifier, currentOrganization));
+        model.addAttribute("currentUserProjects", currentUser.getProjects());
+
         return "/issues/edit-issue";
     }
 
     @RequestMapping("/{identifier}/delete/{issueKey}/{isOrganizationList}")
     public String deleteIssue(@PathVariable(name = "issueKey") String issueKey, @PathVariable(name = "identifier") String identifier,
                               @PathVariable("isOrganizationList") boolean isOrganizationList, Principal principal) {
-        issueService.delete(issueRepository.findByIssueKey(issueKey).getId());
+        User currentUser = userRepository.findByEmail(principal.getName());
+        Organization currentOrganization = currentUser.getOrganization();
 
-        if(projectRepository.findByIdentifier(identifier).getIssues().isEmpty()) {
-            issueKeySequenceRepository.delete(issueKeySequenceRepository.findByProjectIdentifier(identifier));
-        }
-
-        if(userRepository.findByEmail(principal.getName()).getOrganization() == null) {
+        if(currentUser.getOrganization() == null)
             return "/organization/select-organization";
+
+        Project currentProject = projectRepository.findByIdentifierAndOrganization(identifier, currentOrganization);
+
+        issueService.delete(issueRepository.findByIssueKeyAndOrganization(issueKey, currentOrganization).getId());
+
+        if(currentProject.getIssues().isEmpty()) {
+            issueKeySequenceRepository.delete(issueKeySequenceRepository.findByProjectIdentifierAndProjectId(identifier, currentProject.getId()));
         }
 
         if(isOrganizationList)
@@ -279,8 +305,8 @@ public class IssueController {
 
     // this shows the json format of all the Issues by Project
     @GetMapping(path = "/{identifier}/json")
-    public @ResponseBody Iterable<Issue> getAllIssuesByProject(@PathVariable("identifier") String identifier) {
-        return issueService.findProjectByIdentifier(identifier);
+    public @ResponseBody Iterable<Issue> getAllIssuesByProject(@PathVariable("identifier") String identifier, Principal principal) {
+        return issueService.findProjectByIdentifierAndOrganization(identifier, userRepository.findByEmail(principal.getName()).getOrganization());
     }
 
     // this shows the json format of all the Comments

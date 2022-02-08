@@ -3,6 +3,7 @@
 package com.sephrael.issuetrackingsystem.repository;
 
 import com.sephrael.issuetrackingsystem.entity.Organization;
+import com.sephrael.issuetrackingsystem.entity.Role;
 import com.sephrael.issuetrackingsystem.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -17,5 +18,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
     User findUserById(Long id);
     List<User> findByOrganization(Organization organization);
     User findByResetPasswordToken(String token);
-    List<User> findByRoleNameAndOrganizationName(String role, String name);
+    List<User> findByOrganizationAndRole(Organization organization, Role role);
+
+    // OLD CODE to get Users by Organization and Role
+    //List<User> findByRoleNameAndOrganizationName(String role, String name);
 }

@@ -1,9 +1,6 @@
 package com.sephrael.issuetrackingsystem.service;
 
-import com.sephrael.issuetrackingsystem.entity.Issue;
-import com.sephrael.issuetrackingsystem.entity.IssueKeySequence;
-import com.sephrael.issuetrackingsystem.entity.Project;
-import com.sephrael.issuetrackingsystem.entity.User;
+import com.sephrael.issuetrackingsystem.entity.*;
 import com.sephrael.issuetrackingsystem.repository.IssueKeySequenceRepository;
 import com.sephrael.issuetrackingsystem.repository.IssueRepository;
 import com.sephrael.issuetrackingsystem.repository.ProjectRepository;
@@ -33,8 +30,8 @@ public class IssueService {
         return (List<Issue>) issueRepository.findAll();
     }
 
-    public List<Issue> findProjectByIdentifier(String identifier) {
-        Project project = projectRepository.findByAccessKey(identifier);
+    public List<Issue> findProjectByIdentifierAndOrganization(String identifier, Organization organization) {
+        Project project = projectRepository.findByIdentifierAndOrganization(identifier, organization);
 
         return issueRepository.findByProject(project);
     }
@@ -102,7 +99,6 @@ public class IssueService {
             if(issue1.getAssignedTo() == null || userRepository.findUserById(issue1.getAssignedTo().getId()) == null)
                 newIssue.setNewValue(null);
             else {
-                System.out.println(issue1.getAssignedTo());
                 User issue1User = userRepository.findUserById(issue1.getAssignedTo().getId());
                 newIssue.setNewValue(issue1User.getFirstName() + " " + issue1User.getLastName());
             }
@@ -209,8 +205,8 @@ public class IssueService {
         }
     }
 
-    public int getNumberOfIssuesByProjectAndStatus(String status, String projectIdentifier) {
-        return issueRepository.findByProjectAndStatus(projectRepository.findByIdentifier(projectIdentifier), status).size();
+    public int getNumberOfIssuesByProjectAndStatus(String status, String projectIdentifier, Organization currentUserOrganization) {
+        return issueRepository.findByProjectAndStatus(projectRepository.findByIdentifierAndOrganization(projectIdentifier, currentUserOrganization), status).size();
     }
 
     public int getNumberOfIssuesByOrganizationAndStatus(String status, User currentUser) {
@@ -240,12 +236,13 @@ public class IssueService {
         if(issue.getIssueKey() == null || !Objects.equals(previousProject.getId(), nextProject.getId())) {
             if(nextProject.getIssues().size() == 0) {
                 IssueKeySequence issueKeySequence = new IssueKeySequence();
+                issueKeySequence.setProjectId(nextProject.getId());
                 issueKeySequence.setProjectIdentifier(nextProject.getIdentifier());
                 issueKeySequence.setIssueKeyCounter(1);
                 issueKeySequenceRepository.save(issueKeySequence);
                 issueKey = nextProject.getIdentifier() + "-" + issueKeySequence.getIssueKeyCounter();
             } else {
-                IssueKeySequence currentSequence = issueKeySequenceRepository.findByProjectIdentifier(nextProject.getIdentifier());
+                IssueKeySequence currentSequence = issueKeySequenceRepository.findByProjectIdentifierAndProjectId(nextProject.getIdentifier(), nextProject.getId());
                 currentSequence.setIssueKeyCounter(currentSequence.getIssueKeyCounter() + 1);
 
                 issueKey = nextProject.getIdentifier() + "-" + currentSequence.getIssueKeyCounter();
@@ -253,7 +250,7 @@ public class IssueService {
 
             // if the previous project will no longer have any issues after switching its only issue to a different project
             if(previousProject != null && previousProject != nextProject && previousProject.getIssues().size() <= 1) {
-                issueKeySequenceRepository.delete(issueKeySequenceRepository.findByProjectIdentifier(previousProject.getIdentifier()));
+                issueKeySequenceRepository.delete(issueKeySequenceRepository.findByProjectIdentifierAndProjectId(previousProject.getIdentifier(), previousProject.getId()));
             }
 
             issue.setIssueKey(issueKey);

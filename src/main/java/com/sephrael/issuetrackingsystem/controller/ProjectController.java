@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
 import java.time.temporal.ChronoUnit;
@@ -33,20 +34,27 @@ public class ProjectController {
 
     @RequestMapping("/all")
     public String viewProjects(Model model, Principal principal) {
-        model.addAttribute("newProject", new Project());
-        model.addAttribute("currentUser", userRepository.findByEmail(principal.getName()));
-        model.addAttribute("currentUserProjects", userRepository.findByEmail(principal.getName()).getProjects());
+        User currentUser = userRepository.findByEmail(principal.getName());
 
-        if(userRepository.findByEmail(principal.getName()).getOrganization() == null) {
+        if(currentUser.getOrganization() == null)
             return "/organization/select-organization";
-        }
+
+        model.addAttribute("newProject", new Project());
+        model.addAttribute("currentUser", currentUser);
+        model.addAttribute("currentUserProjects", currentUser.getProjects());
+
         return "/projects/projects-list";
     }
 
     @RequestMapping("/{identifier}")
     public String projectHome(@PathVariable("identifier") String identifier, Model model, Principal principal) {
         User currentUser = userRepository.findByEmail(principal.getName());
-        Project currentProject = projectRepository.findByIdentifier(identifier);
+        Organization currentOrganization = currentUser.getOrganization();
+
+        if(currentOrganization == null)
+            return "/organization/select-organization";
+
+        Project currentProject = projectRepository.findByIdentifierAndOrganization(identifier, currentOrganization);
 
         List<Issue> sortedIssues = issueService.getIssuesSortedByRecentActivity(
                 issueRepository.findByProject(currentProject),
@@ -62,45 +70,67 @@ public class ProjectController {
         model.addAttribute("currentProject", currentProject);
         model.addAttribute("issueRepository", issueRepository);
         model.addAttribute("currentUserProjects", currentUser.getProjects());
-        model.addAttribute("numberOfOpenIssues", issueService.getNumberOfIssuesByProjectAndStatus("Open", identifier));
-        model.addAttribute("numberOfClosedIssues", issueService.getNumberOfIssuesByProjectAndStatus("Closed", identifier));
-        model.addAttribute("numberOfResolvedIssues", issueService.getNumberOfIssuesByProjectAndStatus("Resolved", identifier));
-        model.addAttribute("numberOfInProgressIssues", issueService.getNumberOfIssuesByProjectAndStatus("In-Progress", identifier));
+        model.addAttribute("numberOfOpenIssues", issueService.getNumberOfIssuesByProjectAndStatus("Open", identifier, currentOrganization));
+        model.addAttribute("numberOfClosedIssues", issueService.getNumberOfIssuesByProjectAndStatus("Closed", identifier, currentOrganization));
+        model.addAttribute("numberOfResolvedIssues", issueService.getNumberOfIssuesByProjectAndStatus("Resolved", identifier, currentOrganization));
+        model.addAttribute("numberOfInProgressIssues", issueService.getNumberOfIssuesByProjectAndStatus("In-Progress", identifier, currentOrganization));
 
-        if(userRepository.findByEmail(principal.getName()).getOrganization() == null) {
-            return "/organization/select-organization";
-        }
         return "/projects/project-home";
     }
 
     @PostMapping("/new")
-    public String createProject(Project project, Principal principal, Model model) {
-        model.addAttribute("project", new Project());
-        project.addUser(userRepository.findByEmail(principal.getName()));
+    public String createProject(Project newProject, Principal principal, Model model, RedirectAttributes redirectAttributes) {
+        User currentUser = userRepository.findByEmail(principal.getName());
+        Organization currentUserOrganization = currentUser.getOrganization();
 
-//        userRepository.findByEmail(principal.getName()).addProject(project);
+        if(currentUserOrganization == null)
+            return "/organization/select-organization";
+
+        model.addAttribute("project", new Project());
+
+        // if the new Project's Identifier or Access Key already exists within the current User's Organization's Projects,
+        // display an ERROR message
+        for(Project currentProject : currentUserOrganization.getProjects()) {
+            if(Objects.equals(newProject.getIdentifier(), currentProject.getIdentifier())) {
+                // popup alerts are displayed accordingly
+                redirectAttributes.addFlashAttribute("idNotUniqueToOrganization", "Error creating project! Project 'ID' already exists within Organization!");
+
+                return "redirect:/projects/all";
+            } else if(Objects.equals(newProject.getAccessKey(), currentProject.getAccessKey())) {
+                redirectAttributes.addFlashAttribute("accessKeyNotUniqueToOrganization", "Error creating project! Project 'Access Key' already exists within Organization!");
+
+                return "redirect:/projects/all";
+            }
+        }
+
+        newProject.addUser(currentUser);
 
         // this adds the newly created project to the current user's Organization
-        userRepository.findByEmail(principal.getName()).getOrganization().addToProject(project);
+        currentUserOrganization.addToProject(newProject);
 
-        projectRepository.save(project);
+        projectRepository.save(newProject);
+        redirectAttributes.addFlashAttribute("projectCreationSuccess", "Project '" + newProject.getName() + "'" + " has been successfully created!");
 
-        if(userRepository.findByEmail(principal.getName()).getOrganization() == null) {
-            return "/organization/select-organization";
-        }
         return "redirect:/projects/all";
     }
 
     @PostMapping("/join")
-    public String joinProject(@RequestParam(value = "accessKey") String accessKey, Principal principal) {
-        Project currentProject = projectRepository.findByAccessKey(accessKey);
+    public String joinProject(@RequestParam(value = "accessKey") String accessKey, Principal principal, RedirectAttributes redirectAttributes) {
         User currentUser = userRepository.findByEmail(principal.getName());
+        Organization currentUserOrganization = currentUser.getOrganization();
 
+        if(currentUserOrganization == null)
+            return "/organization/select-organization";
 
+        Project currentProject = projectRepository.findByAccessKeyAndOrganization(accessKey, currentUserOrganization);
+
+        if(currentProject == null) {
+            redirectAttributes.addFlashAttribute("projectNotFound", "Project Not Found!");
+            return "redirect:/projects/all";
+        }
 
         // this adds the project to the current user's Organization only if the current user is in the Organization that
         // the Project was created in
-        Organization currentUserOrganization = currentUser.getOrganization();
         if(Objects.equals(currentUserOrganization.getId(), currentProject.getOrganization().getId())) {
             currentUserOrganization.addToProject(currentProject);
 
@@ -108,24 +138,22 @@ public class ProjectController {
             // the associated Organization and adds the current user to the desired Project
             currentProject.addUser(currentUser);
         } else {
-            System.out.println("Project Not Found in this Organization");
+            return "/error/500";
         }
 
-        // OLD this adds the project to the current user's Organization without CHECKING
+        // OLD CODE: this added the project to the current user's Organization WITHOUT CHECKING
         //userRepository.findByEmail(principal.getName()).getOrganization().addToProject(projectRepository.findByIdentifier(identifier));
 
-
         // after adding the current user to the desired Organization, this saves the Organization
-        projectRepository.save(projectRepository.findByAccessKey(accessKey));
+        projectRepository.save(projectRepository.findByAccessKeyAndOrganization(accessKey, currentUserOrganization));
 
-        if(userRepository.findByEmail(principal.getName()).getOrganization() == null) {
-            return "/organization/select-organization";
-        }
         return "redirect:/projects/" + currentProject.getIdentifier();
     }
 
     @PostMapping("/save")
     public String editProject(@RequestParam(value = "id") Long id, Project project, Principal principal) {
+        if(userRepository.findByEmail(principal.getName()).getOrganization() == null)
+            return "/organization/select-organization";
 
         Project currentProject = projectRepository.findProjectById(id);
 
@@ -138,19 +166,23 @@ public class ProjectController {
 
         projectRepository.save(project);
 
-        if(userRepository.findByEmail(principal.getName()).getOrganization() == null) {
-            return "/organization/select-organization";
-        }
         return "redirect:/projects/all";
     }
 
     @RequestMapping("/delete/{id}")
     public String deleteProject(@PathVariable(name = "id") Long id, Principal principal) {
+        User currentUser = userRepository.findByEmail(principal.getName());
+
+        if(currentUser.getOrganization() == null)
+            return "/organization/select-organization";
+
+        // checks if the Current User is involved with the Requested Project
+        if(!currentUser.getProjects().contains(projectRepository.findProjectById(id))) {
+            return "/error/404";
+        }
+
         projectRepository.deleteById(id);
 
-        if(userRepository.findByEmail(principal.getName()).getOrganization() == null) {
-            return "/organization/select-organization";
-        }
         return "redirect:/projects/all";
     }
 

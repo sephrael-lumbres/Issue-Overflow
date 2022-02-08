@@ -129,42 +129,61 @@ public class UserController {
         return "redirect:/login";
     }
 
+    // change this to only display 'Users' within the 'Organization'
     @GetMapping("/users")
     public String listUsers(Model model, Principal principal) {
+        User currentUser = userRepository.findByEmail(principal.getName());
+
+        if(currentUser.getOrganization() == null)
+            return "/organization/select-organization";
+
         List<User> listUsers = userRepository.findAll();
         model.addAttribute("listUsers", listUsers);
-        model.addAttribute("currentUser", userRepository.findByEmail(principal.getName()));
-        model.addAttribute("currentUserProjects", userRepository.findByEmail(principal.getName()).getProjects());
+        model.addAttribute("currentUser", currentUser);
+        model.addAttribute("currentUserProjects", currentUser.getProjects());
 
-        if(userRepository.findByEmail(principal.getName()).getOrganization() == null) {
-            return "/organization/select-organization";
-        }
         return "/users/users-by-organization";
     }
 
-    // DOES NOT WORK DUE TO USER PASSWORD
     @GetMapping("/users/edit/{id}")
     public String showEditUserPage(@PathVariable("id") long id, Model model, Principal principal) {
+        User currentUser = userRepository.findByEmail(principal.getName());
+
+        if(currentUser.getOrganization() == null)
+            return "/organization/select-organization";
+
         User user = userRepository.getById(id);
+
+        // if the Current User is NOT in the same Organization as the Requested User, redirect to 404 page
+        if(!currentUser.getOrganization().getUsers().contains(user)) {
+            return "/error/404";
+        }
+
         model.addAttribute("user", user);
         model.addAttribute("listRoles", userService.listRoles());
-        model.addAttribute("currentUserProjects", userRepository.findByEmail(principal.getName()).getProjects());
-        model.addAttribute("currentUser", userRepository.findByEmail(principal.getName()));
+        model.addAttribute("currentUserProjects", currentUser.getProjects());
+        model.addAttribute("currentUser", currentUser);
         model.addAttribute("editUser", userRepository.findUserById(id));
         model.addAttribute("allProjectsInOrganization", projectRepository.findAllProjectsByOrganizationId(userRepository.findUserById(id).getOrganization().getId()));
 
-        if(userRepository.findByEmail(principal.getName()).getOrganization() == null) {
-            return "/organization/select-organization";
-        }
         return "/users/edit-user";
     }
 
     // Allows for updating a User's Role and Projects(only Project Managers are allowed to make these changes)
     @PostMapping(value = "/users/update/{id}")
-    public String saveUserChanges(@PathVariable("id") Long id, @RequestParam("role") long roleId,
+    public String saveUserChanges(@PathVariable("id") Long id, @RequestParam("role") long roleId, Principal principal,
                                   @RequestParam(value = "projects", required = false) List<Project> projects, User userBeforeUpdate) {
+        User currentUser = userRepository.findByEmail(principal.getName());
+
+        if(currentUser.getOrganization() == null)
+            return "/organization/select-organization";
 
         User userToBeUpdated = userRepository.findUserById(id);
+
+        // if the Current User is NOT in the same Organization as the Requested User, redirect to 404 page
+        if(!currentUser.getOrganization().getUsers().contains(userToBeUpdated)) {
+            return "/error/404";
+        }
 
         // changes a User's Role
         roleRepository.findRoleById(roleId).addToUser(userToBeUpdated);
@@ -185,8 +204,17 @@ public class UserController {
 
     @RequestMapping("/users/delete/{id}")
     public String deleteUser(@PathVariable(name = "id") long id, Principal principal) {
+        User currentUser = userRepository.findByEmail(principal.getName());
+
+        if(currentUser.getOrganization() == null)
+            return "/organization/select-organization";
 
         User userBeforeDeletion = userRepository.findUserById(id);
+
+        // if the Current User is NOT in the same Organization as the Requested User, redirect to 404 page
+        if(!currentUser.getOrganization().getUsers().contains(userBeforeDeletion)) {
+            return "/error/404";
+        }
 
         // unassigns a User from all Issues that they were previously assigned to
         userService.unassignAllIssuesBeforeUserDeletion(userBeforeDeletion);
@@ -198,13 +226,8 @@ public class UserController {
 
         userRepository.deleteById(id);
 
-        if(userRepository.findByEmail(principal.getName()) != null && userRepository.findByEmail(principal.getName()).getOrganization() == null) {
-            return "/organization/select-organization";
-        }
-
-        if(userRepository.findByEmail(principal.getName()) == null) {
+        if(currentUser.getId() == id)
             return "redirect:/register";
-        }
 
         return "redirect:/users";
     }
