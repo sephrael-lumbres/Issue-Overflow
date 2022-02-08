@@ -334,6 +334,13 @@
                     </header>
                     <!-- Main page content-->
                     <div class="container-fluid px-4">
+
+                        <!-- Popup alerts -->
+                        <div th:text="${projectCreationSuccess}" th:if="${projectCreationSuccess}" id="popupAlerts" class="alert alert-success alert-dismissible fade show text-center mt-n1" role="alert"></div>
+                        <div th:text="${idNotUniqueToOrganization}" th:if="${idNotUniqueToOrganization}" id="popupAlerts" class="alert alert-danger alert-dismissible fade show text-center mt-n1" role="alert"></div>
+                        <div th:text="${accessKeyNotUniqueToOrganization}" th:if="${accessKeyNotUniqueToOrganization}" id="popupAlerts" class="alert alert-danger alert-dismissible fade show text-center mt-n1" role="alert"></div>
+                        <div th:text="${projectNotFound}" th:if="${projectNotFound}" id="popupAlerts" class="alert alert-danger alert-dismissible fade show text-center mt-n1" role="alert"></div>
+
                         <div class="card">
                             <div class="card-body">
                                 <table id="datatablesSimple">
@@ -564,6 +571,13 @@
     <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" crossorigin="anonymous"></script>
     <script src="/js/datatables/datatables-simple-demo.js"></script>
     <script type="text/javascript">
+        let buttonElement = document.createElement("button");
+        buttonElement.className = "btn-close";
+        buttonElement.setAttribute("data-bs-dismiss", "alert");
+        buttonElement.setAttribute("aria-label", "Close");
+        buttonElement.setAttribute("type", "button");
+        document.getElementById("popupAlerts").appendChild(buttonElement);
+
         function copyToClipboard() {
             let textToCopy = document.getElementById('viewAccessKey');
 

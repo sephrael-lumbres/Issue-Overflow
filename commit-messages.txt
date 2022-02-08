@@ -193,3 +193,18 @@ which would cause all ‘Users’ to have no Authority to do anything
 regardless of their ‘Role’
 - fixed bug where clicking on a ‘Project’ in the ‘Projects List’ page
 would not redirect the ‘User’ to its corresponding ‘Project Home’ page
+
+
+
+Add 'My Issues' Element to 'Dashboard' and More
+
+- Added 'My Issues' to 'Dashboard' that displays the Issues that the
+Current User has been Assigned to or Issues that they have Opened
+- Modified Colors and Positions of 'Issue Status' buttons and badges
+throughout Website
+- Added 'Delete Issue' button in the 'Edit Issue' page
+- Added popup alerts based on Project Creation or Joining a Project
+- Added HTML template files that will be used for the Help Section of
+the website (i.e. Getting Started, Contact Us, Knowledge Base, etc.)
+- Added Buttons to Top Nav Bar of Dashboard for Help Section Elements
+- Removed Unused Buttons from Top Nav Bar of Dashboard

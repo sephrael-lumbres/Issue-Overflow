@@ -32,38 +32,6 @@
             </form>
             <!-- Navbar Items-->
             <ul class="navbar-nav align-items-center ms-auto">
-                <!-- Documentation Dropdown-->
-                <li class="nav-item dropdown no-caret d-none d-md-block me-3">
-                    <a class="nav-link dropdown-toggle" id="navbarDropdownDocs" href="javascript:void(0);" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <div class="fw-500">Documentation</div>
-                        <i class="fas fa-chevron-right dropdown-arrow"></i>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-end py-0 me-sm-n15 me-lg-0 o-hidden animated--fade-in-up" aria-labelledby="navbarDropdownDocs">
-                        <a class="dropdown-item py-3" href="https://docs.startbootstrap.com/sb-admin-pro" target="_blank">
-                            <div class="icon-stack bg-primary-soft text-primary me-4"><i data-feather="book"></i></div>
-                            <div>
-                                <div class="small text-gray-500">Documentation</div>
-                                Usage instructions and reference
-                            </div>
-                        </a>
-                        <div class="dropdown-divider m-0"></div>
-                        <a class="dropdown-item py-3" href="https://docs.startbootstrap.com/sb-admin-pro/components" target="_blank">
-                            <div class="icon-stack bg-primary-soft text-primary me-4"><i data-feather="code"></i></div>
-                            <div>
-                                <div class="small text-gray-500">Components</div>
-                                Code snippets and reference
-                            </div>
-                        </a>
-                        <div class="dropdown-divider m-0"></div>
-                        <a class="dropdown-item py-3" href="https://docs.startbootstrap.com/sb-admin-pro/changelog" target="_blank">
-                            <div class="icon-stack bg-primary-soft text-primary me-4"><i data-feather="file-text"></i></div>
-                            <div>
-                                <div class="small text-gray-500">Changelog</div>
-                                Updates and changes
-                            </div>
-                        </a>
-                    </div>
-                </li>
                 <!-- Navbar Search Dropdown-->
                 <!-- * * Note: * * Visible only below the lg breakpoint-->
                 <li class="nav-item dropdown no-caret me-3 d-lg-none">
@@ -78,93 +46,56 @@
                         </form>
                     </div>
                 </li>
-                <!-- Alerts Dropdown-->
-                <li class="nav-item dropdown no-caret d-none d-sm-block me-3 dropdown-notifications">
-                    <a class="btn btn-icon btn-transparent-dark dropdown-toggle" id="navbarDropdownAlerts" href="javascript:void(0);" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i data-feather="bell"></i></a>
-                    <div class="dropdown-menu dropdown-menu-end border-0 shadow animated--fade-in-up" aria-labelledby="navbarDropdownAlerts">
+
+                <!-- Contact Us Button-->
+                <li class="nav-item no-caret">
+                    <a class="btn btn-sm btn-transparent-dark" href="/help/contact-us" role="button">
+                        <div class="fw-500">Contact Us</div>
+                    </a>
+                </li>
+
+                <!-- Help Dropdown-->
+                <li class="nav-item dropdown no-caret me-3 dropdown-notifications">
+                    <a class="btn btn-icon btn-transparent-dark dropdown-toggle" id="navbarDropdownAlerts" href="javascript:void(0);" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="feather-xl" data-feather="help-circle"></i></a>
+                    <div class="dropdown-menu dropdown-menu-end py-0 me-sm-n15 me-lg-0 o-hidden animated--fade-in-up" aria-labelledby="navbarDropdownDocs">
                         <h6 class="dropdown-header dropdown-notifications-header">
-                            <i class="me-2" data-feather="bell"></i>
-                            Alerts Center
+                            <i class="me-2" data-feather="help-circle"></i>
+                            Help
                         </h6>
-                        <!-- Example Alert 1-->
-                        <a class="dropdown-item dropdown-notifications-item" href="#!">
-                            <div class="dropdown-notifications-item-icon bg-warning"><i data-feather="activity"></i></div>
-                            <div class="dropdown-notifications-item-content">
-                                <div class="dropdown-notifications-item-content-details">December 29, 2021</div>
-                                <div class="dropdown-notifications-item-content-text">This is an alert message. It's nothing serious, but it requires your attention.</div>
+                        <a class="dropdown-item py-3" href="#">
+                            <div class="icon-stack bg-primary-soft text-primary me-4"><i data-feather="book"></i></div>
+                            <div>
+                                <div class="small text-gray-500">Getting Started</div>
+                                A guide for new users.
                             </div>
                         </a>
-                        <!-- Example Alert 2-->
-                        <a class="dropdown-item dropdown-notifications-item" href="#!">
-                            <div class="dropdown-notifications-item-icon bg-info"><i data-feather="bar-chart"></i></div>
-                            <div class="dropdown-notifications-item-content">
-                                <div class="dropdown-notifications-item-content-details">December 22, 2021</div>
-                                <div class="dropdown-notifications-item-content-text">A new monthly report is ready. Click here to view!</div>
+                        <div class="dropdown-divider m-0"></div>
+                        <a class="dropdown-item py-3" href="/help/knowledge-base">
+                            <div class="icon-stack bg-primary-soft text-primary me-4"><i data-feather="file-text"></i></div>
+                            <div>
+                                <div class="small text-gray-500">Knowledge Base</div>
+                                Updates and changes
                             </div>
                         </a>
-                        <!-- Example Alert 3-->
-                        <a class="dropdown-item dropdown-notifications-item" href="#!">
-                            <div class="dropdown-notifications-item-icon bg-danger"><i class="fas fa-exclamation-triangle"></i></div>
-                            <div class="dropdown-notifications-item-content">
-                                <div class="dropdown-notifications-item-content-details">December 8, 2021</div>
-                                <div class="dropdown-notifications-item-content-text">Critical system failure, systems shutting down.</div>
+                        <div class="dropdown-divider m-0"></div>
+                        <a class="dropdown-item py-3" href="#">
+                            <div class="icon-stack bg-primary-soft text-primary me-4"><i data-feather="list"></i></div>
+                            <div>
+                                <div class="small text-gray-500">Issues</div>
+                                Issues
                             </div>
                         </a>
-                        <!-- Example Alert 4-->
-                        <a class="dropdown-item dropdown-notifications-item" href="#!">
-                            <div class="dropdown-notifications-item-icon bg-success"><i data-feather="user-plus"></i></div>
-                            <div class="dropdown-notifications-item-content">
-                                <div class="dropdown-notifications-item-content-details">December 2, 2021</div>
-                                <div class="dropdown-notifications-item-content-text">New user request. Woody has requested access to the organization.</div>
+                        <div class="dropdown-divider m-0"></div>
+                        <a class="dropdown-item py-3" href="https://github.com/sephraellumbres/IssueTrackingSystem" target="_blank">
+                            <div class="icon-stack bg-primary-soft text-primary me-4"><i data-feather="github"></i></div>
+                            <div>
+                                <div class="small text-gray-500">Github</div>
+                                Code snippets and reference
                             </div>
                         </a>
-                        <a class="dropdown-item dropdown-notifications-footer" href="#!">View All Alerts</a>
                     </div>
                 </li>
-                <!-- Messages Dropdown-->
-                <li class="nav-item dropdown no-caret d-none d-sm-block me-3 dropdown-notifications">
-                    <a class="btn btn-icon btn-transparent-dark dropdown-toggle" id="navbarDropdownMessages" href="javascript:void(0);" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i data-feather="mail"></i></a>
-                    <div class="dropdown-menu dropdown-menu-end border-0 shadow animated--fade-in-up" aria-labelledby="navbarDropdownMessages">
-                        <h6 class="dropdown-header dropdown-notifications-header">
-                            <i class="me-2" data-feather="mail"></i>
-                            Message Center
-                        </h6>
-                        <!-- Example Message 1  -->
-                        <a class="dropdown-item dropdown-notifications-item" href="#!">
-                            <img class="dropdown-notifications-item-img" src="/assets/img/illustrations/profiles/profile-2.png" />
-                            <div class="dropdown-notifications-item-content">
-                                <div class="dropdown-notifications-item-content-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>
-                                <div class="dropdown-notifications-item-content-details">Thomas Wilcox · 58m</div>
-                            </div>
-                        </a>
-                        <!-- Example Message 2-->
-                        <a class="dropdown-item dropdown-notifications-item" href="#!">
-                            <img class="dropdown-notifications-item-img" src="/assets/img/illustrations/profiles/profile-3.png" />
-                            <div class="dropdown-notifications-item-content">
-                                <div class="dropdown-notifications-item-content-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>
-                                <div class="dropdown-notifications-item-content-details">Emily Fowler · 2d</div>
-                            </div>
-                        </a>
-                        <!-- Example Message 3-->
-                        <a class="dropdown-item dropdown-notifications-item" href="#!">
-                            <img class="dropdown-notifications-item-img" src="/assets/img/illustrations/profiles/profile-4.png" />
-                            <div class="dropdown-notifications-item-content">
-                                <div class="dropdown-notifications-item-content-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>
-                                <div class="dropdown-notifications-item-content-details">Marshall Rosencrantz · 3d</div>
-                            </div>
-                        </a>
-                        <!-- Example Message 4-->
-                        <a class="dropdown-item dropdown-notifications-item" href="#!">
-                            <img class="dropdown-notifications-item-img" src="/assets/img/illustrations/profiles/profile-5.png" />
-                            <div class="dropdown-notifications-item-content">
-                                <div class="dropdown-notifications-item-content-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>
-                                <div class="dropdown-notifications-item-content-details">Colby Newton · 3d</div>
-                            </div>
-                        </a>
-                        <!-- Footer Link-->
-                        <a class="dropdown-item dropdown-notifications-footer" href="#!">Read All Messages</a>
-                    </div>
-                </li>
+
                 <!-- User Dropdown-->
                 <li class="nav-item dropdown no-caret dropdown-user me-3 me-lg-4">
                     <a class="btn btn-icon btn-transparent-dark dropdown-toggle" id="navbarDropdownUserImage" href="javascript:void(0);" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -317,7 +248,7 @@
                     <!-- Main page content-->
                     <div class="container-xl px-4 mt-n10">
                         <div class="row">
-                            <div class="col-xxl-4 col-xl-12 mb-4">
+                            <div class="col-xxl-4 col-xl-6 mb-4">
                                 <div class="card card-header-actions h-100">
                                     <div class="card-header">
                                         Projects
@@ -415,24 +346,35 @@
 
                                     <div class="card-body h-100 p-2">
 
-                                        <ul class="list-group">
-                                            <li th:href="@{'/projects/' + ${project.identifier}}" th:each="project : ${currentUserProjects}" onclick="rowClicked(this.getAttribute('href'))" style="cursor: pointer" class="border-0 list-group-item list-group-item-action flex-column align-items-start rounded" aria-current="true">
+                                        <div th:if="${currentUserProjects.size() == 0}" class="text-center">
+                                            <div>There are no projects at the moment.</div>
+                                            <a class="text-primary" style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#createProjectModal">Create a new Project</a>
+                                            <span>or</span>
+                                            <a class="text-primary" style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#joinProjectModal">Join a Project</a>
+                                        </div>
+
+                                        <ul th:each="project : ${currentUserProjects}" class="list-group">
+                                            <li th:if="${currentUserProjects.size() > 0}" th:href="@{'/projects/' + ${project.identifier}}" onclick="rowClicked(this.getAttribute('href'))" style="cursor: pointer"
+                                                class="border-0 list-group-item list-group-item-action flex-column align-items-start rounded" aria-current="true">
                                                 <div class="d-flex w-100 justify-content-between align-items-center">
                                                     <h6 th:text="${project.name}" class="mb-0"></h6>
                                                     <span>
+                                                        <a th:href="@{'/issues/' + ${project.identifier} + '/results?status=Open'}"
+                                                           th:text="${issueRepository.findByProjectAndStatus(project, 'Open').size()}"
+                                                           title="View 'Open' Issues" class="badge btn btn-danger rounded-pill">
+                                                        </a>
                                                         <a th:href="@{'/issues/' + ${project.identifier} + '/results?status=In-Progress'}"
                                                            th:text="${issueRepository.findByProjectAndStatus(project, 'In-Progress').size()}"
-                                                           title="View 'In Progress' Issues" class="badge btn btn-blue rounded-pill">
+                                                           title="View 'In Progress' Issues" class="badge btn btn-warning rounded-pill">
+                                                        </a>
+                                                        <a th:href="@{'/issues/' + ${project.identifier} + '/results?status=Resolved'}"
+                                                           th:text="${issueRepository.findByProjectAndStatus(project, 'Resolved').size()}"
+                                                           title="View 'Resolved' Issues" class="badge btn btn-primary rounded-pill">
                                                         </a>
                                                         <a th:href="@{'/issues/' + ${project.identifier} + '/results?status=Closed'}"
                                                            th:text="${issueRepository.findByProjectAndStatus(project, 'Closed').size()}"
-                                                           title="View 'Closed' Issues" class="badge btn btn-yellow rounded-pill"></a>
-                                                        <a th:href="@{'/issues/' + ${project.identifier} + '/results?status=Resolved'}"
-                                                           th:text="${issueRepository.findByProjectAndStatus(project, 'Resolved').size()}"
-                                                           title="View 'Resolved' Issues" class="badge btn btn-green rounded-pill"></a>
-                                                        <a th:href="@{'/issues/' + ${project.identifier} + '/results?status=Open'}"
-                                                           th:text="${issueRepository.findByProjectAndStatus(project, 'Open').size()}"
-                                                           title="View 'Open' Issues" class="badge btn btn-red rounded-pill"></a>
+                                                           title="View 'Closed' Issues" class="badge btn btn-success rounded-pill">
+                                                        </a>
                                                     </span>
                                                 </div>
                                                 <span>
@@ -449,14 +391,38 @@
                                 </div>
                             </div>
 
-                            <!-- Recent Activity Card -->
+                            <!-- Progress Tracker for Projects -->
                             <div class="col-xxl-4 col-xl-6 mb-4">
                                 <div class="card card-header-actions h-100">
+                                    <div class="card-header">
+                                        Progress Tracker
+                                    </div>
+                                    <div class="card-body">
+                                        <span th:each="project, list : ${currentUserProjects}">
+                                            <span th:text="${#numbers.formatPercent(#lists.size(issueRepository.findByProjectAndStatus(project, 'Closed')) / (project.issues.size() * 1.0), 1, 0)}" class="float-end fw-bold"></span>
+                                            <span th:text="${#lists.size(issueRepository.findByProjectAndStatus(project, 'Closed')) / (project.issues.size() * 1.0)}" class="projectProgressDecimal" hidden></span>
+                                            <h4 th:text="${project.name}" class="small"></h4>
+                                            <div th:classappend="${!list.last} ? 'mb-4'" class="progress">
+                                                <div th:attrappend="style='width: ' + ${#numbers.formatPercent(#lists.size(issueRepository.findByProjectAndStatus(project, 'Closed')) / (project.issues.size() * 1.0), 1, 0)}"
+                                                     class="progress-bar projectProgressBar" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
+                                                </div>
+                                            </div>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Recent Activity Card -->
+                            <div class="col-xxl-4 col-xl-6 mb-4">
+                                <div class="card">
                                     <div class="card-header">
                                         Recent Activity
                                     </div>
                                     <div class="card-body" style="height: 25em; overflow-y: scroll;">
                                         <div class="timeline timeline-xs">
+
+                                            <div th:if="${issues.size() == 0 || currentUserProjects.size() == 0}" class="text-center">Issue Updates are displayed here. There are no updates currently.</div>
+
                                             <!-- Timeline item for newly created and updated Issues -->
                                             <div th:each="issue, list : ${issues}" th:if="${currentUser.getProjects().contains(issue.project)}" class="timeline-item">
                                                 <div class="timeline-item-marker">
@@ -486,82 +452,95 @@
                                 </div>
                             </div>
 
-                            <!-- Progress Tracker for Projects -->
+                            <!-- ISSUES THAT THE CURRENT USER HAS CREATED OR HAS BEEN ASSIGNED TO -->
                             <div class="col-xxl-4 col-xl-6 mb-4">
-                                <div class="card card-header-actions h-100">
+                                <div class="card h-100">
                                     <div class="card-header">
-                                        Progress Tracker
+                                        My Issues
                                     </div>
-                                    <div class="card-body">
-                                        <span th:each="project : ${currentUserProjects}">
-                                            <span th:text="${#numbers.formatPercent(#lists.size(issueRepository.findByProjectAndStatus(project, 'Closed')) / (project.issues.size() * 1.0), 1, 0)}" class="float-end fw-bold"></span>
-                                            <span th:text="${#lists.size(issueRepository.findByProjectAndStatus(project, 'Closed')) / (project.issues.size() * 1.0)}" class="projectProgressDecimal" hidden></span>
-                                            <h4 th:text="${project.name}" class="small"></h4>
-                                            <div class="progress mb-4"><div th:attrappend="style='width: ' + ${#numbers.formatPercent(#lists.size(issueRepository.findByProjectAndStatus(project, 'Closed')) / (project.issues.size() * 1.0), 1, 0)}" class="progress-bar projectProgressBar" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div></div>
-                                        </span>
-                                    </div>
-                                    <div class="card-footer position-relative">
-                                        <div class="d-flex align-items-center justify-content-between small text-body">
-                                            <a class="stretched-link text-body" href="/projects">View All Projects</a>
-                                            <i class="fas fa-angle-right"></i>
-                                        </div>
+                                    <div class="card-body" style="height: 25em; overflow-y: scroll;">
+                                        <dl class="mb-0">
+                                            <dt>Filters:
+                                                <span>
+                                                    <button id="showAssignedIssuesButton" class="btn btn-xs btn-primary" onclick="showAssignedToIssues()"><span>Assigned to me (<span th:text="${assignedToCurrentUser.size()}"></span>)</span></button>
+                                                    <button id="showCreatedByIssuesButton" class="btn btn-xs" onclick="showCreatedByIssues()"><span>Opened by me (<span th:text="${createdByCurrentUser.size()}"></span>)</span></button>
+                                                </span>
+                                            </dt>
+                                        </dl>
+                                        <table id="dashboardIssuesDataTable" style="font-size: 0.75rem;">
+                                            <thead>
+                                            <tr>
+                                                <th class="align-middle text-center">Key</th>
+                                                <th class="align-middle text-center">Title</th>
+                                                <th class="align-middle text-center">Priority</th>
+                                                <th class="align-middle text-center">Status</th>
+                                            </tr>
+                                            </thead>
+                                            <tfoot>
+                                            <tr>
+                                                <th>Key</th>
+                                                <th>Title</th>
+                                                <th>Priority</th>
+                                                <th>Status</th>
+                                            </tr>
+                                            </tfoot>
+                                            <!-- LIST OF ISSUES ASSIGNED TO THE CURRENT USER -->
+                                            <tbody id="assignedToIssues" style="">
+                                            <tr th:each="issue : ${assignedToCurrentUser}" style="cursor: pointer;"
+                                                th:href="@{'/issues/' + ${issue.project.identifier} + '/view/' + ${issue.issueKey}}"
+                                                onclick="issueRowClicked(this.getAttribute('href'))">
+                                                <td class="align-middle text-center">
+                                                    <span th:text="${issue.issueKey}" class="badge"
+                                                          th:classappend="'bg-' + ${issue.project.color} + '-soft' + ' text-' + ${issue.project.color}">
+                                                    </span>
+                                                </td>
+                                                <td th:text="${issue.title}" class="align-middle"></td>
+                                                <td th:switch="${issue.priority}" class="align-middle text-center">
+                                                    <span th:case="Low" class="badge bg-green-soft text-green">Low</span>
+                                                    <span th:case="Normal" class="badge bg-yellow-soft text-yellow">Normal</span>
+                                                    <span th:case="High" class="badge bg-red-soft text-red">High</span>
+                                                </td>
+                                                <td th:switch="${issue.status}" class="align-middle text-center">
+                                                    <span th:case="Open" class="badge bg-danger-soft text-danger">Open</span>
+                                                    <span th:case="In-Progress" class="badge bg-warning-soft text-warning">In Progress</span>
+                                                    <span th:case="Resolved" class="badge bg-primary-soft text-primary">Resolved</span>
+                                                    <span th:case="Closed" class="badge bg-success-soft text-success">Closed</span>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                            <!-- LIST OF ISSUES OPENED BY THE CURRENT USER -->
+                                            <tbody id="createdByIssues" style="display: none;">
+                                            <tr th:each="issue : ${createdByCurrentUser}" style="cursor: pointer;"
+                                                th:href="@{'/issues/' + ${issue.project.identifier} + '/view/' + ${issue.issueKey}}"
+                                                onclick="issueRowClicked(this.getAttribute('href'))">
+                                                <td class="align-middle text-center">
+                                                    <span th:text="${issue.issueKey}" class="badge"
+                                                          th:classappend="'bg-' + ${issue.project.color} + '-soft' + ' text-' + ${issue.project.color}">
+                                                    </span>
+                                                </td>
+                                                <td th:text="${issue.title}" class="align-middle"></td>
+                                                <td th:switch="${issue.priority}" class="align-middle text-center">
+                                                    <span th:case="Low" class="badge bg-green-soft text-green">Low</span>
+                                                    <span th:case="Normal" class="badge bg-yellow-soft text-yellow">Normal</span>
+                                                    <span th:case="High" class="badge bg-red-soft text-red">High</span>
+                                                </td>
+                                                <td th:switch="${issue.status}" class="align-middle text-center">
+                                                    <span th:case="Open" class="badge bg-danger-soft text-danger">Open</span>
+                                                    <span th:case="In-Progress" class="badge bg-warning-soft text-warning">In Progress</span>
+                                                    <span th:case="Resolved" class="badge bg-primary-soft text-primary">Resolved</span>
+                                                    <span th:case="Closed" class="badge bg-success-soft text-success">Closed</span>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <!-- Number of Issues of each Status Cards -->
                         <div class="row">
-                            <div class="col-lg-6 col-xl-3 mb-4">
-                                <div class="card bg-primary text-white h-100">
-                                    <div class="card-body">
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <div class="me-3">
-                                                <div class="text-white-75 small">In Progress</div>
-                                                <div th:text="${numberOfInProgressIssues}" class="text-lg fw-bold"></div>
-                                            </div>
-                                            <i class="feather-xl text-white-50" data-feather="clock"></i>
-                                        </div>
-                                    </div>
-                                    <div class="card-footer d-flex align-items-center justify-content-between small">
-                                        <a class="text-white stretched-link" href="/issues/all/results?status=In-Progress">View</a>
-                                        <div class="text-white"><i class="fas fa-angle-right"></i></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-6 col-xl-3 mb-4">
-                                <div class="card bg-warning text-white h-100">
-                                    <div class="card-body">
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <div class="me-3">
-                                                <div class="text-white-75 small">Closed</div>
-                                                <div th:text="${numberOfClosedIssues}" class="text-lg fw-bold"></div>
-                                            </div>
-                                            <i class="feather-xl text-white-50" data-feather="x-circle"></i>
-                                        </div>
-                                    </div>
-                                    <div class="card-footer d-flex align-items-center justify-content-between small">
-                                        <a class="text-white stretched-link" href="/issues/all/results?status=Closed">View</a>
-                                        <div class="text-white"><i class="fas fa-angle-right"></i></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-6 col-xl-3 mb-4">
-                                <div class="card bg-success text-white h-100">
-                                    <div class="card-body">
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <div class="me-3">
-                                                <div class="text-white-75 small">Resolved</div>
-                                                <div th:text="${numberOfResolvedIssues}" class="text-lg fw-bold"></div>
-                                            </div>
-                                            <i class="feather-xl text-white-50" data-feather="check-circle"></i>
-                                        </div>
-                                    </div>
-                                    <div class="card-footer d-flex align-items-center justify-content-between small">
-                                        <a class="text-white stretched-link" href="/issues/all/results?status=Resolved">View</a>
-                                        <div class="text-white"><i class="fas fa-angle-right"></i></div>
-                                    </div>
-                                </div>
-                            </div>
+                            <!-- OPEN ISSUES -->
                             <div class="col-lg-6 col-xl-3 mb-4">
                                 <div class="card bg-danger text-white h-100">
                                     <div class="card-body">
@@ -579,12 +558,66 @@
                                     </div>
                                 </div>
                             </div>
+                            <!-- IN PROGRESS ISSUES -->
+                            <div class="col-lg-6 col-xl-3 mb-4">
+                                <div class="card bg-warning text-white h-100">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div class="me-3">
+                                                <div class="text-white-75 small">In Progress</div>
+                                                <div th:text="${numberOfInProgressIssues}" class="text-lg fw-bold"></div>
+                                            </div>
+                                            <i class="feather-xl text-white-50" data-feather="clock"></i>
+                                        </div>
+                                    </div>
+                                    <div class="card-footer d-flex align-items-center justify-content-between small">
+                                        <a class="text-white stretched-link" href="/issues/all/results?status=In-Progress">View</a>
+                                        <div class="text-white"><i class="fas fa-angle-right"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- RESOLVED ISSUES -->
+                            <div class="col-lg-6 col-xl-3 mb-4">
+                                <div class="card bg-primary text-white h-100">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div class="me-3">
+                                                <div class="text-white-75 small">Resolved</div>
+                                                <div th:text="${numberOfResolvedIssues}" class="text-lg fw-bold"></div>
+                                            </div>
+                                            <i class="feather-xl text-white-50" data-feather="check-circle"></i>
+                                        </div>
+                                    </div>
+                                    <div class="card-footer d-flex align-items-center justify-content-between small">
+                                        <a class="text-white stretched-link" href="/issues/all/results?status=Resolved">View</a>
+                                        <div class="text-white"><i class="fas fa-angle-right"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- CLOSED ISSUES -->
+                            <div class="col-lg-6 col-xl-3 mb-4">
+                                <div class="card bg-success text-white h-100">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div class="me-3">
+                                                <div class="text-white-75 small">Closed</div>
+                                                <div th:text="${numberOfClosedIssues}" class="text-lg fw-bold"></div>
+                                            </div>
+                                            <i class="feather-xl text-white-50" data-feather="x-circle"></i>
+                                        </div>
+                                    </div>
+                                    <div class="card-footer d-flex align-items-center justify-content-between small">
+                                        <a class="text-white stretched-link" href="/issues/all/results?status=Closed">View</a>
+                                        <div class="text-white"><i class="fas fa-angle-right"></i></div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <!-- Users Table -->
                         <div class="card mb-4">
                             <div class="card-header">Members</div>
                             <div class="card-body">
-                                <table id="datatablesSimple">
+                                <table id="datatablesSimple" style="font-size: 0.75rem;">
                                     <thead>
                                     <tr>
                                         <th class="align-middle text-center">Name</th>
@@ -680,6 +713,45 @@
 
             // makes every Project clickable and goes to the Project's Home page
             function rowClicked(value) {
+                location.href = value;
+            }
+
+            function showAssignedToIssues() {
+                let assignedToTable = document.getElementById("assignedToIssues");
+                let createdByTable = document.getElementById("createdByIssues");
+
+                if(assignedToTable.getAttribute("style") === "display: none;") {
+                    createdByTable.setAttribute("style", "display: none;");
+                    assignedToTable.setAttribute("style", "");
+                }
+
+                if(document.getElementById("showCreatedByIssuesButton").classList.contains("btn-primary")) {
+                    document.getElementById("showCreatedByIssuesButton").classList.remove("btn-primary")
+                }
+                if(!document.getElementById("showAssignedIssuesButton").classList.contains("btn-primary")) {
+                    document.getElementById("showAssignedIssuesButton").classList.add("btn-primary");
+                }
+            }
+
+            function showCreatedByIssues() {
+                let createdByTable = document.getElementById("createdByIssues");
+                let assignedToTable = document.getElementById("assignedToIssues");
+
+                if(createdByTable.getAttribute("style") === "display: none;") {
+                    assignedToTable.setAttribute("style", "display: none;");
+                    createdByTable.setAttribute("style", "");
+                }
+
+                if(document.getElementById("showAssignedIssuesButton").classList.contains("btn-primary")) {
+                    document.getElementById("showAssignedIssuesButton").classList.remove("btn-primary");
+                }
+                if(!document.getElementById("showCreatedByIssuesButton").classList.contains("btn-primary")) {
+                    document.getElementById("showCreatedByIssuesButton").classList.add("btn-primary");
+                }
+            }
+
+            // makes every row in the Issue table, clickable and goes to the View Issue Details page
+            function issueRowClicked(value) {
                 location.href = value;
             }
         </script>

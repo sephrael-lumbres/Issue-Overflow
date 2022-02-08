@@ -469,10 +469,10 @@
                                             class="align-middle text-center text-nowrap">
                                         </td>
                                         <td th:switch="${issue.status}" class="align-middle text-center">
-                                            <span th:case="Open" class="badge bg-red-soft text-red">Open</span>
-                                            <span th:case="In-Progress" class="badge bg-blue-soft text-blue">In Progress</span>
-                                            <span th:case="Resolved" class="badge bg-green-soft text-green">Resolved</span>
-                                            <span th:case="Closed" class="badge bg-yellow-soft text-yellow">Closed</span>
+                                            <span th:case="Open" class="badge bg-danger-soft text-danger">Open</span>
+                                            <span th:case="In-Progress" class="badge bg-warning-soft text-warning">In Progress</span>
+                                            <span th:case="Resolved" class="badge bg-primary-soft text-primary">Resolved</span>
+                                            <span th:case="Closed" class="badge bg-success-soft text-success">Closed</span>
                                         </td>
                                         <td th:if="${issue.user == currentUser || #authorization.expression('hasAnyAuthority(''Project Manager'', ''Admin'')')}"
                                             class="align-middle text-center">

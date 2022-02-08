@@ -16,6 +16,7 @@ public interface IssueRepository extends RevisionRepository<Issue, Long, Integer
 
     Issue findIssueById(Long id);
     List<Issue> findByUser(User user);
+    List<Issue> findByAssignedTo(User assignedTo);
     Issue findByIssueKey(String issueKey);
     List<Issue> findByOrganization(Organization organization);
     List<Issue> findByProject(Project project);

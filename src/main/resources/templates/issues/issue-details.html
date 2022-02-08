@@ -404,11 +404,11 @@
                                     <div class="ms-2 me-auto">
                                     <div class="fw-bold mb-2">Status</div>
                                         <h5>
-                                            <span th:case="Open" class="badge bg-red-soft text-red">Open</span>
+                                            <span th:case="Open" class="badge bg-danger-soft text-danger">Open</span>
                                             <span th:case="In-Progress"
-                                                  class="badge bg-blue-soft text-blue">In Progress</span>
-                                            <span th:case="Resolved" class="badge bg-green-soft text-green">Resolved</span>
-                                            <span th:case="Closed" class="badge bg-yellow-soft text-yellow">Closed</span>
+                                                  class="badge bg-warning-soft text-warning">In Progress</span>
+                                            <span th:case="Resolved" class="badge bg-primary-soft text-primary">Resolved</span>
+                                            <span th:case="Closed" class="badge bg-success-soft text-success">Closed</span>
                                         </h5>
                                     </div>
                                 </li>
@@ -451,7 +451,7 @@
                                     <a th:href="@{'/files/' + ${attachment.id}}" th:text="${attachment.name}" id="attachments"></a>
                                     <span th:if="${attachment.size < 1000000}" th:text="'(' + ${attachment.size / 1000} + ' KB, ' + ${#temporals.format(attachment.dateCreated, 'dd MMM yyyy HH:mm:ss')} + ')'" style="font-size: 12px;"></span>
                                     <span th:if="${attachment.size > 999999}" th:text="'(' + ${#numbers.formatDecimal((attachment.size * 1.0) / 1000000, 1, 1)} + ' MB, ' + ${#temporals.format(attachment.dateCreated, 'dd MMM yyyy HH:mm:ss')} + ')'" style="font-size: 12px;"></span>
-                                    <a class="btn-transparent-dark"
+                                    <a th:if="${attachment.getUser().getId() == currentUser.getId()}" class="btn-transparent-dark"
                                        th:href="@{'/files/' + ${currentProject.identifier} + '/' + ${issue.issueKey} + '/delete/' + ${attachment.id}}"
                                        th:attr="onclick=|return confirm('Are you sure you want to delete &quot;${attachment.name}&quot;?')|">
                                         <i data-feather="trash-2" class="mt-1"></i>
@@ -545,10 +545,10 @@
                                         <!-- OLD VALUE -->
                                         <td th:if="${version.property == 'Status'}">
                                             <span th:switch="${version.oldValue}">
-                                                <span th:case="Open" th:text="${version.oldValue}" class="badge bg-red-soft text-red"></span>
-                                                <span th:case="In-Progress" th:text="${version.oldValue}" class="badge bg-blue-soft text-blue"></span>
-                                                <span th:case="Resolved" th:text="${version.oldValue}" class="badge bg-green-soft text-green"></span>
-                                                <span th:case="Closed" th:text="${version.oldValue}" class="badge bg-yellow-soft text-yellow"></span>
+                                                <span th:case="Open" th:text="${version.oldValue}" class="badge bg-danger-soft text-danger"></span>
+                                                <span th:case="In-Progress" th:text="${version.oldValue}" class="badge bg-warning-soft text-warning"></span>
+                                                <span th:case="Resolved" th:text="${version.oldValue}" class="badge bg-primary-soft text-primary"></span>
+                                                <span th:case="Closed" th:text="${version.oldValue}" class="badge bg-success-soft text-success"></span>
                                             </span>
                                         </td>
                                         <td th:if="${version.property == 'Type'}">
@@ -576,10 +576,10 @@
                                         <!-- NEW VALUE -->
                                         <td th:if="${version.property == 'Status'}">
                                             <span th:switch="${version.newValue}">
-                                                <span th:case="Open" th:text="${version.newValue}" class="badge bg-red-soft text-red"></span>
-                                                <span th:case="In-Progress" th:text="${version.newValue}" class="badge bg-blue-soft text-blue"></span>
-                                                <span th:case="Resolved" th:text="${version.newValue}" class="badge bg-green-soft text-green"></span>
-                                                <span th:case="Closed" th:text="${version.newValue}" class="badge bg-yellow-soft text-yellow"></span>
+                                                <span th:case="Open" th:text="${version.newValue}" class="badge bg-danger-soft text-danger"></span>
+                                                <span th:case="In-Progress" th:text="${version.newValue}" class="badge bg-warning-soft text-warning"></span>
+                                                <span th:case="Resolved" th:text="${version.newValue}" class="badge bg-primary-soft text-primary"></span>
+                                                <span th:case="Closed" th:text="${version.newValue}" class="badge bg-success-soft text-success"></span>
                                             </span>
                                         </td>
                                         <td th:if="${version.property == 'Type'}">
@@ -621,7 +621,7 @@
                                 <label for="markdownCommentEditor"></label>
                                 <textarea th:field="*{newComment.message}" id="markdownCommentEditor" form="addComment" class="form-control" placeholder="Write a comment..."></textarea>
                                 <button type="submit" class="btn btn-primary btn me-2 mt-n4" form="addComment">Add Comment</button>
-                                <button class="btn btn-light btn me-2 mt-n4" data-bs-toggle="modal" data-bs-target="#attachFileModal">
+                                <button sec:authorize="hasAnyAuthority('Project Manager', 'Admin', 'Developer')" class="btn btn-light btn me-2 mt-n4" data-bs-toggle="modal" data-bs-target="#attachFileModal">
                                     <i class="fas fa-paperclip me-2"></i>
                                     Attach File(s)
                                 </button>

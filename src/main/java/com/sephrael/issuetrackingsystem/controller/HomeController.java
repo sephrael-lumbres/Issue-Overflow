@@ -35,6 +35,9 @@ public class HomeController {
         User currentUser = userRepository.findByEmail(principal.getName());
         Organization currentOrganization = userRepository.findByEmail(principal.getName()).getOrganization();
 
+        if(currentOrganization == null)
+            return "/organization/select-organization";
+
         List<Issue> sortedIssues = issueService.getIssuesSortedByRecentActivity(
                 issueRepository.findByOrganization(currentOrganization),
                 issueRepository.findByOrganizationOrderByDateCreatedDesc(currentOrganization),
@@ -42,6 +45,8 @@ public class HomeController {
         );
 
         model.addAttribute("currentUser", currentUser);
+        model.addAttribute("createdByCurrentUser", issueRepository.findByUser(currentUser));
+        model.addAttribute("assignedToCurrentUser", issueRepository.findByAssignedTo(currentUser));
         model.addAttribute("newProject", new Project());
         model.addAttribute("issueRepository", issueRepository);
         model.addAttribute("issueService", issueService);
@@ -54,9 +59,6 @@ public class HomeController {
         model.addAttribute("numberOfResolvedIssues", issueService.getNumberOfIssuesByOrganizationAndStatus("Resolved", currentUser));
         model.addAttribute("numberOfInProgressIssues", issueService.getNumberOfIssuesByOrganizationAndStatus("In-Progress", currentUser));
 
-        if(currentOrganization == null) {
-            return "/organization/select-organization";
-        }
         return "index";
     }
 

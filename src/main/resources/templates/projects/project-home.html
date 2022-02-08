@@ -312,20 +312,18 @@
                                         </h1>
                                     </div>
                                     <div class="col-12 col-xl-auto mb-3">
-                                        <a class="btn btn-sm btn-light text-primary" href="/users">
-                                            <i class="me-1" data-feather="user"></i>
-                                            Manage Users
-                                        </a>
                                         <a class="btn btn-sm btn-light text-primary" href="/projects/all">
                                             <i class="me-1" data-feather="users"></i>
                                             Manage Projects
                                         </a>
-
+                                        <a class="btn btn-sm btn-light text-primary" th:href="@{'/issues/' + ${currentProject.getIdentifier()}}">
+                                            <i class="me-1" data-feather="list"></i>
+                                            Issues
+                                        </a>
                                         <a class="btn btn-sm btn-light text-primary" data-bs-toggle="modal" data-bs-target="#viewAccessKeyModal">
                                             <i class="me-1" data-feather="key"></i>
-                                            View Access Key
+                                            Access Key
                                         </a>
-
                                     </div>
                                 </div>
                             </div>
@@ -349,7 +347,7 @@
 
                             <!-- Recent Activity Card -->
                             <div class="col-xl-8 col-lg-12 mb-4">
-                                <div class="card card-header-actions h-100">
+                                <div class="card card-header-actions">
                                     <div class="card-header">
                                         Recent Activity
                                     </div>
@@ -413,10 +411,10 @@
                                     <div class="col-12 mb-4">
                                         <div class="card">
                                             <div class="card-header">Members<span th:text="' (' + ${currentProject.getUsers().size()} + ')'"></span></div>
-                                            <div class="card-body" style="height: 25em; overflow-y: scroll;">
+                                            <div class="card-body" style="height: 16em; overflow-y: scroll;">
                                                 <!-- Item 1-->
-                                                <div th:each="user: ${currentProject.getUsers()}" class="d-flex align-items-center justify-content-between mb-4">
-                                                    <div class="d-flex align-items-center flex-shrink-0 me-3">
+                                                <div th:each="user, list : ${currentProject.getUsers()}" class="d-flex align-items-center justify-content-between">
+                                                    <div th:classappend="${!list.last} ? 'mb-4'" class="d-flex align-items-center flex-shrink-0 me-3">
                                                         <div class="avatar avatar-xl me-3 bg-gray-200">
                                                             <img th:if="${user.hasProfilePicture()}" th:src="@{'/files/' +${user.id} + '/true'}"
                                                                  src="/assets/img/demo/user-placeholder.svg" class="avatar-img img-fluid" alt="" />
@@ -440,8 +438,27 @@
 
                         <!-- Number of Issues of each Status Cards -->
                         <div class="row">
+                            <!-- OPEN ISSUES -->
                             <div class="col-lg-6 col-xl-3 mb-4">
-                                <div class="card bg-primary text-white h-100">
+                                <div class="card bg-danger text-white h-100">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div class="me-3">
+                                                <div class="text-white-75 small">Open</div>
+                                                <div th:text="${numberOfOpenIssues}" class="text-lg fw-bold"></div>
+                                            </div>
+                                            <i class="feather-xl text-white-50" data-feather="alert-circle"></i>
+                                        </div>
+                                    </div>
+                                    <div class="card-footer d-flex align-items-center justify-content-between small">
+                                        <a class="text-white stretched-link" th:href="@{'/issues/' + ${currentProject.identifier} + '/results?status=Open'}">View</a>
+                                        <div class="text-white"><i class="fas fa-angle-right"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- IN PROGRESS ISSUES -->
+                            <div class="col-lg-6 col-xl-3 mb-4">
+                                <div class="card bg-warning text-white h-100">
                                     <div class="card-body">
                                         <div class="d-flex justify-content-between align-items-center">
                                             <div class="me-3">
@@ -457,25 +474,9 @@
                                     </div>
                                 </div>
                             </div>
+                            <!-- RESOLVED ISSUES -->
                             <div class="col-lg-6 col-xl-3 mb-4">
-                                <div class="card bg-warning text-white h-100">
-                                    <div class="card-body">
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <div class="me-3">
-                                                <div class="text-white-75 small">Closed</div>
-                                                <div th:text="${numberOfClosedIssues}" class="text-lg fw-bold"></div>
-                                            </div>
-                                            <i class="feather-xl text-white-50" data-feather="x-circle"></i>
-                                        </div>
-                                    </div>
-                                    <div class="card-footer d-flex align-items-center justify-content-between small">
-                                        <a class="text-white stretched-link" th:href="@{'/issues/' + ${currentProject.identifier} + '/results?status=Closed'}">View</a>
-                                        <div class="text-white"><i class="fas fa-angle-right"></i></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-6 col-xl-3 mb-4">
-                                <div class="card bg-success text-white h-100">
+                                <div class="card bg-primary text-white h-100">
                                     <div class="card-body">
                                         <div class="d-flex justify-content-between align-items-center">
                                             <div class="me-3">
@@ -491,19 +492,20 @@
                                     </div>
                                 </div>
                             </div>
+                            <!-- CLOSED ISSUES -->
                             <div class="col-lg-6 col-xl-3 mb-4">
-                                <div class="card bg-danger text-white h-100">
+                                <div class="card bg-success text-white h-100">
                                     <div class="card-body">
                                         <div class="d-flex justify-content-between align-items-center">
                                             <div class="me-3">
-                                                <div class="text-white-75 small">Open</div>
-                                                <div th:text="${numberOfOpenIssues}" class="text-lg fw-bold"></div>
+                                                <div class="text-white-75 small">Closed</div>
+                                                <div th:text="${numberOfClosedIssues}" class="text-lg fw-bold"></div>
                                             </div>
-                                            <i class="feather-xl text-white-50" data-feather="alert-circle"></i>
+                                            <i class="feather-xl text-white-50" data-feather="x-circle"></i>
                                         </div>
                                     </div>
                                     <div class="card-footer d-flex align-items-center justify-content-between small">
-                                        <a class="text-white stretched-link" th:href="@{'/issues/' + ${currentProject.identifier} + '/results?status=Open'}">View</a>
+                                        <a class="text-white stretched-link" th:href="@{'/issues/' + ${currentProject.identifier} + '/results?status=Closed'}">View</a>
                                         <div class="text-white"><i class="fas fa-angle-right"></i></div>
                                     </div>
                                 </div>
