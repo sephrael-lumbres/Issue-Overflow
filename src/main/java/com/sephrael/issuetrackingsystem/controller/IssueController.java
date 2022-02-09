@@ -4,8 +4,8 @@ import com.sephrael.issuetrackingsystem.entity.*;
 import com.sephrael.issuetrackingsystem.repository.*;
 import com.sephrael.issuetrackingsystem.service.FileService;
 import com.sephrael.issuetrackingsystem.service.IssueService;
-import com.sephrael.issuetrackingsystem.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -28,8 +28,6 @@ public class IssueController {
     @Autowired
     private UserRepository userRepository;
     @Autowired
-    private UserService userService;
-    @Autowired
     private CommentRepository commentRepository;
     @Autowired
     private ProjectRepository projectRepository;
@@ -45,6 +43,7 @@ public class IssueController {
 
         List<Issue> issuesByOrganization = issueRepository.findByOrganization(currentUser.getOrganization());
 
+        model.addAttribute("newProject", new Project());
         model.addAttribute("issues", issuesByOrganization);
         model.addAttribute("currentUser", currentUser);
         model.addAttribute("currentUserProjects", currentUser.getProjects());
@@ -86,6 +85,7 @@ public class IssueController {
                     status, priority, type, userRepository.findByEmail(assignedTo), userRepository.findByEmail(createdBy));
         }
 
+        model.addAttribute("newProject", new Project());
         model.addAttribute("issues", filteredIssues);
         model.addAttribute("currentUser", currentUser);
         model.addAttribute("currentUserProjects", currentUser.getProjects());
@@ -166,14 +166,14 @@ public class IssueController {
         model.addAttribute("currentProject", projectRepository.findByIdentifierAndOrganization(identifier, currentOrganization));
         model.addAttribute("currentUserProjects", currentUser.getProjects());
 
-        // this was previously used to CONNECT an 'Issue' to the 'User' that created the 'Issue'
+        // OLD CODE: this was previously used to CONNECT an 'Issue' to the 'User' that created the 'Issue'
         //model.addAttribute("users", userService.listAll());
 
         return("/issues/create-issue");
     }
 
     @PostMapping(value = "/new")
-    public String saveIssue(@ModelAttribute("issue") Issue issue, Principal principal,
+    public String saveNewIssue(@ModelAttribute("issue") Issue issue, Principal principal,
                             @RequestParam(value = "files", required = false)MultipartFile[] files) {
         User currentUser = userRepository.findByEmail(principal.getName());
 
@@ -237,7 +237,8 @@ public class IssueController {
     }
 
     @RequestMapping("/{identifier}/view/{issueKey}")
-    public String showViewIssuePage(@PathVariable("issueKey") String issueKey, @PathVariable(name = "identifier") String identifier, Model model, Principal principal) {
+    public String showViewIssuePage(@PathVariable("issueKey") String issueKey, Model model,
+                                    @PathVariable(name = "identifier") String identifier, Principal principal) {
         User currentUser = userRepository.findByEmail(principal.getName());
         Organization currentOrganization = currentUser.getOrganization();
 
@@ -259,14 +260,23 @@ public class IssueController {
     }
 
     @GetMapping("/{identifier}/edit/{issueKey}")
-    public String showEditIssuePage(@PathVariable("issueKey") String issueKey, @PathVariable(name = "identifier") String identifier, Model model, Principal principal) {
+    public String showEditIssuePage(@PathVariable("issueKey") String issueKey, Authentication authentication,
+                                    @PathVariable(name = "identifier") String identifier, Model model, Principal principal) {
         User currentUser = userRepository.findByEmail(principal.getName());
         Organization currentOrganization = currentUser.getOrganization();
 
         if(currentOrganization == null)
             return "/organization/select-organization";
 
-        model.addAttribute("issue", issueRepository.findByIssueKeyAndOrganization(issueKey, currentOrganization));
+        Issue currentIssue = issueRepository.findByIssueKeyAndOrganization(issueKey, currentOrganization);
+
+        // if Current User did NOT Open the requested Issue AND is NOT a Project Manager AND is NOT an Admin, display 403 error
+        if(!Objects.equals(currentIssue.getUser().getId(), currentUser.getId()) &&
+                authentication.getAuthorities().stream().noneMatch(a -> a.getAuthority().equals("Project Manager")) &&
+                authentication.getAuthorities().stream().noneMatch(a -> a.getAuthority().equals("Admin")))
+            return "/error/403";
+
+        model.addAttribute("issue", currentIssue);
         model.addAttribute("currentUser", currentUser);
         model.addAttribute("currentProject", projectRepository.findByIdentifierAndOrganization(identifier, currentOrganization));
         model.addAttribute("currentUserProjects", currentUser.getProjects());
@@ -275,17 +285,26 @@ public class IssueController {
     }
 
     @RequestMapping("/{identifier}/delete/{issueKey}/{isOrganizationList}")
-    public String deleteIssue(@PathVariable(name = "issueKey") String issueKey, @PathVariable(name = "identifier") String identifier,
-                              @PathVariable("isOrganizationList") boolean isOrganizationList, Principal principal) {
+    public String deleteIssue(@PathVariable(name = "issueKey") String issueKey,
+                              @PathVariable(name = "identifier") String identifier, Principal principal,
+                              @PathVariable("isOrganizationList") boolean isOrganizationList, Authentication authentication) {
         User currentUser = userRepository.findByEmail(principal.getName());
         Organization currentOrganization = currentUser.getOrganization();
 
         if(currentUser.getOrganization() == null)
             return "/organization/select-organization";
 
+        Issue currentIssue = issueRepository.findByIssueKeyAndOrganization(issueKey, currentOrganization);
+
+        // if Current User did NOT Open the requested Issue AND is NOT a Project Manager AND is NOT an Admin, display 403 error
+        if(!Objects.equals(currentIssue.getUser().getId(), currentUser.getId()) &&
+                authentication.getAuthorities().stream().noneMatch(a -> a.getAuthority().equals("Project Manager")) &&
+                authentication.getAuthorities().stream().noneMatch(a -> a.getAuthority().equals("Admin")))
+            return "/error/403";
+
         Project currentProject = projectRepository.findByIdentifierAndOrganization(identifier, currentOrganization);
 
-        issueService.delete(issueRepository.findByIssueKeyAndOrganization(issueKey, currentOrganization).getId());
+        issueService.delete(currentIssue.getId());
 
         if(currentProject.getIssues().isEmpty()) {
             issueKeySequenceRepository.delete(issueKeySequenceRepository.findByProjectIdentifierAndProjectId(identifier, currentProject.getId()));

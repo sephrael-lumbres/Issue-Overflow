@@ -255,7 +255,7 @@
                                         <div class="dropdown no-caret">
                                             <button class="btn btn-transparent-dark btn-icon dropdown-toggle" id="projectsDropdownMenuButton" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="text-gray-500" data-feather="more-vertical"></i></button>
                                             <div class="dropdown-menu dropdown-menu-end animated--fade-in-up" aria-labelledby="dropdownMenuButton">
-                                                <a style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#createProjectModal" class="dropdown-item">
+                                                <a sec:authorize="hasAuthority('Project Manager')" style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#createProjectModal" class="dropdown-item">
                                                     <div class="dropdown-item-icon"><i class="text-gray-500" data-feather="plus"></i></div>
                                                     Create Project
                                                 </a>
@@ -272,7 +272,7 @@
                                     </div>
 
                                     <!-- Create project modal-->
-                                    <div class="modal fade" id="createProjectModal" tabindex="-1" role="dialog" aria-labelledby="createProjectModalLabel" aria-hidden="true">
+                                    <div sec:authorize="hasAuthority('Project Manager')" class="modal fade" id="createProjectModal" tabindex="-1" role="dialog" aria-labelledby="createProjectModalLabel" aria-hidden="true">
                                         <div class="modal-dialog modal-lg" role="document">
                                             <div class="modal-content">
                                                 <div class="modal-header">
@@ -348,8 +348,8 @@
 
                                         <div th:if="${currentUserProjects.size() == 0}" class="text-center">
                                             <div>There are no projects at the moment.</div>
-                                            <a class="text-primary" style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#createProjectModal">Create a new Project</a>
-                                            <span>or</span>
+                                            <a sec:authorize="hasAuthority('Project Manager')" class="text-primary" style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#createProjectModal">Create a new Project</a>
+                                            <span sec:authorize="hasAuthority('Project Manager')">or</span>
                                             <a class="text-primary" style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#joinProjectModal">Join a Project</a>
                                         </div>
 
@@ -539,7 +539,7 @@
                             </div>
                         </div>
                         <!-- Number of Issues of each Status Cards -->
-                        <div class="row">
+                        <div th:if="${!currentUser.getProjects().isEmpty()}" class="row">
                             <!-- OPEN ISSUES -->
                             <div class="col-lg-6 col-xl-3 mb-4">
                                 <div class="card bg-danger text-white h-100">

@@ -316,7 +316,7 @@
                                             <i class="me-1" data-feather="user"></i>
                                             Manage Users
                                         </a>
-                                        <button sec:authorize="hasAnyAuthority('Project Manager', 'Admin')"
+                                        <button sec:authorize="hasAuthority('Project Manager')"
                                                 class="btn btn-sm btn-light text-primary" type="button" data-bs-toggle="modal" data-bs-target="#createProjectModal">
                                             <i class="me-1" data-feather="plus"></i>
                                             Create New Project
@@ -334,6 +334,18 @@
                     </header>
                     <!-- Main page content-->
                     <div class="container-fluid px-4">
+
+                        <!-- ALERT MESSAGE IF CURRENT USER IS NOT INVOLVED WITH ANY PROJECT -->
+                        <div th:if="${currentUser.getProjects().isEmpty()}" class="alert alert-danger text-center mt-n2" role="alert">
+                            <i data-feather="alert-triangle" class="feather-lg"></i>
+                            Please
+                            <span sec:authorize="hasAuthority('Project Manager')">
+                                <a data-bs-toggle="modal" data-bs-target="#createProjectModal" style="cursor: pointer" class="alert-link">create a project</a>
+                                or
+                            </span>
+                            <a data-bs-toggle="modal" data-bs-target="#joinProjectModal" style="cursor: pointer" class="alert-link">join a project</a>
+                            to start tracking Issues
+                        </div>
 
                         <!-- Popup alerts -->
                         <div th:text="${projectCreationSuccess}" th:if="${projectCreationSuccess}" id="popupAlerts" class="alert alert-success alert-dismissible fade show text-center mt-n1" role="alert"></div>
@@ -479,7 +491,7 @@
                     </div>
 
                     <!-- Create project modal-->
-                    <div class="modal fade" id="createProjectModal" tabindex="-1" role="dialog" aria-labelledby="createProjectModalLabel" aria-hidden="true">
+                    <div sec:authorize="hasAuthority('Project Manager')" class="modal fade" id="createProjectModal" tabindex="-1" role="dialog" aria-labelledby="createProjectModalLabel" aria-hidden="true">
                         <div class="modal-dialog modal-lg" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">

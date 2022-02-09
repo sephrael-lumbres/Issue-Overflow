@@ -1,12 +1,14 @@
 package com.sephrael.issuetrackingsystem.controller;
 
 import com.sephrael.issuetrackingsystem.entity.Organization;
+import com.sephrael.issuetrackingsystem.entity.Project;
 import com.sephrael.issuetrackingsystem.entity.User;
 import com.sephrael.issuetrackingsystem.repository.OrganizationRepository;
 import com.sephrael.issuetrackingsystem.repository.RoleRepository;
 import com.sephrael.issuetrackingsystem.repository.UserRepository;
 import com.sephrael.issuetrackingsystem.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -36,14 +38,15 @@ public class OrganizationController {
             return "/organization/select-organization";
         }
 
+        model.addAttribute("newProject", new Project());
         model.addAttribute("currentUser", currentUser);
+        model.addAttribute("currentUserProjects", currentUser.getProjects());
 
         // gets the Users of an Organization by each Role
         model.addAttribute("projectManagers", userRepository.findByOrganizationAndRole(currentOrganization, roleRepository.findByName("Project Manager")));
         model.addAttribute("admins", userRepository.findByOrganizationAndRole(currentOrganization, roleRepository.findByName("Admin")));
         model.addAttribute("developers", userRepository.findByOrganizationAndRole(currentOrganization, roleRepository.findByName("Developer")));
         model.addAttribute("guests", userRepository.findByOrganizationAndRole(currentOrganization, roleRepository.findByName("Guest")));
-        model.addAttribute("currentUserProjects", currentUser.getProjects());
 
         return "/organization/organization-details";
     }
@@ -89,7 +92,10 @@ public class OrganizationController {
         roleRepository.findByName("Project Manager").addToUser(currentUser);
         userRepository.save(currentUser);
 
-        return "redirect:/organization";
+        // logs out the Current User to allow the Authorization of 'Project Manager'
+        SecurityContextHolder.getContext().setAuthentication(null);
+
+        return "redirect:/dashboard";
     }
 
     @PostMapping("/joining")
@@ -101,7 +107,7 @@ public class OrganizationController {
         // after adding the current user to the desired Organization, this saves the Organization
         organizationRepository.save(organizationRepository.findByAccessKey(accessKey));
 
-        return "redirect:/organization";
+        return "redirect:/dashboard";
     }
 
     @RequestMapping("/join")

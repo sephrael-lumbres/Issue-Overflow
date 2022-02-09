@@ -1,6 +1,7 @@
 package com.sephrael.issuetrackingsystem.controller;
 
 import com.sephrael.issuetrackingsystem.entity.File;
+import com.sephrael.issuetrackingsystem.entity.Project;
 import com.sephrael.issuetrackingsystem.entity.User;
 import com.sephrael.issuetrackingsystem.repository.UserRepository;
 import com.sephrael.issuetrackingsystem.service.UserService;
@@ -30,12 +31,16 @@ public class AccountController {
     public String showAccountProfilePage(@PathVariable("id") long id, Principal principal, Model model) {
         User currentUser = userRepository.findByEmail(principal.getName());
 
+        if(currentUser.getOrganization() == null)
+            return "/organization/select-organization";
+
         // checks if the the requested Account Profile page matches the Current User
         if(currentUser.getId() != id)
             return "/error/404";
 
         model.addAttribute("user", userRepository.getById(id));
         model.addAttribute("file", new File());
+        model.addAttribute("newProject", new Project());
         model.addAttribute("currentUser", currentUser);
         model.addAttribute("currentUserProjects", currentUser.getProjects());
 
@@ -45,6 +50,9 @@ public class AccountController {
     @PostMapping("/profile/{id}/save")
     public String saveAccountProfileChanges(@PathVariable("id") long id, User user, Principal principal) {
         User currentUser = userRepository.findByEmail(principal.getName());
+
+        if(currentUser.getOrganization() == null)
+            return "/organization/select-organization";
 
         if(currentUser.getId() != id)
             return "/error/404";
@@ -64,9 +72,13 @@ public class AccountController {
     public String showAccountSecurityPage(@PathVariable("id") long id, Principal principal, Model model) {
         User currentUser = userRepository.findByEmail(principal.getName());
 
+        if(currentUser.getOrganization() == null)
+            return "/organization/select-organization";
+
         if(currentUser.getId() != id)
             return "/error/404";
 
+        model.addAttribute("newProject", new Project());
         model.addAttribute("user", userRepository.getById(id));
         model.addAttribute("currentUser", currentUser);
         model.addAttribute("currentUserProjects", currentUser.getProjects());
@@ -80,6 +92,9 @@ public class AccountController {
                                              @RequestParam("newPassword") String newPassword,
                                              @RequestParam("confirmPassword") String confirmPassword, Principal principal) {
         User currentUser = userRepository.findByEmail(principal.getName());
+
+        if(currentUser.getOrganization() == null)
+            return "/organization/select-organization";
 
         if(currentUser.getId() != id)
             return "/error/404";
@@ -110,6 +125,9 @@ public class AccountController {
     public String deleteAccount(@PathVariable(name = "id") long id, Principal principal, RedirectAttributes redirectAttributes,
                                 @RequestParam(value = "password", required = false) String password) {
         User currentUser = userRepository.findByEmail(principal.getName());
+
+        if(currentUser.getOrganization() == null)
+            return "/organization/select-organization";
 
         if(currentUser.getId() != id)
             return "/error/404";
@@ -142,9 +160,13 @@ public class AccountController {
     public String showAccountNotificationsPage(@PathVariable("id") long id, Principal principal, Model model) {
         User currentUser = userRepository.findByEmail(principal.getName());
 
+        if(currentUser.getOrganization() == null)
+            return "/organization/select-organization";
+
         if(currentUser.getId() != id)
             return "/error/404";
 
+        model.addAttribute("newProject", new Project());
         model.addAttribute("user", userRepository.getById(id));
         model.addAttribute("currentUser", currentUser);
         model.addAttribute("currentUserProjects", currentUser.getProjects());

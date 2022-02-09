@@ -53,25 +53,25 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/reset-password", "/change-password*").permitAll()
                 .antMatchers("/error", "/js/**", "/assets/**", "/css/**", "/webjars/**").permitAll()
 
-                // update users allowed to Project Managers
-                .antMatchers("/users/edit/**", "/users/update/**").hasAnyAuthority("Project Manager")
+                // Update operations on Users allowed to Project Managers
+                .antMatchers("/users/edit/*", "/users/update/*").hasAnyAuthority("Project Manager")
 
-                // create, update, and delete projects allowed to Project Managers and Admins
-                .antMatchers("/projects/new", "/projects/save", "/projects/delete/**")
-                .hasAnyAuthority("Project Manager", "Admin")
+                // CRUD operations on Projects allowed to Project Managers
+                .antMatchers("/projects/new", "/projects/save", "/projects/delete/*")
+                .hasAnyAuthority("Project Manager")
 
-                // create, update, and delete issues allowed to Project Managers, Admins, and Developers
-                .antMatchers("/issues/**/new", "/issues/**/save", "/issues/**/edit/**", "/issues/**/delete/**", "/issues/new", "/issues/update")
+                // CRUD operations on Issues allowed to Project Managers, Admins, and Developers
+                .antMatchers("/issues/*/new", "/issues/*/edit/*", "/issues/*/delete/**", "/issues/new", "/issues/update")
                 .hasAnyAuthority("Project Manager", "Admin", "Developer")
 
-                // view issues allowed to all Roles
-                .antMatchers("/issues/**/view/**").hasAnyAuthority("Project Manager", "Admin", "Developer", "Guest")
+                // view Issues allowed to all Roles
+                .antMatchers("/issues/*/view/*").hasAnyAuthority("Project Manager", "Admin", "Developer", "Guest")
 
-                // deletion of files only allowed to PMs, Admins, and Developers
-                .antMatchers("/files/**/**/delete/**").hasAnyAuthority("Project Manager", "Admin", "Developer")
+                // deletion of Files only allowed to PMs, Admins, and Developers
+                .antMatchers("/files/*/*/delete/*").hasAnyAuthority("Project Manager", "Admin", "Developer")
 
-                // create and delete comments allowed to all Roles
-                .antMatchers("/issues/**/view/**/comment/**").hasAnyAuthority("Project Manager", "Admin", "Developer", "Guest")
+                // CRUD operations on Comments allowed to all Roles
+                .antMatchers("/issues/*/view/*/comment/**").hasAnyAuthority("Project Manager", "Admin", "Developer", "Guest")
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()

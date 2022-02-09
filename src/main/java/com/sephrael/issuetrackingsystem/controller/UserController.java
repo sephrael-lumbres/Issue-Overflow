@@ -139,6 +139,7 @@ public class UserController {
 
         List<User> listUsers = userRepository.findAll();
         model.addAttribute("listUsers", listUsers);
+        model.addAttribute("newProject", new Project());
         model.addAttribute("currentUser", currentUser);
         model.addAttribute("currentUserProjects", currentUser.getProjects());
 

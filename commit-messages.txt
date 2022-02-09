@@ -254,3 +254,24 @@ and Developers
 
 - Also cleaned up some code and added/modified documentation for
 readability and uniformity
+
+
+
+Add a Persistent 'Project' Alert and Fix Bugs
+
+- Added Persistent Alerts throughout the website that would be
+displayed if the Current User was not involved in any Projects.
+The Alert has button(s) to 'Create a Project' or 'Join a Project',
+depending on the Current User's Role
+- The Dashboard Issue Status Card buttons are now hidden if the
+Current User is not involved in any Projects
+- Fixed a bug where if the Current User had the correct Role, they
+could Edit or Delete any Issue, without being involved with the Issue's
+Organization or Project. Now only the User that Opened the Issue or
+Project Managers or Admins that are involved with the Issue's
+Organization and Project, can 'Edit' the Issue
+- Fixed a bug where, after Registration, Login, then Creating an
+Organization, would not grant the User of 'Project Manager' permissions
+immediately, the User would have to logout, then log back in to finally
+be granted 'Project Manager' permissions
+- Changed CRUD permissions of Projects to only Project Managers
