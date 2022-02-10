@@ -320,9 +320,80 @@
                             </div>
                         </div>
                     </header>
+
+                    <!-- Create project modal-->
+                    <div sec:authorize="hasAuthority('Project Manager')" th:if="${currentUser.getProjects().isEmpty()}" class="modal fade" id="createProjectModal" tabindex="-1" role="dialog" aria-labelledby="createProjectModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="createProjectModalLabel">Create New Project</h5>
+                                    <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <form action="#" th:action="@{/projects/new}" th:object="${newProject}" method="post">
+                                    <div class="modal-body">
+                                        <div class="mb-0">
+                                            <label class="mb-1" for="createFormProjectName" style="font-size: 14px">Project Name<span style="color: red">*</span></label>
+                                            <input th:field="*{name}" class="form-control mb-3" id="createFormProjectName" type="text" placeholder="Enter project name..." required/>
+
+                                            <label class="mb-1" for="createFormProjectIdentifier" style="font-size: 14px">Project ID<span style="color: red">*</span></label>
+                                            <input th:field="*{identifier}" style="text-transform: uppercase;" class="form-control" id="createFormProjectIdentifier" type="text" required/>
+                                            <p class="form-text mb-n2" style="font-size: 12px">The project ID is a unique identifier for a project. A short, concise key is recommended.</p>
+                                            <p class="form-text" style="font-size: 12px">(e.g. Project ID for 'Call of Duty' could be 'COD') Uppercase letters (A-Z), numbers (0-9) and underscore (_) can be used.</p>
+
+                                            <label class="mb-1" for="createFormProjectAccessKey" style="font-size: 14px">Project Access Key<span style="color: red">*</span></label>
+                                            <input th:field="*{accessKey}" class="form-control" id="createFormProjectAccessKey" type="text" placeholder="Enter project access key..." required/>
+                                            <p class="form-text mb-3" style="font-size: 12px">The project access key is a password that could be shared to allow other users in an Organization to join a project.</p>
+
+                                            <label class="mb-1" for="color" style="font-size: 14px;">Project Color<span style="color: red">*</span></label>
+                                            <select th:field="*{color}" name="color" class="form-control mb-auto" id="color">
+                                                <option value="" disabled>Select a color:</option>
+                                                <option value="blue">Blue</option>
+                                                <option value="cyan">Cyan</option>
+                                                <option value="green">Green</option>
+                                                <option value="indigo">Indigo</option>
+                                                <option value="orange">Orange</option>
+                                                <option value="pink">Pink</option>
+                                                <option value="purple">Purple</option>
+                                                <option value="red">Red</option>
+                                                <option value="teal">Teal</option>
+                                                <option value="yellow">Yellow</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button class="btn btn-danger-soft text-danger" type="button" data-bs-dismiss="modal">Cancel</button>
+                                        <button class="btn btn-primary-soft text-primary" type="submit">Create New Project</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Join project modal-->
+                    <div th:if="${currentUser.getProjects().isEmpty()}" class="modal fade" id="joinProjectModal" tabindex="-1" role="dialog" aria-labelledby="joinProjectModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="joinProjectModalLabel">Join Project</h5>
+                                    <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <form action="#" th:action="@{/projects/join}" th:object="${newProject}" method="post">
+                                    <div class="modal-body">
+                                        <div class="mb-0">
+                                            <label class="mb-1" for="joinFormProjectName" style="font-size: 14px">Project Access Key<span style="color: red">*</span></label>
+                                            <input th:name="accessKey" class="form-control" id="joinFormProjectName" type="text" placeholder="Enter project access key..." required/>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button class="btn btn-danger-soft text-danger" type="button" data-bs-dismiss="modal">Cancel</button>
+                                        <button class="btn btn-primary-soft text-primary" type="submit">Join Project</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- Main page content-->
                     <div th:classappend="${!currentUser.getProjects().isEmpty()} ? 'mt-n3'" class="container-xl px-4">
-
                         <!-- ALERT MESSAGE IF CURRENT USER IS NOT INVOLVED WITH ANY PROJECT -->
                         <div th:if="${currentUser.getProjects().isEmpty()}" class="alert alert-danger text-center mt-n2" role="alert">
                             <i data-feather="alert-triangle" class="feather-lg"></i>
@@ -334,80 +405,6 @@
                             <a data-bs-toggle="modal" data-bs-target="#joinProjectModal" style="cursor: pointer" class="alert-link">join a project</a>
                             to start tracking Issues
                         </div>
-
-                        <!-- Create project modal-->
-                        <div sec:authorize="hasAuthority('Project Manager')" th:if="${currentUser.getProjects().isEmpty()}" class="modal fade" id="createProjectModal" tabindex="-1" role="dialog" aria-labelledby="createProjectModalLabel" aria-hidden="true">
-                            <div class="modal-dialog modal-lg" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="createProjectModalLabel">Create New Project</h5>
-                                        <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
-                                    </div>
-                                    <form action="#" th:action="@{/projects/new}" th:object="${newProject}" method="post">
-                                        <div class="modal-body">
-                                            <div class="mb-0">
-                                                <label class="mb-1" for="createFormProjectName" style="font-size: 14px">Project Name<span style="color: red">*</span></label>
-                                                <input th:field="*{name}" class="form-control mb-3" id="createFormProjectName" type="text" placeholder="Enter project name..." required/>
-
-                                                <label class="mb-1" for="createFormProjectIdentifier" style="font-size: 14px">Project ID<span style="color: red">*</span></label>
-                                                <input th:field="*{identifier}" style="text-transform: uppercase;" class="form-control" id="createFormProjectIdentifier" type="text" required/>
-                                                <p class="form-text mb-n2" style="font-size: 12px">The project ID is a unique identifier for a project. A short, concise key is recommended.</p>
-                                                <p class="form-text" style="font-size: 12px">(e.g. Project ID for 'Call of Duty' could be 'COD') Uppercase letters (A-Z), numbers (0-9) and underscore (_) can be used.</p>
-
-                                                <label class="mb-1" for="createFormProjectAccessKey" style="font-size: 14px">Project Access Key<span style="color: red">*</span></label>
-                                                <input th:field="*{accessKey}" class="form-control" id="createFormProjectAccessKey" type="text" placeholder="Enter project access key..." required/>
-                                                <p class="form-text mb-3" style="font-size: 12px">The project access key is a password that could be shared to allow other users in an Organization to join a project.</p>
-
-                                                <label class="mb-1" for="color" style="font-size: 14px;">Project Color<span style="color: red">*</span></label>
-                                                <select th:field="*{color}" name="color" class="form-control mb-auto" id="color">
-                                                    <option value="" disabled>Select a color:</option>
-                                                    <option value="blue">Blue</option>
-                                                    <option value="cyan">Cyan</option>
-                                                    <option value="gray">Gray</option>
-                                                    <option value="green">Green</option>
-                                                    <option value="indigo">Indigo</option>
-                                                    <option value="orange">Orange</option>
-                                                    <option value="pink">Pink</option>
-                                                    <option value="purple">Purple</option>
-                                                    <option value="red">Red</option>
-                                                    <option value="teal">Teal</option>
-                                                    <option value="yellow">Yellow</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button class="btn btn-danger-soft text-danger" type="button" data-bs-dismiss="modal">Cancel</button>
-                                            <button class="btn btn-primary-soft text-primary" type="submit">Create New Project</button>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Join project modal-->
-                        <div th:if="${currentUser.getProjects().isEmpty()}" class="modal fade" id="joinProjectModal" tabindex="-1" role="dialog" aria-labelledby="joinProjectModalLabel" aria-hidden="true">
-                            <div class="modal-dialog modal-lg" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="joinProjectModalLabel">Join Project</h5>
-                                        <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
-                                    </div>
-                                    <form action="#" th:action="@{/projects/join}" th:object="${newProject}" method="post">
-                                        <div class="modal-body">
-                                            <div class="mb-0">
-                                                <label class="mb-1" for="joinFormProjectName" style="font-size: 14px">Project Access Key<span style="color: red">*</span></label>
-                                                <input th:name="accessKey" class="form-control" id="joinFormProjectName" type="text" placeholder="Enter project access key..." required/>
-                                            </div>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button class="btn btn-danger-soft text-danger" type="button" data-bs-dismiss="modal">Cancel</button>
-                                            <button class="btn btn-primary-soft text-primary" type="submit">Join Project</button>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-
                         <!-- Account page navigation-->
                         <nav class="nav nav-borders">
                             <a class="nav-link ms-0" th:href="@{'/account/profile/' + ${currentUser.id}}">Profile</a>
@@ -422,7 +419,6 @@
                         <div th:text="${passwordsDoNotMatch}" th:if="${passwordsDoNotMatch}" id="popupAlerts" class="alert alert-danger alert-dismissible fade show text-center mt-n1" role="alert"></div>
                         <div th:text="${error}" th:if="${error}" id="popupAlerts" class="alert alert-danger alert-dismissible fade show text-center mt-n1" role="alert"></div>
                         <div th:text="${accountDeletionFailed}" th:if="${accountDeletionFailed}" id="popupAlerts" class="alert alert-danger alert-dismissible fade show text-center mt-4" role="alert"></div>
-
 
                         <div class="row">
                             <div class="col-lg-8">

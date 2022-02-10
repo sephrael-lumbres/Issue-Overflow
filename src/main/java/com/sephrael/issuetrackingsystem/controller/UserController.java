@@ -173,7 +173,8 @@ public class UserController {
     // Allows for updating a User's Role and Projects(only Project Managers are allowed to make these changes)
     @PostMapping(value = "/users/update/{id}")
     public String saveUserChanges(@PathVariable("id") Long id, @RequestParam("role") long roleId, Principal principal,
-                                  @RequestParam(value = "projects", required = false) List<Project> projects, User userBeforeUpdate) {
+                                  @RequestParam(value = "projects", required = false) List<Project> projects,
+                                  User userBeforeUpdate, RedirectAttributes redirectAttributes) {
         User currentUser = userRepository.findByEmail(principal.getName());
 
         if(currentUser.getOrganization() == null)
@@ -199,6 +200,7 @@ public class UserController {
         }
 
         userRepository.save(userToBeUpdated);
+        redirectAttributes.addFlashAttribute("userUpdateSuccess", "Changes have been saved");
 
         return "redirect:/users";
     }

@@ -48,7 +48,8 @@ public class AccountController {
     }
 
     @PostMapping("/profile/{id}/save")
-    public String saveAccountProfileChanges(@PathVariable("id") long id, User user, Principal principal) {
+    public String saveAccountProfileChanges(@PathVariable("id") long id, User user, Principal principal,
+                                            RedirectAttributes redirectAttributes) {
         User currentUser = userRepository.findByEmail(principal.getName());
 
         if(currentUser.getOrganization() == null)
@@ -57,13 +58,18 @@ public class AccountController {
         if(currentUser.getId() != id)
             return "/error/404";
 
-        User userToBeUpdated = userRepository.findUserById(id);
+        try {
+            User userToBeUpdated = userRepository.findUserById(id);
 
-        userToBeUpdated.setFirstName(user.getFirstName());
-        userToBeUpdated.setLastName(user.getLastName());
-        userToBeUpdated.setEmail(user.getEmail());
+            userToBeUpdated.setFirstName(user.getFirstName());
+            userToBeUpdated.setLastName(user.getLastName());
+            userToBeUpdated.setEmail(user.getEmail());
 
-        userRepository.save(userToBeUpdated);
+            userRepository.save(userToBeUpdated);
+            redirectAttributes.addFlashAttribute("profileChangeSuccess", "Account Profile changes have been saved");
+        } catch (Exception exception) {
+            redirectAttributes.addFlashAttribute("profileChangeError", "An error has occurred while attempting to save Account Profile Changes");;
+        }
 
         return "redirect:/account/profile/" + id;
     }

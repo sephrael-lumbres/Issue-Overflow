@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.security.Principal;
@@ -66,16 +67,24 @@ public class FileController {
 
     @PostMapping("/upload/{userId}/{isProfilePicture}")
     public String uploadFile(@PathVariable("userId") long userId, @RequestParam("file")MultipartFile file, Principal principal,
-                                                      @PathVariable("isProfilePicture") boolean isProfilePicture) {
+                             @PathVariable("isProfilePicture") boolean isProfilePicture, RedirectAttributes redirectAttributes) {
         User user = userRepository.findUserById(userId);
 
         // if Current User does NOT match the requested User, redirect to 404 page
         if(userRepository.findByEmail(principal.getName()).getId() != userId)
             return "/error/404";
 
+        // if 'File' is NOT empty and the 'User' already has a 'Profile Picture', DELETE the User's current
+        // 'Profile Picture', then upload the new 'Profile Picture'
+        if(!file.isEmpty() && user.hasProfilePicture()) {
+            fileService.deleteFile(fileRepository.findByUserAndIsProfilePicture(user, isProfilePicture).getId());
+            user.setHasProfilePicture(false);
+            fileService.uploadFile(user, file, isProfilePicture);
+            redirectAttributes.addFlashAttribute("pictureUploadSuccess", "Profile Picture has been successfully uploaded");
+
         // if the 'User' uploaded an empty 'File' AND the 'User' already has a 'Profile Picture', DELETE the User's current
         // 'Profile Picture' and SET the User's 'hasProfilePicture' to FALSE
-        if(file.isEmpty() && user.hasProfilePicture()) {
+        } else if(file.isEmpty() && user.hasProfilePicture()) {
             fileService.deleteFile(fileRepository.findByUserAndIsProfilePicture(user, isProfilePicture).getId());
 
             user.setHasProfilePicture(false);
@@ -89,8 +98,9 @@ public class FileController {
         // 'Profile Picture'
         } else if(!file.isEmpty() && !user.hasProfilePicture()) {
             fileService.uploadFile(user, file, isProfilePicture);
+            redirectAttributes.addFlashAttribute("pictureUploadSuccess", "Profile Picture has been successfully uploaded");
         } else
-            return "/error/400";
+            redirectAttributes.addFlashAttribute("pictureUploadError", "An error has occurred while attempting to upload Profile Picture");;
 
         return "redirect:/account/profile/" + userId;
     }

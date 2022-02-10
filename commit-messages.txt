@@ -275,3 +275,15 @@ Organization, would not grant the User of 'Project Manager' permissions
 immediately, the User would have to logout, then log back in to finally
 be granted 'Project Manager' permissions
 - Changed CRUD permissions of Projects to only Project Managers
+
+
+
+Add 'ProjectService' Class and Add Popup Alerts
+
+- Added popup alerts to notify the User of Success or Failure of CRUD
+operations throughout the website
+- Moved code to verify the Uniqueness of a Project's ID and Access Key
+upon Creation or Update, to a new Java Class: 'ProjectService' which is
+called in the 'ProjectController'
+- Fixed bug where if a User already has a Profile Picture and tries to
+upload a new one, it is unsuccessful and the webpage crashes

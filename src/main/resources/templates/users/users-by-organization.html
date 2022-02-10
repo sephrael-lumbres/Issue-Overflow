@@ -328,6 +328,9 @@
                     <!--  NEW MAIN PAGE CONTENT  -->
                     <div class="container-fluid px-4">
 
+                        <!-- Popup alerts -->
+                        <div th:text="${userUpdateSuccess}" th:if="${userUpdateSuccess}" id="popupAlerts" class="alert alert-success alert-dismissible fade show text-center mt-n1" role="alert"></div>
+
                         <!-- ALERT MESSAGE IF CURRENT USER IS NOT INVOLVED WITH ANY PROJECT -->
                         <div th:if="${currentUser.getProjects().isEmpty()}" class="alert alert-danger text-center mt-n2" role="alert">
                             <i data-feather="alert-triangle" class="feather-lg"></i>
@@ -368,7 +371,6 @@
                                                     <option value="" disabled>Select a color:</option>
                                                     <option value="blue">Blue</option>
                                                     <option value="cyan">Cyan</option>
-                                                    <option value="gray">Gray</option>
                                                     <option value="green">Green</option>
                                                     <option value="indigo">Indigo</option>
                                                     <option value="orange">Orange</option>
@@ -488,5 +490,13 @@
         <script src="/js/scripts.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" crossorigin="anonymous"></script>
         <script src="/js/datatables/datatables-simple-demo.js"></script>
+        <script>
+            let buttonElement = document.createElement("button");
+            buttonElement.className = "btn-close";
+            buttonElement.setAttribute("data-bs-dismiss", "alert");
+            buttonElement.setAttribute("aria-label", "Close");
+            buttonElement.setAttribute("type", "button");
+            document.getElementById("popupAlerts").appendChild(buttonElement);
+        </script>
     </body>
 </html>

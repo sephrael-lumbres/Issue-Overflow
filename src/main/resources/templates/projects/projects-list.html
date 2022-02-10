@@ -349,6 +349,7 @@
 
                         <!-- Popup alerts -->
                         <div th:text="${projectCreationSuccess}" th:if="${projectCreationSuccess}" id="popupAlerts" class="alert alert-success alert-dismissible fade show text-center mt-n1" role="alert"></div>
+                        <div th:text="${projectUpdateSuccess}" th:if="${projectUpdateSuccess}" id="popupAlerts" class="alert alert-success alert-dismissible fade show text-center mt-n1" role="alert"></div>
                         <div th:text="${idNotUniqueToOrganization}" th:if="${idNotUniqueToOrganization}" id="popupAlerts" class="alert alert-danger alert-dismissible fade show text-center mt-n1" role="alert"></div>
                         <div th:text="${accessKeyNotUniqueToOrganization}" th:if="${accessKeyNotUniqueToOrganization}" id="popupAlerts" class="alert alert-danger alert-dismissible fade show text-center mt-n1" role="alert"></div>
                         <div th:text="${projectNotFound}" th:if="${projectNotFound}" id="popupAlerts" class="alert alert-danger alert-dismissible fade show text-center mt-n1" role="alert"></div>
@@ -518,7 +519,6 @@
                                                 <option value="" disabled>Select a color:</option>
                                                 <option value="blue">Blue</option>
                                                 <option value="cyan">Cyan</option>
-                                                <option value="gray">Gray</option>
                                                 <option value="green">Green</option>
                                                 <option value="indigo">Indigo</option>
                                                 <option value="orange">Orange</option>
