@@ -32,6 +32,10 @@ public class Organization {
 //        this.users.add(user);
     }
 
+    public void removeUser(User user) {
+        this.users.remove(user);
+    }
+
     @OneToMany(mappedBy = "organization")
     private List<Project> projects;
 

@@ -6,6 +6,7 @@ import com.sephrael.issuetrackingsystem.entity.User;
 import com.sephrael.issuetrackingsystem.repository.UserRepository;
 import com.sephrael.issuetrackingsystem.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -60,12 +61,19 @@ public class AccountController {
 
         try {
             User userToBeUpdated = userRepository.findUserById(id);
+            String previousEmail = userToBeUpdated.getEmail();
 
             userToBeUpdated.setFirstName(user.getFirstName());
             userToBeUpdated.setLastName(user.getLastName());
             userToBeUpdated.setEmail(user.getEmail());
 
             userRepository.save(userToBeUpdated);
+
+            if(!Objects.equals(previousEmail, user.getEmail())) {
+                redirectAttributes.addFlashAttribute("emailChangeSuccess", "Email address has been successfully updated. Please log in with your new email address.");
+                SecurityContextHolder.getContext().setAuthentication(null);
+                return "redirect:/login";
+            }
             redirectAttributes.addFlashAttribute("profileChangeSuccess", "Account Profile changes have been saved");
         } catch (Exception exception) {
             redirectAttributes.addFlashAttribute("profileChangeError", "An error has occurred while attempting to save Account Profile Changes");;

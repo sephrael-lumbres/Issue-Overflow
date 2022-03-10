@@ -1,9 +1,7 @@
 package com.sephrael.issuetrackingsystem.controller;
 
-import com.sephrael.issuetrackingsystem.entity.Issue;
-import com.sephrael.issuetrackingsystem.entity.Organization;
-import com.sephrael.issuetrackingsystem.entity.Project;
-import com.sephrael.issuetrackingsystem.entity.User;
+import com.sephrael.issuetrackingsystem.entity.*;
+import com.sephrael.issuetrackingsystem.repository.IssueKeySequenceRepository;
 import com.sephrael.issuetrackingsystem.repository.IssueRepository;
 import com.sephrael.issuetrackingsystem.repository.ProjectRepository;
 import com.sephrael.issuetrackingsystem.repository.UserRepository;
@@ -34,6 +32,8 @@ public class ProjectController {
     private IssueRepository issueRepository;
     @Autowired
     private IssueService issueService;
+    @Autowired
+    private IssueKeySequenceRepository issueKeySequenceRepository;
 
     @RequestMapping("/all")
     public String viewProjects(Model model, Principal principal) {
@@ -71,6 +71,7 @@ public class ProjectController {
         model.addAttribute("issueService", issueService);
         model.addAttribute("seconds", ChronoUnit.SECONDS);
         model.addAttribute("currentProject", currentProject);
+        model.addAttribute("currentOrganizationMembers", userRepository.findByOrganizationOrderByRoleId(currentOrganization));
         model.addAttribute("issueRepository", issueRepository);
         model.addAttribute("currentUserProjects", currentUser.getProjects());
         model.addAttribute("numberOfOpenIssues", issueService.getNumberOfIssuesByProjectAndStatus("Open", identifier, currentOrganization));
@@ -142,6 +143,20 @@ public class ProjectController {
             return "/organization/select-organization";
 
         Project projectBeforeUpdate = projectRepository.findProjectById(id);
+
+        // if a Project's Identifier is requested to be changed, create a new Issue Key Sequence and delete the previous one
+        if(!Objects.equals(projectBeforeUpdate.getIdentifier(), requestedProjectUpdate.getIdentifier())) {
+            IssueKeySequence previousIssueKeySequence = issueKeySequenceRepository.findByProjectIdentifierAndProjectId(
+                    projectBeforeUpdate.getIdentifier(), projectBeforeUpdate.getId());
+
+            IssueKeySequence newIssueKeySequence = new IssueKeySequence();
+            newIssueKeySequence.setProjectId(requestedProjectUpdate.getId());
+            newIssueKeySequence.setProjectIdentifier(requestedProjectUpdate.getIdentifier());
+            newIssueKeySequence.setIssueKeyCounter(previousIssueKeySequence.getIssueKeyCounter());
+            issueKeySequenceRepository.save(newIssueKeySequence);
+
+            issueKeySequenceRepository.delete(previousIssueKeySequence);
+        }
 
         // fixes bug that when updating a Project removed all the Users in an updated Project except for the User that
         // performed the update

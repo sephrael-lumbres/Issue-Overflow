@@ -287,3 +287,25 @@ upon Creation or Update, to a new Java Class: 'ProjectService' which is
 called in the 'ProjectController'
 - Fixed bug where if a User already has a Profile Picture and tries to
 upload a new one, it is unsuccessful and the webpage crashes
+
+
+
+Add Knowledge Base, Change Name, and More...
+
+- Changed name to 'Issue Overflow'
+- Changed the color scheme
+- Added a logo
+- Added a Contact Us page
+- Changed the top navigation bar
+- Added a Knowledge Base with 29 articles/pages of how to use
+Issue Overflow with 7 sections: Getting Started, Account Settings,
+User Settings, Dashboard, Organization, Projects, and Issues
+- Fixed bug where changing my email address in the 'Account Settings'
+would not successfully change until logged out.
+- Fixed bug where changing the ‘Identifier’ of a ‘Project’ with
+existing ‘Issues’ causes ‘Issue Key’ creation problems because the
+query returned null
+- Fixed bug where Table Buttons in ‘My Issues’ in the ‘Dashboard’ were
+not sorting and not searching correctly
+- Removed some unused files
+- Cleaned up some code

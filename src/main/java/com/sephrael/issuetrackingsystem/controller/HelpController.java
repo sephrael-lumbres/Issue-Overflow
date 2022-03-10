@@ -1,37 +1,47 @@
 package com.sephrael.issuetrackingsystem.controller;
 
+import com.sephrael.issuetrackingsystem.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.security.Principal;
+
 @Controller
-@RequestMapping("/help")
 public class HelpController {
 
+    @Autowired
+    private UserRepository userRepository;
+
     @RequestMapping("/getting-started")
-    public String showGettingStartedPage() {
+    public String showGettingStartedCategory(Model model, Principal principal) {
+        if(principal != null)
+            model.addAttribute("currentUser", userRepository.findByEmail(principal.getName()));
 
-        return "/help/getting-started";
+        return "/knowledge-base/getting-started/getting-started-category";
     }
 
-    @RequestMapping("/knowledge-base")
-    public String showKnowledgeBasePage() {
+    @RequestMapping("/getting-started/project-manager")
+    public String showGettingStartedPageForProjectManager(Model model, Principal principal) {
+        if(principal != null)
+            model.addAttribute("currentUser", userRepository.findByEmail(principal.getName()));
 
-        return "/help/knowledge-base-home";
+        return "/knowledge-base/getting-started/articles/project-manager-guide";
     }
 
-    @RequestMapping("/knowledge-base/category")
-    public String showKnowledgeBaseCategoryPage() {
+    @RequestMapping("/getting-started/user")
+    public String showGettingStartedForUserPage(Model model, Principal principal) {
+        if(principal != null)
+            model.addAttribute("currentUser", userRepository.findByEmail(principal.getName()));
 
-        return "/help/knowledge-base-category";
-    }
-    @RequestMapping("/knowledge-base/article")
-    public String showKnowledgeBaseArticlePage() {
-
-        return "/help/knowledge-base-article";
+        return "/knowledge-base/getting-started/articles/user-guide";
     }
 
     @RequestMapping("/contact-us")
-    public String showContactUsPage() {
+    public String showContactUsPage(Model model, Principal principal) {
+        if(principal != null)
+            model.addAttribute("currentUser", userRepository.findByEmail(principal.getName()));
 
         return "/help/contact-us";
     }

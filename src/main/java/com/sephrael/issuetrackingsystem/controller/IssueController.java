@@ -52,43 +52,20 @@ public class IssueController {
     }
     
     @GetMapping("/all/results")
-    public String filterAllIssues(Model model, Principal principal,
-                                  @RequestParam(value = "type", required = false) String type,
-                                  @RequestParam(value = "status", required = false) String status,
-                                  @RequestParam(value = "priority", required = false) String priority,
-                                  @RequestParam(value = "createdBy", required = false) String createdBy,
-                                  @RequestParam(value = "assignedTo", required = false) String assignedTo,
-                                  @RequestParam(value = "projectIdentifier", required = false) String projectIdentifier) {
+    public String showFilteredIssuesByOrganizationPage(
+            @RequestParam(value = "type", required = false) String type,
+            @RequestParam(value = "status", required = false) String status,
+            @RequestParam(value = "priority", required = false) String priority,
+            @RequestParam(value = "createdBy", required = false) String createdBy,
+            @RequestParam(value = "assignedTo", required = false) String assignedTo,
+            @RequestParam(value = "identifier", required = false) String identifier, Model model, Principal principal) {
 
-        User currentUser = userRepository.findByEmail(principal.getName());
-        List<Issue> filteredIssues;
+        String URL = issueService.getFilteredIssues(type, status, priority, createdBy, assignedTo, identifier, model, principal);
 
-        if(currentUser.getOrganization() == null)
-            return "/organization/select-organization";
-
-        // this allows filter fields to be empty
-        type = issueService.setEmptyFilterFieldToNull(type);
-        status = issueService.setEmptyFilterFieldToNull(status);
-        priority = issueService.setEmptyFilterFieldToNull(priority);
-        createdBy = issueService.setEmptyFilterFieldToNull(createdBy);
-        projectIdentifier = issueService.setEmptyFilterFieldToNull(projectIdentifier);
-
-        // this allows a User to view Issues that are unassigned or assigned to a specific User or all issues that are
-        // neither assigned nor unassigned
-        if(Objects.equals(assignedTo, "Unassigned")) {
-            filteredIssues = issueRepository.findByProjectAndStatusAndPriorityAndTypeAndUserAndAssignedTo(
-                    projectRepository.findByIdentifierAndOrganization(projectIdentifier, currentUser.getOrganization()),
-                    status, priority, type, userRepository.findByEmail(createdBy), null);
-        } else {
-            filteredIssues = issueRepository.findByProjectAndStatusAndPriorityAndTypeAndAssignedToAndUser(
-                    projectRepository.findByIdentifierAndOrganization(projectIdentifier, currentUser.getOrganization()),
-                    status, priority, type, userRepository.findByEmail(assignedTo), userRepository.findByEmail(createdBy));
-        }
+        // if Current User does not belong to any Organization, redirect them to the 'Select Organization' page
+        if(URL != null) return URL;
 
         model.addAttribute("newProject", new Project());
-        model.addAttribute("issues", filteredIssues);
-        model.addAttribute("currentUser", currentUser);
-        model.addAttribute("currentUserProjects", currentUser.getProjects());
 
         return ("/issues/issues-by-organization");
     }
@@ -112,42 +89,22 @@ public class IssueController {
     }
 
     @GetMapping("/{identifier}/results")
-    public String filterIssues(@RequestParam(value = "type", required = false) String type,
-                               @RequestParam(value = "status", required = false) String status,
-                               @RequestParam(value = "priority", required = false) String priority,
-                               @RequestParam(value = "createdBy", required = false) String createdBy,
-                               @RequestParam(value = "assignedTo", required = false) String assignedTo,
-                               @PathVariable("identifier") String identifier, Model model, Principal principal) {
+    public String showFilteredIssuesByProjectPage(
+            @RequestParam(value = "type", required = false) String type,
+            @RequestParam(value = "status", required = false) String status,
+            @RequestParam(value = "priority", required = false) String priority,
+            @RequestParam(value = "createdBy", required = false) String createdBy,
+            @RequestParam(value = "assignedTo", required = false) String assignedTo,
+            @PathVariable("identifier") String identifier, Model model, Principal principal) {
 
-        User currentUser = userRepository.findByEmail(principal.getName());
-        Organization currentOrganization = currentUser.getOrganization();
+        Project currentProject = projectRepository.findByIdentifierAndOrganization(identifier,
+                userRepository.findByEmail(principal.getName()).getOrganization());
+        String URL = issueService.getFilteredIssues(type, status, priority, createdBy, assignedTo, identifier, model, principal);
 
-        if(currentOrganization == null)
-            return "/organization/select-organization";
+        // if Current User does not belong to any Organization, redirect them to the 'Select Organization' page
+        if(URL != null) return URL;
 
-        Project currentProject = projectRepository.findByIdentifierAndOrganization(identifier, currentOrganization);
-        List<Issue> filteredIssues;
-
-        // this allows filter fields to be empty
-        type = issueService.setEmptyFilterFieldToNull(type);
-        status = issueService.setEmptyFilterFieldToNull(status);
-        priority = issueService.setEmptyFilterFieldToNull(priority);
-        createdBy = issueService.setEmptyFilterFieldToNull(createdBy);
-        
-        // this allows a User to view Issues that are unassigned or assigned to a specific User or all issues that are
-        // neither assigned nor unassigned
-        if(Objects.equals(assignedTo, "Unassigned")) {
-            filteredIssues = issueRepository.findByProjectAndStatusAndPriorityAndTypeAndUserAndAssignedTo(currentProject,
-                    status, priority, type, userRepository.findByEmail(createdBy), null);
-        } else {
-            filteredIssues = issueRepository.findByProjectAndStatusAndPriorityAndTypeAndAssignedToAndUser(currentProject,
-                    status, priority, type, userRepository.findByEmail(assignedTo), userRepository.findByEmail(createdBy));
-        }
-
-        model.addAttribute("issues", filteredIssues);
         model.addAttribute("currentProject", currentProject);
-        model.addAttribute("currentUser", currentUser);
-        model.addAttribute("currentUserProjects", currentUser.getProjects());
 
         return ("/issues/issues-by-project");
     }

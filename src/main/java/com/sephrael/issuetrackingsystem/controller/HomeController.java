@@ -53,7 +53,7 @@ public class HomeController {
         model.addAttribute("issues", sortedIssues);
         model.addAttribute("seconds", ChronoUnit.SECONDS);
         model.addAttribute("currentUserProjects", currentUser.getProjects());
-        model.addAttribute("usersByOrganization", userRepository.findByOrganization(currentOrganization));
+        model.addAttribute("usersByOrganization", userRepository.findByOrganizationOrderByRoleId(currentOrganization));
         model.addAttribute("numberOfOpenIssues", issueService.getNumberOfIssuesByOrganizationAndStatus("Open", currentUser));
         model.addAttribute("numberOfClosedIssues", issueService.getNumberOfIssuesByOrganizationAndStatus("Closed", currentUser));
         model.addAttribute("numberOfResolvedIssues", issueService.getNumberOfIssuesByOrganizationAndStatus("Resolved", currentUser));

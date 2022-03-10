@@ -10,6 +10,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 @Entity
@@ -73,6 +74,9 @@ public class User {
 //    }
 //
     public List<Project> getProjects() {
+        // sorts the Projects alphabetically by their Names
+        projects.sort(Comparator.comparing(Project::getName));
+
         return projects;
     }
 

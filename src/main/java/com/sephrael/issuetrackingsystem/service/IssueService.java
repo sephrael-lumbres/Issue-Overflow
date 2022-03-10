@@ -8,8 +8,10 @@ import com.sephrael.issuetrackingsystem.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.history.RevisionMetadata;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 
 import javax.transaction.Transactional;
+import java.security.Principal;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
@@ -255,5 +257,38 @@ public class IssueService {
 
             issue.setIssueKey(issueKey);
         }
+    }
+
+    public String getFilteredIssues(String type, String status, String priority, String createdBy, String assignedTo, String identifier, Model model, Principal principal) {
+        User currentUser = userRepository.findByEmail(principal.getName());
+        Organization currentOrganization = currentUser.getOrganization();
+
+        if(currentOrganization == null)
+            return "/organization/select-organization";
+
+        Project currentProject = projectRepository.findByIdentifierAndOrganization(identifier, currentOrganization);
+        List<Issue> filteredIssues;
+
+        // this allows filter fields to be empty
+        type = setEmptyFilterFieldToNull(type);
+        status = setEmptyFilterFieldToNull(status);
+        priority = setEmptyFilterFieldToNull(priority);
+        createdBy = setEmptyFilterFieldToNull(createdBy);
+
+        // this allows a User to view Issues that are unassigned or assigned to a specific User or all issues that are
+        // neither assigned nor unassigned
+        if(Objects.equals(assignedTo, "Unassigned")) {
+            filteredIssues = issueRepository.findByProjectAndStatusAndPriorityAndTypeAndUserAndAssignedTo(currentProject,
+                    status, priority, type, userRepository.findByEmail(createdBy), null);
+        } else {
+            filteredIssues = issueRepository.findByProjectAndStatusAndPriorityAndTypeAndAssignedToAndUser(currentProject,
+                    status, priority, type, userRepository.findByEmail(assignedTo), userRepository.findByEmail(createdBy));
+        }
+
+        model.addAttribute("issues", filteredIssues);
+        model.addAttribute("currentUser", currentUser);
+        model.addAttribute("currentUserProjects", currentUser.getProjects());
+
+        return null;
     }
 }

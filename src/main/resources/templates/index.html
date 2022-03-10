@@ -6,50 +6,27 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title th:text="'[' + ${currentUser.organization.name} + ']' + ' Dashboard | Issue Tracking System'"></title>
+        <title th:text="'[' + ${currentUser.organization.name} + ']' + ' Dashboard | Issue Overflow'"></title>
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
         <link href="/css/styles.css" rel="stylesheet" />
-        <link rel="icon" type="image/x-icon" href="/assets/img/favicon.png" />
+        <link rel="icon" type="image/x-icon" href="/assets/img/swirl-logo.png" />
         <script data-search-pseudo-elements defer src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.28.0/feather.min.js" crossorigin="anonymous"></script>
     </head>
     <body class="nav-fixed">
-        <nav class="topnav navbar navbar-expand shadow justify-content-between justify-content-sm-start navbar-light bg-white" id="sidenavAccordion">
+        <nav class="topnav navbar navbar-expand shadow justify-content-between justify-content-sm-start navbar-primary bg-white" id="sidenavAccordion">
             <!-- Sidenav Toggle Button-->
             <button class="btn btn-icon btn-transparent-dark order-0 ms-2 me-0" id="sidebarToggle"><i data-feather="menu"></i></button>
             <!-- Navbar Brand-->
-            <!-- * * Tip * * You can use text or an image for your navbar brand.-->
-            <!-- * * * * * * When using an image, we recommend the SVG format.-->
-            <!-- * * * * * * Dimensions: Maximum height: 32px, maximum width: 240px-->
-            <a class="navbar-brand pe-3 ps-0 ps-lg-2" href="/dashboard">Issue Tracking System</a>
-            <!-- Navbar Search Input-->
-            <!-- * * Note: * * Visible only on and above the lg breakpoint-->
-            <form class="form-inline me-auto d-none d-lg-block me-3">
-                <div class="input-group input-group-joined input-group-solid">
-                    <input class="form-control pe-0" type="search" placeholder="Search" aria-label="Search" />
-                    <div class="input-group-text"><i data-feather="search"></i></div>
-                </div>
-            </form>
+            <a class="navbar-brand pe-3 ps-0 ps-lg-2" href="/dashboard">
+                <img src="/assets/img/swirl-logo.png" style="height: 1.0rem;" alt="">
+                Issue Overflow
+            </a>
             <!-- Navbar Items-->
             <ul class="navbar-nav align-items-center ms-auto">
-                <!-- Navbar Search Dropdown-->
-                <!-- * * Note: * * Visible only below the lg breakpoint-->
-                <li class="nav-item dropdown no-caret me-3 d-lg-none">
-                    <a class="btn btn-icon btn-transparent-dark dropdown-toggle" id="searchDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i data-feather="search"></i></a>
-                    <!-- Dropdown - Search-->
-                    <div class="dropdown-menu dropdown-menu-end p-3 shadow animated--fade-in-up" aria-labelledby="searchDropdown">
-                        <form class="form-inline me-auto w-100">
-                            <div class="input-group input-group-joined input-group-solid">
-                                <input class="form-control pe-0" type="text" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2" />
-                                <div class="input-group-text"><i data-feather="search"></i></div>
-                            </div>
-                        </form>
-                    </div>
-                </li>
-
                 <!-- Contact Us Button-->
                 <li class="nav-item no-caret">
-                    <a class="btn btn-sm btn-transparent-dark" href="/help/contact-us" role="button">
+                    <a class="btn btn-sm btn-transparent-dark" href="/contact-us" role="button">
                         <div class="fw-500">Contact Us</div>
                     </a>
                 </li>
@@ -62,7 +39,7 @@
                             <i class="me-2" data-feather="help-circle"></i>
                             Help
                         </h6>
-                        <a class="dropdown-item py-3" href="#">
+                        <a class="dropdown-item py-3" href="/getting-started">
                             <div class="icon-stack bg-primary-soft text-primary me-4"><i data-feather="book"></i></div>
                             <div>
                                 <div class="small text-gray-500">Getting Started</div>
@@ -70,7 +47,7 @@
                             </div>
                         </a>
                         <div class="dropdown-divider m-0"></div>
-                        <a class="dropdown-item py-3" href="/help/knowledge-base">
+                        <a class="dropdown-item py-3" href="/knowledge-base">
                             <div class="icon-stack bg-primary-soft text-primary me-4"><i data-feather="file-text"></i></div>
                             <div>
                                 <div class="small text-gray-500">Knowledge Base</div>
@@ -82,7 +59,7 @@
                             <div class="icon-stack bg-primary-soft text-primary me-4"><i data-feather="list"></i></div>
                             <div>
                                 <div class="small text-gray-500">Issues</div>
-                                Issues
+                                Submit an Issue
                             </div>
                         </a>
                         <div class="dropdown-divider m-0"></div>
@@ -248,7 +225,7 @@
                     <!-- Main page content-->
                     <div class="container-xl px-4 mt-n10">
                         <div class="row">
-                            <div class="col-xxl-4 col-xl-6 mb-4">
+                            <div class="col-xl-6 mb-4">
                                 <div class="card card-header-actions h-100">
                                     <div class="card-header">
                                         Projects
@@ -368,7 +345,7 @@
                                                         </a>
                                                         <a th:href="@{'/issues/' + ${project.identifier} + '/results?status=Resolved'}"
                                                            th:text="${issueRepository.findByProjectAndStatus(project, 'Resolved').size()}"
-                                                           title="View 'Resolved' Issues" class="badge btn btn-primary rounded-pill">
+                                                           title="View 'Resolved' Issues" class="badge btn btn-secondary rounded-pill">
                                                         </a>
                                                         <a th:href="@{'/issues/' + ${project.identifier} + '/results?status=Closed'}"
                                                            th:text="${issueRepository.findByProjectAndStatus(project, 'Closed').size()}"
@@ -378,10 +355,10 @@
                                                 </div>
                                                 <span>
                                                     <a sec:authorize="hasAnyAuthority('Project Manager', 'Admin', 'Developer')"
-                                                       th:href="@{'/issues/' + ${project.identifier} + '/new'}" class="btn btn-xs btn-outline-blue">
+                                                       th:href="@{'/issues/' + ${project.identifier} + '/new'}" class="btn btn-xs btn-outline-primary">
                                                         Add Issue
                                                     </a>
-                                                    <a th:href="@{'/issues/' + ${project.identifier}}" class="btn btn-xs btn-outline-blue">Issues</a>
+                                                    <a th:href="@{'/issues/' + ${project.identifier}}" class="btn btn-xs btn-outline-primary">Issues</a>
                                                 </span>
                                             </li>
                                         </ul>
@@ -391,7 +368,7 @@
                             </div>
 
                             <!-- Progress Tracker for Projects -->
-                            <div class="col-xxl-4 col-xl-6 mb-4">
+                            <div class="col-xl-6 mb-4">
                                 <div class="card card-header-actions h-100">
                                     <div class="card-header">
                                         Progress Tracker
@@ -412,7 +389,7 @@
                             </div>
 
                             <!-- Recent Activity Card -->
-                            <div class="col-xxl-4 col-xl-6 mb-4">
+                            <div class="col-xl-6 mb-4">
                                 <div class="card">
                                     <div class="card-header">
                                         Recent Activity
@@ -426,8 +403,8 @@
                                             <div th:each="issue, list : ${issues}" th:if="${currentUser.getProjects().contains(issue.project)}" class="timeline-item">
                                                 <div class="timeline-item-marker">
                                                     <div th:text="${issueService.getIssueDateTimeString(issue)}" class="timeline-item-marker-text"></div>
-                                                    <div th:if="${issue.dateCreated.until(issue.getDateUpdated(), seconds) == 0}" class="timeline-item-marker-indicator bg-green"></div>
-                                                    <div th:unless="${issue.dateCreated.until(issue.getDateUpdated(), seconds) == 0}" class="timeline-item-marker-indicator bg-purple"></div>
+                                                    <div th:if="${issue.dateCreated.until(issue.getDateUpdated(), seconds) == 0}" class="timeline-item-marker-indicator bg-success"></div>
+                                                    <div th:unless="${issue.dateCreated.until(issue.getDateUpdated(), seconds) == 0}" class="timeline-item-marker-indicator bg-secondary"></div>
                                                 </div>
                                                 <div th:if="${issue.dateCreated.until(issue.getDateUpdated(), seconds) == 0}" class="timeline-item-content">
                                                     New issue opened!
@@ -452,7 +429,7 @@
                             </div>
 
                             <!-- ISSUES THAT THE CURRENT USER HAS CREATED OR HAS BEEN ASSIGNED TO -->
-                            <div class="col-xxl-4 col-xl-6 mb-4">
+                            <div class="col-xl-6 mb-4">
                                 <div class="card h-100">
                                     <div class="card-header">
                                         My Issues
@@ -466,73 +443,94 @@
                                                 </span>
                                             </dt>
                                         </dl>
-                                        <table id="dashboardIssuesDataTable" style="font-size: 0.75rem;">
-                                            <thead>
-                                            <tr>
-                                                <th class="align-middle text-center">Key</th>
-                                                <th class="align-middle text-center">Title</th>
-                                                <th class="align-middle text-center">Priority</th>
-                                                <th class="align-middle text-center">Status</th>
-                                            </tr>
-                                            </thead>
-                                            <tfoot>
-                                            <tr>
-                                                <th>Key</th>
-                                                <th>Title</th>
-                                                <th>Priority</th>
-                                                <th>Status</th>
-                                            </tr>
-                                            </tfoot>
-                                            <!-- LIST OF ISSUES ASSIGNED TO THE CURRENT USER -->
-                                            <tbody id="assignedToIssues" style="">
-                                            <tr th:each="issue : ${assignedToCurrentUser}" style="cursor: pointer;"
-                                                th:href="@{'/issues/' + ${issue.project.identifier} + '/view/' + ${issue.issueKey}}"
-                                                onclick="issueRowClicked(this.getAttribute('href'))">
-                                                <td class="align-middle text-center">
-                                                    <span th:text="${issue.issueKey}" class="badge"
-                                                          th:classappend="'bg-' + ${issue.project.color} + '-soft' + ' text-' + ${issue.project.color}">
-                                                    </span>
-                                                </td>
-                                                <td th:text="${issue.title}" class="align-middle"></td>
-                                                <td th:switch="${issue.priority}" class="align-middle text-center">
-                                                    <span th:case="Low" class="badge bg-green-soft text-green">Low</span>
-                                                    <span th:case="Normal" class="badge bg-yellow-soft text-yellow">Normal</span>
-                                                    <span th:case="High" class="badge bg-red-soft text-red">High</span>
-                                                </td>
-                                                <td th:switch="${issue.status}" class="align-middle text-center">
-                                                    <span th:case="Open" class="badge bg-danger-soft text-danger">Open</span>
-                                                    <span th:case="In-Progress" class="badge bg-warning-soft text-warning">In Progress</span>
-                                                    <span th:case="Resolved" class="badge bg-primary-soft text-primary">Resolved</span>
-                                                    <span th:case="Closed" class="badge bg-success-soft text-success">Closed</span>
-                                                </td>
-                                            </tr>
-                                            </tbody>
-                                            <!-- LIST OF ISSUES OPENED BY THE CURRENT USER -->
-                                            <tbody id="createdByIssues" style="display: none;">
-                                            <tr th:each="issue : ${createdByCurrentUser}" style="cursor: pointer;"
-                                                th:href="@{'/issues/' + ${issue.project.identifier} + '/view/' + ${issue.issueKey}}"
-                                                onclick="issueRowClicked(this.getAttribute('href'))">
-                                                <td class="align-middle text-center">
-                                                    <span th:text="${issue.issueKey}" class="badge"
-                                                          th:classappend="'bg-' + ${issue.project.color} + '-soft' + ' text-' + ${issue.project.color}">
-                                                    </span>
-                                                </td>
-                                                <td th:text="${issue.title}" class="align-middle"></td>
-                                                <td th:switch="${issue.priority}" class="align-middle text-center">
-                                                    <span th:case="Low" class="badge bg-green-soft text-green">Low</span>
-                                                    <span th:case="Normal" class="badge bg-yellow-soft text-yellow">Normal</span>
-                                                    <span th:case="High" class="badge bg-red-soft text-red">High</span>
-                                                </td>
-                                                <td th:switch="${issue.status}" class="align-middle text-center">
-                                                    <span th:case="Open" class="badge bg-danger-soft text-danger">Open</span>
-                                                    <span th:case="In-Progress" class="badge bg-warning-soft text-warning">In Progress</span>
-                                                    <span th:case="Resolved" class="badge bg-primary-soft text-primary">Resolved</span>
-                                                    <span th:case="Closed" class="badge bg-success-soft text-success">Closed</span>
-                                                </td>
-                                            </tr>
-                                            </tbody>
-                                        </table>
-
+                                        <!-- LIST OF ISSUES ASSIGNED TO THE CURRENT USER -->
+                                        <div id="assignedToIssues" style="">
+                                            <table id="dashboardIssuesDataTable" style="font-size: 0.75rem;">
+                                                <thead>
+                                                <tr>
+                                                    <th class="align-middle text-center">Key</th>
+                                                    <th class="align-middle text-center">Title</th>
+                                                    <th class="align-middle text-center">Priority</th>
+                                                    <th class="align-middle text-center">Status</th>
+                                                </tr>
+                                                </thead>
+                                                <tfoot>
+                                                <tr>
+                                                    <th>Key</th>
+                                                    <th>Title</th>
+                                                    <th>Priority</th>
+                                                    <th>Status</th>
+                                                </tr>
+                                                </tfoot>
+                                                <tbody>
+                                                <tr th:each="issue : ${assignedToCurrentUser}" style="cursor: pointer;"
+                                                    th:href="@{'/issues/' + ${issue.project.identifier} + '/view/' + ${issue.issueKey}}"
+                                                    onclick="issueRowClicked(this.getAttribute('href'))">
+                                                    <td class="align-middle text-center">
+                                                        <span th:text="${issue.issueKey}" class="badge"
+                                                              th:classappend="'bg-' + ${issue.project.color} + '-soft' + ' text-' + ${issue.project.color}">
+                                                        </span>
+                                                    </td>
+                                                    <td th:text="${issue.title}" class="align-middle"></td>
+                                                    <td th:switch="${issue.priority}" class="align-middle text-center">
+                                                        <span th:case="Low" class="badge bg-green-soft text-green">Low</span>
+                                                        <span th:case="Normal" class="badge bg-yellow-soft text-yellow">Normal</span>
+                                                        <span th:case="High" class="badge bg-red-soft text-red">High</span>
+                                                    </td>
+                                                    <td th:switch="${issue.status}" class="align-middle text-center">
+                                                        <span th:case="Open" class="badge bg-danger-soft text-danger">Open</span>
+                                                        <span th:case="In-Progress" class="badge bg-warning-soft text-warning">In Progress</span>
+                                                        <span th:case="Resolved" class="badge bg-secondary-soft text-secondary">Resolved</span>
+                                                        <span th:case="Closed" class="badge bg-success-soft text-success">Closed</span>
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <!-- LIST OF ISSUES OPENED BY THE CURRENT USER -->
+                                        <div id="createdByIssues" style="display: none;">
+                                            <table id="dashboardIssuesDataTable1" style="font-size: 0.75rem;">
+                                                <thead>
+                                                <tr>
+                                                    <th class="align-middle text-center">Key</th>
+                                                    <th class="align-middle text-center">Title</th>
+                                                    <th class="align-middle text-center">Priority</th>
+                                                    <th class="align-middle text-center">Status</th>
+                                                </tr>
+                                                </thead>
+                                                <tfoot>
+                                                <tr>
+                                                    <th>Key</th>
+                                                    <th>Title</th>
+                                                    <th>Priority</th>
+                                                    <th>Status</th>
+                                                </tr>
+                                                </tfoot>
+                                                <tbody>
+                                                <tr th:each="issue : ${createdByCurrentUser}" style="cursor: pointer;"
+                                                    th:href="@{'/issues/' + ${issue.project.identifier} + '/view/' + ${issue.issueKey}}"
+                                                    onclick="issueRowClicked(this.getAttribute('href'))">
+                                                    <td class="align-middle text-center">
+                                                        <span th:text="${issue.issueKey}" class="badge"
+                                                              th:classappend="'bg-' + ${issue.project.color} + '-soft' + ' text-' + ${issue.project.color}">
+                                                        </span>
+                                                    </td>
+                                                    <td th:text="${issue.title}" class="align-middle"></td>
+                                                    <td th:switch="${issue.priority}" class="align-middle text-center">
+                                                        <span th:case="Low" class="badge bg-green-soft text-green">Low</span>
+                                                        <span th:case="Normal" class="badge bg-yellow-soft text-yellow">Normal</span>
+                                                        <span th:case="High" class="badge bg-red-soft text-red">High</span>
+                                                    </td>
+                                                    <td th:switch="${issue.status}" class="align-middle text-center">
+                                                        <span th:case="Open" class="badge bg-danger-soft text-danger">Open</span>
+                                                        <span th:case="In-Progress" class="badge bg-warning-soft text-warning">In Progress</span>
+                                                        <span th:case="Resolved" class="badge bg-secondary-soft text-secondary">Resolved</span>
+                                                        <span th:case="Closed" class="badge bg-success-soft text-success">Closed</span>
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -577,7 +575,7 @@
                             </div>
                             <!-- RESOLVED ISSUES -->
                             <div class="col-lg-6 col-xl-3 mb-4">
-                                <div class="card bg-primary text-white h-100">
+                                <div class="card bg-secondary text-white h-100">
                                     <div class="card-body">
                                         <div class="d-flex justify-content-between align-items-center">
                                             <div class="me-3">
@@ -675,13 +673,10 @@
                 </main>
                 <footer class="footer-admin mt-auto footer-light">
                     <div class="container-xl px-4">
-                        <div class="row">
-                            <div class="col-md-6 small">Copyright &copy; Your Website 2021</div>
-                            <div class="col-md-6 text-md-end small">
-                                <a href="#!">Privacy Policy</a>
-                                &middot;
-                                <a href="#!">Terms &amp; Conditions</a>
-                            </div>
+                        <div class="text-end small">
+                            <a href="#!">Privacy Policy</a>
+                            &middot;
+                            <a href="#!">Terms &amp; Conditions</a>
                         </div>
                     </div>
                 </footer>
@@ -697,16 +692,16 @@
                 let element = document.getElementsByClassName("projectProgressDecimal").item(i).innerHTML.toString();
                 let progressBar = document.getElementsByClassName("projectProgressBar").item(i);
 
-                if(element <= 0.2) {
-                    progressBar.className += " bg-red";
-                } else if(element <= 0.4) {
-                    progressBar.className += " bg-yellow";
-                } else if(element <= 0.6) {
-                    progressBar.className += " bg-blue";
-                } else if(element <= 0.8) {
-                    progressBar.className += " bg-purple";
-                } else if(element === '1.0') {
-                    progressBar.className += " bg-green";
+                if(element <= 0.39) {
+                    progressBar.className += " bg-danger";
+                } else if(element <= 0.59) {
+                    progressBar.className += " bg-warning";
+                } else if(element <= 0.79) {
+                    progressBar.className += " bg-secondary";
+                } else if(element <= 0.99) {
+                    progressBar.className += " bg-primary";
+                } else {
+                    progressBar.className += " bg-success";
                 }
             }
 

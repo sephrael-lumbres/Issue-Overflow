@@ -60,7 +60,7 @@ public class UserService {
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message);
 
-        helper.setFrom("lumbres.sephrael@gmail.com", "Issue Tracking System");
+        helper.setFrom("lumbres.sephrael@gmail.com", "Issue Overflow");
         helper.setTo(recipientEmail);
 
         String subject = "Here is the link to reset your password";
