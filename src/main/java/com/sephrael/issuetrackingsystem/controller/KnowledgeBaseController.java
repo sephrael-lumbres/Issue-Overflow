@@ -26,18 +26,6 @@ public class KnowledgeBaseController {
         return "/knowledge-base/knowledge-base-home";
     }
 
-    @RequestMapping("/category")
-    public String showKnowledgeBaseCategoryPage(Model model, Principal principal) {
-        accessCurrentUserDetails(model, principal);
-        return "/knowledge-base/knowledge-base-category";
-    }
-
-    @RequestMapping("/article")
-    public String showKnowledgeBaseArticlePage(Model model, Principal principal) {
-        accessCurrentUserDetails(model, principal);
-        return "/knowledge-base/knowledge-base-article";
-    }
-
     // ACCOUNT SETTINGS CATEGORY
     @RequestMapping("/account-settings")
     public String showAccountSettingsCategoryPage(Model model, Principal principal) {
@@ -157,7 +145,25 @@ public class KnowledgeBaseController {
     @RequestMapping("/organization/organization-details")
     public String showOrganizationDetailsArticlePage(Model model, Principal principal) {
         accessCurrentUserDetails(model, principal);
-        return "/knowledge-base/organization/articles/organization-details";
+        return "/knowledge-base/organization/articles/organization-details-article";
+    }
+
+    @RequestMapping("/organization/access-key")
+    public String showOrganizationAccessKeyArticlePage(Model model, Principal principal) {
+        accessCurrentUserDetails(model, principal);
+        return "/knowledge-base/organization/articles/access-key-article";
+    }
+
+    @RequestMapping("/organization/editing-organization")
+    public String showEditingOrganizationArticlePage(Model model, Principal principal) {
+        accessCurrentUserDetails(model, principal);
+        return "/knowledge-base/organization/articles/editing-organization";
+    }
+
+    @RequestMapping("/organization/removing-users")
+    public String showRemovingUsersFromOrganizationArticlePage(Model model, Principal principal) {
+        accessCurrentUserDetails(model, principal);
+        return "/knowledge-base/organization/articles/removing-users";
     }
 
     // PROJECTS CATEGORY
@@ -196,6 +202,12 @@ public class KnowledgeBaseController {
     public String showDeleteProjectArticlePage(Model model, Principal principal) {
         accessCurrentUserDetails(model, principal);
         return "/knowledge-base/projects/articles/deleting-projects";
+    }
+
+    @RequestMapping("/projects/managing-members")
+    public String showManagingMembersArticlePage(Model model, Principal principal) {
+        accessCurrentUserDetails(model, principal);
+        return "/knowledge-base/projects/articles/managing-members";
     }
 
     // ISSUES CATEGORY

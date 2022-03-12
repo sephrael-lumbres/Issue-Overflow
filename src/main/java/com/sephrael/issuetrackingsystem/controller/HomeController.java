@@ -59,7 +59,7 @@ public class HomeController {
         model.addAttribute("numberOfResolvedIssues", issueService.getNumberOfIssuesByOrganizationAndStatus("Resolved", currentUser));
         model.addAttribute("numberOfInProgressIssues", issueService.getNumberOfIssuesByOrganizationAndStatus("In-Progress", currentUser));
 
-        return "index";
+        return "dashboard";
     }
 
     @RequestMapping(value = "/", method = RequestMethod.GET)

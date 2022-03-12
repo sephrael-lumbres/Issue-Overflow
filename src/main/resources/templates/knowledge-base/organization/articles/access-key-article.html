@@ -6,7 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>Knowledge Base - Issue Overflow</title>
+        <title>Organization Access Key - Issue Overflow Knowledge Base</title>
         <link href="/css/styles.css" rel="stylesheet" />
         <link rel="icon" type="image/x-icon" href="/assets/img/swirl-logo.png" />
         <script data-search-pseudo-elements defer src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js" crossorigin="anonymous"></script>
@@ -56,14 +56,6 @@
                                 </div>
                             </a>
                             <div class="dropdown-divider m-0"></div>
-                            <a class="dropdown-item py-3" href="#">
-                                <div class="icon-stack bg-primary-soft text-primary me-4"><i data-feather="list"></i></div>
-                                <div>
-                                    <div class="small text-gray-500">Issues</div>
-                                    Issues
-                                </div>
-                            </a>
-                            <div class="dropdown-divider m-0"></div>
                             <a class="dropdown-item py-3" href="https://github.com/sephraellumbres/IssueTrackingSystem"
                                target="_blank">
                                 <div class="icon-stack bg-primary-soft text-primary me-4"><i data-feather="github"></i>
@@ -102,7 +94,7 @@
                                      src="/assets/img/demo/user-placeholder.svg"
                                      class="dropdown-user-img" alt="">
                                 <div class="dropdown-user-details">
-                                    <div th:text="${currentUser.firstName} + ' ' + ${currentUser.lastName}"
+                                    <div th:text="${currentUser.getFullName()}"
                                          class="dropdown-user-details-name"></div>
                                     <div th:text="${currentUser.email}" class="dropdown-user-details-email"></div>
                                 </div>
@@ -139,8 +131,8 @@
                         <nav class="mt-4 rounded" aria-label="breadcrumb">
                             <ol class="breadcrumb px-3 py-2 rounded mb-0">
                                 <li class="breadcrumb-item"><a href="/knowledge-base">Knowledge Base</a></li>
-                                <li class="breadcrumb-item"><a href="/knowledge-base/category">Category Name</a></li>
-                                <li class="breadcrumb-item active">Article Name</li>
+                                <li class="breadcrumb-item"><a href="/knowledge-base/organization">Organization</a></li>
+                                <li class="breadcrumb-item active">Access Key</li>
                             </ol>
                         </nav>
                         <!-- SEARCH BAR -->
@@ -158,27 +150,14 @@
                 <!-- Knowledge base article-->
                 <div class="card mb-4">
                     <div class="card-header d-flex align-items-center">
-                        <a class="btn btn-transparent-dark btn-icon" href="/knowledge-base/category"><i data-feather="arrow-left"></i></a>
-                        <div class="ms-3"><h2 class="my-3">Knowledge base article example</h2></div>
+                        <a class="btn btn-transparent-dark btn-icon" href="/knowledge-base/organization"><i data-feather="arrow-left"></i></a>
+                        <div class="ms-3"><h2 class="my-3">Organization Access Key</h2></div>
                     </div>
                     <div class="card-body">
-                        <p class="lead">Here's an example of what an article in your knowledge base will look like.</p>
-                        <p class="lead">You can use the paragraph element along with other typography elements and text tools to create articles within your knowledge base. This is a great way to display support information to your users.</p>
-                        <p class="lead">The knowledge base page examples are a great starting point for creating FAQ's, documentation, and more. In this section, we're using the lead paragraph class to make the text a bit larger so it's more legible since it's meant to be read in sentences.</p>
-                        <p class="lead mb-5">You can also use step-by-step examples in this section:</p>
-                        <h4>Step 1: Start the process</h4>
-                        <p class="lead mb-4">Here is some example text of a longer version of a first step. This format is great when you need to explain things more, not just using a ordered list.</p>
-                        <h4>Step 2: Continue doing something</h4>
-                        <p class="lead mb-4">We're using built-in elements and text utilities to make this list more legible and understandable. This is a great starting point for a step by step guide within your knowledge base article.</p>
-                        <h4>Step 3: Finish the process</h4>
-                        <p class="lead mb-5">We've used spacing utilities, text utilities, and other components within this article example. This is just an example layout of a few things you can do within an article page. Thanks for reading!</p>
-                        <div class="alert alert-primary alert-icon mb-0" role="alert">
-                            <div class="alert-icon-aside"><i data-feather="alert-triangle"></i></div>
-                            <div class="alert-icon-content">
-                                <h5 class="alert-heading">Article Alert</h5>
-                                If there is something in your article that you really want to emphasize, use the alert component, or our custom icon alert component like this one here!
-                            </div>
-                        </div>
+                        <p class="lead mb-0">To view your Organization's access key, select <strong>Organization</strong> on the left navigation menu,
+                            then select the <strong><i data-feather="key" class="me-1 mt-1"></i>Access Key</strong> button on the top right.
+                            To copy the access key to your clipboard, select the <i data-feather="clipboard" class="mt-1"></i> button to the right.</p>
+                        <img src="/assets/img/knowledge-base/organization/organization-access-key.png" class="w-100 mb-4" alt="">
                     </div>
                 </div>
                 <!-- Knowledge base rating-->

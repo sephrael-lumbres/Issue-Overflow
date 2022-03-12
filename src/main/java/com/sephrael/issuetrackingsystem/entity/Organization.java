@@ -34,6 +34,7 @@ public class Organization {
 
     public void removeUser(User user) {
         this.users.remove(user);
+        user.setOrganization(null);
     }
 
     @OneToMany(mappedBy = "organization")

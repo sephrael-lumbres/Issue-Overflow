@@ -56,14 +56,6 @@
                                 </div>
                             </a>
                             <div class="dropdown-divider m-0"></div>
-                            <a class="dropdown-item py-3" href="#">
-                                <div class="icon-stack bg-primary-soft text-primary me-4"><i data-feather="list"></i></div>
-                                <div>
-                                    <div class="small text-gray-500">Issues</div>
-                                    Issues
-                                </div>
-                            </a>
-                            <div class="dropdown-divider m-0"></div>
                             <a class="dropdown-item py-3" href="https://github.com/sephraellumbres/IssueTrackingSystem"
                                target="_blank">
                                 <div class="icon-stack bg-primary-soft text-primary me-4"><i data-feather="github"></i>
@@ -102,7 +94,7 @@
                                      src="/assets/img/demo/user-placeholder.svg"
                                      class="dropdown-user-img" alt="">
                                 <div class="dropdown-user-details">
-                                    <div th:text="${currentUser.firstName} + ' ' + ${currentUser.lastName}"
+                                    <div th:text="${currentUser.getFullName()}"
                                          class="dropdown-user-details-name"></div>
                                     <div th:text="${currentUser.email}" class="dropdown-user-details-email"></div>
                                 </div>

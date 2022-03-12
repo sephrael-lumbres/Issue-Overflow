@@ -2,15 +2,15 @@
 
 package com.sephrael.issuetrackingsystem.controller;
 
+import com.sephrael.issuetrackingsystem.entity.Organization;
 import com.sephrael.issuetrackingsystem.entity.Project;
 import com.sephrael.issuetrackingsystem.entity.User;
-import com.sephrael.issuetrackingsystem.repository.ProjectRepository;
-import com.sephrael.issuetrackingsystem.repository.RoleRepository;
-import com.sephrael.issuetrackingsystem.repository.UserRepository;
+import com.sephrael.issuetrackingsystem.repository.*;
 import com.sephrael.issuetrackingsystem.service.UserService;
 import net.bytebuddy.utility.RandomString;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -32,6 +32,8 @@ public class UserController {
     private UserRepository userRepository;
     @Autowired
     private UserService userService;
+    @Autowired
+    private OrganizationRepository organizationRepository;
     @Autowired
     private ProjectRepository projectRepository;
     @Autowired
@@ -129,7 +131,7 @@ public class UserController {
         return "redirect:/login";
     }
 
-    // change this to only display 'Users' within the 'Organization'
+    // all the members of an organization
     @GetMapping("/users")
     public String listUsers(Model model, Principal principal) {
         User currentUser = userRepository.findByEmail(principal.getName());
@@ -137,8 +139,7 @@ public class UserController {
         if(currentUser.getOrganization() == null)
             return "/organization/select-organization";
 
-        List<User> listUsers = userRepository.findAll();
-        model.addAttribute("listUsers", listUsers);
+        model.addAttribute("listUsers", userRepository.findByOrganizationOrderByRoleId(currentUser.getOrganization()));
         model.addAttribute("newProject", new Project());
         model.addAttribute("currentUser", currentUser);
         model.addAttribute("currentUserProjects", currentUser.getProjects());
@@ -205,39 +206,52 @@ public class UserController {
         return "redirect:/users";
     }
 
-    @RequestMapping("/users/delete/{id}")
-    public String deleteUser(@PathVariable(name = "id") long id, Principal principal) {
+    @RequestMapping("/users/remove/{id}/{organizationId}")
+    public String removeUserFromOrganization(@PathVariable("id") long id, Principal principal,
+                                             @PathVariable("organizationId") long organizationId) {
         User currentUser = userRepository.findByEmail(principal.getName());
+        Organization currentOrganization = organizationRepository.findOrganizationById(organizationId);
 
         if(currentUser.getOrganization() == null)
             return "/organization/select-organization";
 
-        User userBeforeDeletion = userRepository.findUserById(id);
+        User userBeforeRemoval = userRepository.findUserById(id);
 
         // if the Current User is NOT in the same Organization as the Requested User, redirect to 404 page
-        if(!currentUser.getOrganization().getUsers().contains(userBeforeDeletion)) {
+        if(!currentUser.getOrganization().getUsers().contains(userBeforeRemoval)) {
             return "/error/404";
         }
 
+        // deletes all the User's issues
+        userService.deleteAllUserIssues(userBeforeRemoval);
+
         // unassigns a User from all Issues that they were previously assigned to
-        userService.unassignAllIssuesBeforeUserDeletion(userBeforeDeletion);
+        userService.unassignAllIssuesBeforeUserDeletion(userBeforeRemoval);
 
         // if a User is involved with any Projects, this removes them from all those Projects before deleting the User
-        if(userBeforeDeletion.getProjects() != null) {
-            userService.removeUserFromAllProjects(userBeforeDeletion);
+        if(userBeforeRemoval.getProjects() != null) {
+            userService.removeUserFromAllProjects(userBeforeRemoval);
         }
 
-        userRepository.deleteById(id);
+        // removes User from Organization
+        currentOrganization.removeUser(userBeforeRemoval);
 
-        if(currentUser.getId() == id)
-            return "redirect:/register";
+        // deletes organization if there are no more members
+        if(currentOrganization.getUsers().size() == 0)
+            organizationRepository.deleteById(currentOrganization.getId());
+
+        // resets the User's account, sets their role to 'Guest' and saves the changes
+        userService.registerDefaultUser(userBeforeRemoval);
+
+        if(Objects.equals(userBeforeRemoval.getId(), currentUser.getId()))
+            SecurityContextHolder.getContext().setAuthentication(null);
 
         return "redirect:/users";
     }
 
     // this returns the json of all the users
-    @GetMapping(path = "/users/all")
-    public @ResponseBody Iterable<User> getAllUsers() {
+    @GetMapping(path = "/users/json")
+    public @ResponseBody Iterable<User> getAllUsersJson() {
         return userRepository.findAll();
     }
 }

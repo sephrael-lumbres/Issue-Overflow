@@ -1,8 +1,10 @@
 package com.sephrael.issuetrackingsystem.controller;
 
 import com.sephrael.issuetrackingsystem.entity.File;
+import com.sephrael.issuetrackingsystem.entity.Organization;
 import com.sephrael.issuetrackingsystem.entity.Project;
 import com.sephrael.issuetrackingsystem.entity.User;
+import com.sephrael.issuetrackingsystem.repository.OrganizationRepository;
 import com.sephrael.issuetrackingsystem.repository.UserRepository;
 import com.sephrael.issuetrackingsystem.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +29,8 @@ public class AccountController {
     private UserService userService;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private OrganizationRepository organizationRepository;
 
     @RequestMapping("/profile/{id}")
     public String showAccountProfilePage(@PathVariable("id") long id, Principal principal, Model model) {
@@ -135,12 +139,14 @@ public class AccountController {
         return "redirect:/account/security/" + id;
     }
 
-    @PostMapping("/security/{id}/delete")
+    @PostMapping("/security/{id}/delete/{organizationId}")
     public String deleteAccount(@PathVariable(name = "id") long id, Principal principal, RedirectAttributes redirectAttributes,
-                                @RequestParam(value = "password", required = false) String password) {
+                                @RequestParam(value = "password", required = false) String password,
+                                @PathVariable("organizationId") long organizationId) {
         User currentUser = userRepository.findByEmail(principal.getName());
+        Organization currentOrganization = organizationRepository.findOrganizationById(organizationId);
 
-        if(currentUser.getOrganization() == null)
+        if(currentOrganization == null)
             return "/organization/select-organization";
 
         if(currentUser.getId() != id)
@@ -158,6 +164,13 @@ public class AccountController {
             if(userToBeDeleted.getProjects() != null) {
                 userService.removeUserFromAllProjects(userToBeDeleted);
             }
+
+            // removes User from Organization
+            currentOrganization.removeUser(currentUser);
+
+            // deletes organization if there are no more members
+            if(currentOrganization.getUsers().size() == 0)
+                organizationRepository.deleteById(currentOrganization.getId());
 
             userRepository.deleteById(id);
             // popup alerts are displayed accordingly

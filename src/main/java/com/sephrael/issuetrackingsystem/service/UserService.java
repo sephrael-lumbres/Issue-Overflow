@@ -121,6 +121,12 @@ public class UserService {
         }
     }
 
+    public void deleteAllUserIssues(User user) {
+        for(Issue issue : issueRepository.findByUser(user)) {
+            issueRepository.deleteById(issue.getId());
+        }
+    }
+
     public List<Role> listRoles() {
         return roleRepository.findAll();
     }

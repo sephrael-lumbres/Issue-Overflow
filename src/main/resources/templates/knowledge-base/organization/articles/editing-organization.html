@@ -6,7 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>Knowledge Base - Issue Overflow</title>
+        <title>Editing Organization - Issue Overflow Knowledge Base</title>
         <link href="/css/styles.css" rel="stylesheet" />
         <link rel="icon" type="image/x-icon" href="/assets/img/swirl-logo.png" />
         <script data-search-pseudo-elements defer src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js" crossorigin="anonymous"></script>
@@ -56,14 +56,6 @@
                                 </div>
                             </a>
                             <div class="dropdown-divider m-0"></div>
-                            <a class="dropdown-item py-3" href="#">
-                                <div class="icon-stack bg-primary-soft text-primary me-4"><i data-feather="list"></i></div>
-                                <div>
-                                    <div class="small text-gray-500">Issues</div>
-                                    Issues
-                                </div>
-                            </a>
-                            <div class="dropdown-divider m-0"></div>
                             <a class="dropdown-item py-3" href="https://github.com/sephraellumbres/IssueTrackingSystem"
                                target="_blank">
                                 <div class="icon-stack bg-primary-soft text-primary me-4"><i data-feather="github"></i>
@@ -102,7 +94,7 @@
                                      src="/assets/img/demo/user-placeholder.svg"
                                      class="dropdown-user-img" alt="">
                                 <div class="dropdown-user-details">
-                                    <div th:text="${currentUser.firstName} + ' ' + ${currentUser.lastName}"
+                                    <div th:text="${currentUser.getFullName()}"
                                          class="dropdown-user-details-name"></div>
                                     <div th:text="${currentUser.email}" class="dropdown-user-details-email"></div>
                                 </div>
@@ -135,14 +127,15 @@
                                 </h1>
                             </div>
                         </div>
-
+                        <!-- BREADCRUMBS -->
                         <nav class="mt-4 rounded" aria-label="breadcrumb">
                             <ol class="breadcrumb px-3 py-2 rounded mb-0">
                                 <li class="breadcrumb-item"><a href="/knowledge-base">Knowledge Base</a></li>
-                                <li class="breadcrumb-item active">Category Name</li>
+                                <li class="breadcrumb-item"><a href="/knowledge-base/organization">Organization</a></li>
+                                <li class="breadcrumb-item active">Editing Organization</li>
                             </ol>
                         </nav>
-
+                        <!-- SEARCH BAR -->
                         <div class="page-header-search mt-4">
                             <div class="input-group input-group-joined">
                                 <span class="input-group-text me-n3"><i data-feather="search"></i></span>
@@ -154,64 +147,21 @@
             </header>
             <!-- Main page content-->
             <div class="container-xl px-4">
-                <!-- Knowledge base category-->
-                <h2 class="mb-0 mt-5">Category Name</h2>
-                <hr class="mt-2 mb-4" />
-                <!-- Knowledge base item-->
-                <a class="card card-icon lift lift-sm mb-4" href="knowledge-base-article.html">
-                    <div class="card-body">
-                        <div class="d-flex align-items-center justify-content-between">
-                            <div class="h5 card-title mb-0">How to update your billing information</div>
-                            <i class="flex-shrink-0 ms-4" data-feather="chevron-right"></i>
-                        </div>
+                <!-- Knowledge base article-->
+                <div class="card mb-4">
+                    <div class="card-header d-flex align-items-center">
+                        <a class="btn btn-transparent-dark btn-icon" href="/knowledge-base/organization"><i data-feather="arrow-left"></i></a>
+                        <div class="ms-3"><h2 class="my-3">Editing Organization</h2></div>
                     </div>
-                </a>
-                <!-- Knowledge base item-->
-                <a class="card card-icon lift lift-sm mb-4" href="knowledge-base-article.html">
                     <div class="card-body">
-                        <div class="d-flex align-items-center justify-content-between">
-                            <div class="h5 card-title mb-0">Integrating with the API</div>
-                            <i class="flex-shrink-0 ms-4" data-feather="chevron-right"></i>
-                        </div>
+                        <p class="lead mb-0">To edit your organization, select <strong>Organization</strong> on the left navigation menu,
+                            then select <strong><i data-feather="edit" class="mt-1 me-1"></i>Edit Organization</strong>.
+                        </p>
+                        <p class="lead mb-0">After making the necessary changes, select <strong>Save changes</strong>.</p>
+                        <img src="/assets/img/knowledge-base/organization/editing-organization.png" class="w-100 mb-4" alt="">
                     </div>
-                </a>
-                <!-- Knowledge base item-->
-                <a class="card card-icon lift lift-sm mb-4" href="knowledge-base-article.html">
-                    <div class="card-body">
-                        <div class="d-flex align-items-center justify-content-between">
-                            <div class="h5 card-title mb-0">Setting up new accounts within our platform</div>
-                            <i class="flex-shrink-0 ms-4" data-feather="chevron-right"></i>
-                        </div>
-                    </div>
-                </a>
-                <!-- Knowledge base item-->
-                <a class="card card-icon lift lift-sm mb-4" href="knowledge-base-article.html">
-                    <div class="card-body">
-                        <div class="d-flex align-items-center justify-content-between">
-                            <div class="h5 card-title mb-0">Accessing and editing order details</div>
-                            <i class="flex-shrink-0 ms-4" data-feather="chevron-right"></i>
-                        </div>
-                    </div>
-                </a>
-                <!-- Knowledge base item-->
-                <a class="card card-icon lift lift-sm mb-4" href="knowledge-base-article.html">
-                    <div class="card-body">
-                        <div class="d-flex align-items-center justify-content-between">
-                            <div class="h5 card-title mb-0">Installation instructions for Windows 10 users</div>
-                            <i class="flex-shrink-0 ms-4" data-feather="chevron-right"></i>
-                        </div>
-                    </div>
-                </a>
-                <!-- Knowledge base item-->
-                <a class="card card-icon lift lift-sm mb-4" href="knowledge-base-article.html">
-                    <div class="card-body">
-                        <div class="d-flex align-items-center justify-content-between">
-                            <div class="h5 card-title mb-0">Installation instructions for Mac OSX users</div>
-                            <i class="flex-shrink-0 ms-4" data-feather="chevron-right"></i>
-                        </div>
-                    </div>
-                </a>
-                <!-- knowledge base rating-->
+                </div>
+                <!-- Knowledge base rating-->
                 <div class="text-center mt-5">
                     <h4 class="mb-3">Was this page helpful?</h4>
                     <div class="mb-3">

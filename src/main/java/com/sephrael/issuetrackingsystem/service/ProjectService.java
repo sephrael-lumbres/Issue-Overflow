@@ -16,14 +16,11 @@ public class ProjectService {
 
     // if the new Project's Identifier or Access Key already exists within the current User's Organization's Projects,
     // display an ERROR message
-    public String isProjectIdentifierAndAccessKeyUniqueWithinOrganization(Project requestedProject, User currentUser, boolean isProjectCreation, RedirectAttributes redirectAttributes) {
+    public String isProjectIdentifierUniqueWithinOrganization(Project requestedProject, User currentUser, boolean isProjectCreation, RedirectAttributes redirectAttributes) {
         for(Project currentProject : currentUser.getOrganization().getProjects()) {
             if (!Objects.equals(currentProject.getId(), requestedProject.getId())) {
                 if (Objects.equals(requestedProject.getIdentifier(), currentProject.getIdentifier())) {
                     redirectAttributes.addFlashAttribute("idNotUniqueToOrganization", "Project 'ID' already exists within Organization! Please try again!");
-                    return "redirect:/projects/all";
-                } else if (Objects.equals(requestedProject.getAccessKey(), currentProject.getAccessKey())) {
-                    redirectAttributes.addFlashAttribute("accessKeyNotUniqueToOrganization", "Project 'Access Key' already exists within Organization! Please try again");
                     return "redirect:/projects/all";
                 }
             }

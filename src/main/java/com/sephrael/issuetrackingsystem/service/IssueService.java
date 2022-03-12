@@ -95,14 +95,14 @@ public class IssueService {
                 newIssue.setOldValue(null);
             else {
                 User issue2User = userRepository.findUserById(issue2.getAssignedTo().getId());
-                newIssue.setOldValue(issue2User.getFirstName() + " " + issue2User.getLastName());
+                newIssue.setOldValue(issue2User.getFullName());
             }
             // if the Issue's 'Assigned To' is empty or does not exist
             if(issue1.getAssignedTo() == null || userRepository.findUserById(issue1.getAssignedTo().getId()) == null)
                 newIssue.setNewValue(null);
             else {
                 User issue1User = userRepository.findUserById(issue1.getAssignedTo().getId());
-                newIssue.setNewValue(issue1User.getFirstName() + " " + issue1User.getLastName());
+                newIssue.setNewValue(issue1User.getFullName());
             }
             newIssue.setChangeVersion(issue2.getChangeVersion());
             newIssue.setUpdatedBy(updatedBy);

@@ -309,3 +309,18 @@ query returned null
 not sorting and not searching correctly
 - Removed some unused files
 - Cleaned up some code
+
+
+
+Add Feature to Remove User from Org. and More
+
+- Added functionality to remove a User from an Organization
+- Added articles in the Organization category of the Knowledge Base
+- Added functionality to change an Organization's name
+- Removed all instances of Project 'Access Key' and joining a Project,
+now, the only way to be added to a project is by a Project Manager
+directly adding a user to a project
+- 'Users' page now only displays an Organization's members and not all
+the users within Issue Overflow
+- Cleaned up some code
+- Removed some unused code and elements

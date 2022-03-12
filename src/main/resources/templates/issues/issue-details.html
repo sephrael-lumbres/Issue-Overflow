@@ -56,14 +56,6 @@
                             </div>
                         </a>
                         <div class="dropdown-divider m-0"></div>
-                        <a class="dropdown-item py-3" href="#">
-                            <div class="icon-stack bg-primary-soft text-primary me-4"><i data-feather="list"></i></div>
-                            <div>
-                                <div class="small text-gray-500">Issues</div>
-                                Submit an Issue
-                            </div>
-                        </a>
-                        <div class="dropdown-divider m-0"></div>
                         <a class="dropdown-item py-3" href="https://github.com/sephraellumbres/IssueTrackingSystem" target="_blank">
                             <div class="icon-stack bg-primary-soft text-primary me-4"><i data-feather="github"></i></div>
                             <div>
@@ -86,7 +78,7 @@
                             <img th:unless="${currentUser.hasProfilePicture()}" src="/assets/img/demo/user-placeholder.svg"
                                  class="dropdown-user-img" alt="">
                             <div class="dropdown-user-details">
-                                <div th:text="${currentUser.firstName} + ' ' + ${currentUser.lastName}" class="dropdown-user-details-name"></div>
+                                <div th:text="${currentUser.getFullName()}" class="dropdown-user-details-name"></div>
                                 <div th:text="${currentUser.email}" class="dropdown-user-details-email"></div>
                             </div>
                         </div>
@@ -202,7 +194,7 @@
                     <div class="sidenav-footer">
                         <div class="sidenav-footer-content">
                             <div class="sidenav-footer-subtitle">Logged in as:</div>
-                            <div th:text="${currentUser.firstName} + ' ' + ${currentUser.lastName}" class="sidenav-footer-title"></div>
+                            <div th:text="${currentUser.getFullName()}" class="sidenav-footer-title"></div>
                         </div>
                     </div>
                 </nav>
@@ -221,10 +213,6 @@
                                     </div>
 
                                     <div class="col-12 col-xl-auto mb-3">
-                                        <a class="btn btn-sm btn-light text-primary" href="/issues/all">
-                                            <i class="me-1" data-feather="arrow-left"></i>
-                                            Back to All Issues
-                                        </a>
                                         <a sec:authorize="hasAnyAuthority('Project Manager', 'Admin', 'Developer')"
                                            th:href="@{'/issues/' + ${currentProject.identifier} +'/new'}" class="btn btn-sm btn-light text-primary">
                                             <i class="me-1" data-feather="plus"></i>
@@ -258,13 +246,13 @@
                                 <li class="col d-flex justify-content-between align-items-start">
                                     <div class="ms-2 me-auto">
                                         <div class="fw-bold mb-2">Opened By</div>
-                                        <span th:text="${issue.user.firstName} + ' ' + ${issue.user.lastName}"></span>
+                                        <span th:text="${issue.user.getFullName()}"></span>
                                     </div>
                                 </li>
                                 <li class="col d-flex justify-content-between align-items-start">
                                     <div class="ms-2 me-auto">
                                         <div class="fw-bold mb-2">Assigned To</div>
-                                        <span th:text="${issue.assignedTo.firstName} + ' ' + ${issue.assignedTo.lastName}"
+                                        <span th:text="${issue.assignedTo.getFullName()}"
                                               th:if="${issue ne null and issue.assignedTo ne null}">
                                         </span>
                                     </div>
@@ -376,7 +364,7 @@
                                 <ul th:each="comment, list : ${comments}" class="row">
                                     <li class="col d-flex">
                                         <div class="me-auto">
-                                            <div th:text="${comment.user.firstName} + ' ' + ${comment.user.lastName}" class="fw-bold mb-n2"></div>
+                                            <div th:text="${comment.user.getFullName()}" class="fw-bold mb-n2"></div>
                                                 <div th:if="${comment.user==currentUser}" style="position: absolute; left: 91.5%;">
                                                     <a th:id="'editCommentButton' + ${list.index}" onclick="editComment(this)" class="btn-lg btn-icon btn-transparent-dark me-2 editCommentButton" href="javascript:void(0);"><i data-feather="edit"></i></a>
                                                     <a class="btn-lg btn-icon btn-transparent-dark"
@@ -444,7 +432,7 @@
                                     <tr th:each="version : ${issueChangeHistoryList}">
                                         <!-- UPDATED BY -->
                                         <td th:if="${version.updatedBy == null}" class="text-nowrap"></td>
-                                        <td th:if="${version.updatedBy != null}" th:text="${version.updatedBy.firstName} + ' ' + ${version.updatedBy.lastName}" class="text-nowrap"></td>
+                                        <td th:if="${version.updatedBy != null}" th:text="${version.updatedBy.getFullName()}" class="text-nowrap"></td>
 
                                         <!-- PROPERTY -->
                                         <td th:text="${version.property}" class="text-nowrap"></td>

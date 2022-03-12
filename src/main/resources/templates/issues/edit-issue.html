@@ -56,14 +56,6 @@
                             </div>
                         </a>
                         <div class="dropdown-divider m-0"></div>
-                        <a class="dropdown-item py-3" href="#">
-                            <div class="icon-stack bg-primary-soft text-primary me-4"><i data-feather="list"></i></div>
-                            <div>
-                                <div class="small text-gray-500">Issues</div>
-                                Submit an Issue
-                            </div>
-                        </a>
-                        <div class="dropdown-divider m-0"></div>
                         <a class="dropdown-item py-3" href="https://github.com/sephraellumbres/IssueTrackingSystem" target="_blank">
                             <div class="icon-stack bg-primary-soft text-primary me-4"><i data-feather="github"></i></div>
                             <div>
@@ -86,7 +78,7 @@
                             <img th:unless="${currentUser.hasProfilePicture()}" src="/assets/img/demo/user-placeholder.svg"
                                  class="dropdown-user-img" alt="">
                             <div class="dropdown-user-details">
-                                <div th:text="${currentUser.firstName} + ' ' + ${currentUser.lastName}" class="dropdown-user-details-name"></div>
+                                <div th:text="${currentUser.getFullName()}" class="dropdown-user-details-name"></div>
                                 <div th:text="${currentUser.email}" class="dropdown-user-details-email"></div>
                             </div>
                         </div>
@@ -202,7 +194,7 @@
                     <div class="sidenav-footer">
                         <div class="sidenav-footer-content">
                             <div class="sidenav-footer-subtitle">Logged in as:</div>
-                            <div th:text="${currentUser.firstName} + ' ' + ${currentUser.lastName}" class="sidenav-footer-title"></div>
+                            <div th:text="${currentUser.getFullName()}" class="sidenav-footer-title"></div>
                         </div>
                     </div>
                 </nav>
@@ -259,7 +251,7 @@
                                         <select class="form-control" name="assignedTo" id="assignedTo" required>
                                             <option th:field="*{assignedTo}" value=" "> </option>
                                             <option th:field="*{assignedTo}" th:each="assignedUser : ${currentProject.getUsers()}" th:value="${assignedUser.id}"
-                                                    th:text="${assignedUser.firstName} + ' ' + ${assignedUser.lastName}"
+                                                    th:text="${assignedUser.getFullName()}"
                                                     th:if="${assignedUser.getRole().name == 'Project Manager' ||
                                                         assignedUser.getRole().name == 'Admin' || assignedUser.getRole().name == 'Developer'}"
                                                     th:selected="${assignedUser==issue.assignedTo}">

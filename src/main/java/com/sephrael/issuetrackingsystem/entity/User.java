@@ -67,12 +67,6 @@ public class User {
     @NotAudited
     private List<Project> projects = new ArrayList<>();
 
-    // I think these lines of code are not being used (Delete if everything works after thoroughly testing)
-//    public void addProject(Project project) {
-//        this.projects.add(project);
-//        project.getUsers().add(this);
-//    }
-//
     public List<Project> getProjects() {
         // sorts the Projects alphabetically by their Names
         projects.sort(Comparator.comparing(Project::getName));
@@ -158,6 +152,10 @@ public class User {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public String getFullName() {
+        return this.firstName + " " + this.lastName;
     }
 
     public String getResetPasswordToken() {

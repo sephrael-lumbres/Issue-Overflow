@@ -56,14 +56,6 @@
                                 </div>
                             </a>
                             <div class="dropdown-divider m-0"></div>
-                            <a class="dropdown-item py-3" href="#">
-                                <div class="icon-stack bg-primary-soft text-primary me-4"><i data-feather="list"></i></div>
-                                <div>
-                                    <div class="small text-gray-500">Issues</div>
-                                    Issues
-                                </div>
-                            </a>
-                            <div class="dropdown-divider m-0"></div>
                             <a class="dropdown-item py-3" href="https://github.com/sephraellumbres/IssueTrackingSystem"
                                target="_blank">
                                 <div class="icon-stack bg-primary-soft text-primary me-4"><i data-feather="github"></i>
@@ -102,7 +94,7 @@
                                      src="/assets/img/demo/user-placeholder.svg"
                                      class="dropdown-user-img" alt="">
                                 <div class="dropdown-user-details">
-                                    <div th:text="${currentUser.firstName} + ' ' + ${currentUser.lastName}"
+                                    <div th:text="${currentUser.getFullName()}"
                                          class="dropdown-user-details-name"></div>
                                     <div th:text="${currentUser.email}" class="dropdown-user-details-email"></div>
                                 </div>
@@ -158,28 +150,37 @@
                 <h2 class="mb-0 mt-5">Organization</h2>
                 <hr class="mt-2 mb-4" />
                 <!-- VIEW ORGANIZATION DETAILS -->
-                <a class="card card-icon lift lift-sm mb-4" href="/knowledge-base/organization/view-organization-details">
+                <a class="card card-icon lift lift-sm mb-4" href="/knowledge-base/organization/organization-details">
                     <div class="card-body">
                         <div class="d-flex align-items-center justify-content-between">
-                            <div class="h5 card-title mb-0">View Organization Details</div>
+                            <div class="h5 card-title mb-0">Organization Details</div>
                             <i class="flex-shrink-0 ms-4" data-feather="chevron-right"></i>
                         </div>
                     </div>
                 </a>
                 <!-- VIEW ACCESS KEY -->
-                <a class="card card-icon lift lift-sm mb-4" href="/knowledge-base/organization/view-access-key">
+                <a class="card card-icon lift lift-sm mb-4" href="/knowledge-base/organization/access-key">
                     <div class="card-body">
                         <div class="d-flex align-items-center justify-content-between">
-                            <div class="h5 card-title mb-0">View Access Key</div>
+                            <div class="h5 card-title mb-0">Organization Access Key</div>
                             <i class="flex-shrink-0 ms-4" data-feather="chevron-right"></i>
                         </div>
                     </div>
                 </a>
-                <!-- EDIT ORGANIZATION NAME -->
-                <a class="card card-icon lift lift-sm mb-4" href="/knowledge-base/organization/edit-organization-name">
+                <!-- EDITiNG ORGANIZATION -->
+                <a class="card card-icon lift lift-sm mb-4" href="/knowledge-base/organization/editing-organization">
                     <div class="card-body">
                         <div class="d-flex align-items-center justify-content-between">
-                            <div class="h5 card-title mb-0">Edit Organization Name</div>
+                            <div class="h5 card-title mb-0">Editing Organization</div>
+                            <i class="flex-shrink-0 ms-4" data-feather="chevron-right"></i>
+                        </div>
+                    </div>
+                </a>
+                <!-- REMOVING USERS -->
+                <a class="card card-icon lift lift-sm mb-4" href="/knowledge-base/organization/removing-users">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div class="h5 card-title mb-0">Removing Users</div>
                             <i class="flex-shrink-0 ms-4" data-feather="chevron-right"></i>
                         </div>
                     </div>

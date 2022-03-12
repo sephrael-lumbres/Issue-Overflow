@@ -94,44 +94,8 @@ public class ProjectController {
 
         // verifies that the Project requested for Creation has unique fields and redirects to '/projects/all' with an
         // alert message based on the result
-        return projectService.isProjectIdentifierAndAccessKeyUniqueWithinOrganization(newProject, currentUser,
+        return projectService.isProjectIdentifierUniqueWithinOrganization(newProject, currentUser,
                 true, redirectAttributes);
-    }
-
-    @PostMapping("/join")
-    public String joinProject(@RequestParam(value = "accessKey") String accessKey, Principal principal, RedirectAttributes redirectAttributes) {
-        User currentUser = userRepository.findByEmail(principal.getName());
-        Organization currentUserOrganization = currentUser.getOrganization();
-
-        if(currentUserOrganization == null)
-            return "/organization/select-organization";
-
-        Project currentProject = projectRepository.findByAccessKeyAndOrganization(accessKey, currentUserOrganization);
-
-        if(currentProject == null) {
-            redirectAttributes.addFlashAttribute("projectNotFound", "Project Not Found!");
-            return "redirect:/projects/all";
-        }
-
-        // this adds the project to the current user's Organization only if the current user is in the Organization that
-        // the Project was created in
-        if(Objects.equals(currentUserOrganization.getId(), currentProject.getOrganization().getId())) {
-            currentUserOrganization.addToProject(currentProject);
-
-            // this gets the access key input by the user from the "Join Organization Form" and uses the access key to find
-            // the associated Organization and adds the current user to the desired Project
-            currentProject.addUser(currentUser);
-        } else {
-            return "/error/500";
-        }
-
-        // OLD CODE: this added the project to the current user's Organization WITHOUT CHECKING
-        //userRepository.findByEmail(principal.getName()).getOrganization().addToProject(projectRepository.findByIdentifier(identifier));
-
-        // after adding the current user to the desired Organization, this saves the Organization
-        projectRepository.save(projectRepository.findByAccessKeyAndOrganization(accessKey, currentUserOrganization));
-
-        return "redirect:/projects/" + currentProject.getIdentifier();
     }
 
     @PostMapping("/save")
@@ -167,7 +131,7 @@ public class ProjectController {
 
         // verifies that the Project requested for an Update has unique fields and redirects to '/projects/all' with an
         // alert message based on the result
-        return projectService.isProjectIdentifierAndAccessKeyUniqueWithinOrganization(requestedProjectUpdate, currentUser,
+        return projectService.isProjectIdentifierUniqueWithinOrganization(requestedProjectUpdate, currentUser,
                 false, redirectAttributes);
     }
 

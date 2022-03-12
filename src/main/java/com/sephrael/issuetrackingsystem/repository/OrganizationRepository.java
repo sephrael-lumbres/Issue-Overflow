@@ -9,4 +9,5 @@ import org.springframework.stereotype.Repository;
 public interface OrganizationRepository extends JpaRepository<Organization, Long> {
     @Query("SELECT o FROM Organization o WHERE o.accessKey = ?1")
     Organization findByAccessKey(String accessKey);
+    Organization findOrganizationById(Long id);
 }

@@ -18,8 +18,6 @@ public interface IssueRepository extends RevisionRepository<Issue, Long, Integer
     List<Issue> findByUser(User user);
     List<Issue> findByAssignedTo(User assignedTo);
     Issue findByIssueKeyAndOrganization(String issueKey, Organization organization);
-    // OLD CODE: caused problems when more than one Project had the same Project Identifier
-    //Issue findByIssueKey(String issueKey);
     List<Issue> findByOrganization(Organization organization);
     List<Issue> findByProject(Project project);
     Issue findIssueByTitle(String title);

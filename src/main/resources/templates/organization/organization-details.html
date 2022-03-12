@@ -55,14 +55,6 @@
                             </div>
                         </a>
                         <div class="dropdown-divider m-0"></div>
-                        <a class="dropdown-item py-3" href="#">
-                            <div class="icon-stack bg-primary-soft text-primary me-4"><i data-feather="list"></i></div>
-                            <div>
-                                <div class="small text-gray-500">Issues</div>
-                                Submit an Issue
-                            </div>
-                        </a>
-                        <div class="dropdown-divider m-0"></div>
                         <a class="dropdown-item py-3" href="https://github.com/sephraellumbres/IssueTrackingSystem" target="_blank">
                             <div class="icon-stack bg-primary-soft text-primary me-4"><i data-feather="github"></i></div>
                             <div>
@@ -85,7 +77,7 @@
                             <img th:unless="${currentUser.hasProfilePicture()}" src="/assets/img/demo/user-placeholder.svg"
                                  class="dropdown-user-img" alt="">
                             <div class="dropdown-user-details">
-                                <div th:text="${currentUser.firstName} + ' ' + ${currentUser.lastName}" class="dropdown-user-details-name"></div>
+                                <div th:text="${currentUser.getFullName()}" class="dropdown-user-details-name"></div>
                                 <div th:text="${currentUser.email}" class="dropdown-user-details-email"></div>
                             </div>
                         </div>
@@ -201,7 +193,7 @@
                     <div class="sidenav-footer">
                         <div class="sidenav-footer-content">
                             <div class="sidenav-footer-subtitle">Logged in as:</div>
-                            <div th:text="${currentUser.firstName} + ' ' + ${currentUser.lastName}" class="sidenav-footer-title"></div>
+                            <div th:text="${currentUser.getFullName()}" class="sidenav-footer-title"></div>
                         </div>
                     </div>
                 </nav>
@@ -219,20 +211,18 @@
                                         </h1>
                                     </div>
                                     <div class="col-12 col-xl-auto mb-3">
-                                        <a class="btn btn-sm btn-light text-primary" href="/users">
-                                            <i class="me-1" data-feather="user"></i>
-                                            Manage Users
-                                        </a>
                                         <a class="btn btn-sm btn-light text-primary" href="/projects/all">
                                             <i class="me-1" data-feather="users"></i>
                                             Manage Projects
                                         </a>
-
                                         <a class="btn btn-sm btn-light text-primary" data-bs-toggle="modal" data-bs-target="#viewAccessKeyModal">
                                             <i class="me-1" data-feather="key"></i>
                                             Access Key
                                         </a>
-
+                                        <a class="btn btn-sm btn-light text-primary" data-bs-toggle="modal" data-bs-target="#editOrganizationModal">
+                                            <i class="me-1" data-feather="edit"></i>
+                                            Edit Organization
+                                        </a>
                                     </div>
                                 </div>
                             </div>
@@ -241,16 +231,14 @@
                     <!-- Main page content-->
                     <div class="container-fluid px-4">
 
+                        <!-- Popup alerts -->
+                        <div th:text="${updateOrganizationSuccess}" th:if="${updateOrganizationSuccess}" id="popupAlerts" class="alert alert-success alert-dismissible fade show text-center mt-n1" role="alert"></div>
+                        <div th:text="${updateOrganizationError}" th:if="${updateOrganizationError}" id="popupAlerts" class="alert alert-danger alert-dismissible fade show text-center mt-n1" role="alert"></div>
+
                         <!-- ALERT MESSAGE IF CURRENT USER IS NOT INVOLVED WITH ANY PROJECT -->
-                        <div th:if="${currentUser.getProjects().isEmpty()}" class="alert alert-danger text-center mt-n2" role="alert">
+                        <div sec:authorize="hasAuthority('Project Manager')" th:if="${currentUser.getProjects().isEmpty()}" class="alert alert-danger text-center mt-n2" role="alert">
                             <i data-feather="alert-triangle" class="feather-lg"></i>
-                            Please
-                            <span sec:authorize="hasAuthority('Project Manager')">
-                                <a data-bs-toggle="modal" data-bs-target="#createProjectModal" style="cursor: pointer" class="alert-link">create a project</a>
-                                or
-                            </span>
-                            <a data-bs-toggle="modal" data-bs-target="#joinProjectModal" style="cursor: pointer" class="alert-link">join a project</a>
-                            to start tracking Issues
+                            Please <a data-bs-toggle="modal" data-bs-target="#createProjectModal" style="cursor: pointer" class="alert-link">create a project</a> to start tracking Issues
                         </div>
 
                         <!-- Create project modal-->
@@ -270,11 +258,7 @@
                                                 <label class="mb-1" for="createFormProjectIdentifier" style="font-size: 14px">Project ID<span style="color: red">*</span></label>
                                                 <input th:field="*{identifier}" style="text-transform: uppercase;" class="form-control" id="createFormProjectIdentifier" type="text" required/>
                                                 <p class="form-text mb-n2" style="font-size: 12px">The project ID is a unique identifier for a project. A short, concise key is recommended.</p>
-                                                <p class="form-text" style="font-size: 12px">(e.g. Project ID for 'Call of Duty' could be 'COD') Uppercase letters (A-Z), numbers (0-9) and underscore (_) can be used.</p>
-
-                                                <label class="mb-1" for="createFormProjectAccessKey" style="font-size: 14px">Project Access Key<span style="color: red">*</span></label>
-                                                <input th:field="*{accessKey}" class="form-control" id="createFormProjectAccessKey" type="text" placeholder="Enter project access key..." required/>
-                                                <p class="form-text mb-3" style="font-size: 12px">The project access key is a password that could be shared to allow other users in an Organization to join a project.</p>
+                                                <p class="form-text mb-2" style="font-size: 12px">(e.g. Project ID for 'Call of Duty' could be 'COD') Uppercase letters (A-Z), numbers (0-9) and underscore (_) can be used.</p>
 
                                                 <label class="mb-1" for="color" style="font-size: 14px;">Project Color<span style="color: red">*</span></label>
                                                 <select th:field="*{color}" name="color" class="form-control mb-auto" id="color">
@@ -301,24 +285,27 @@
                             </div>
                         </div>
 
-                        <!-- Join project modal-->
-                        <div th:if="${currentUser.getProjects().isEmpty()}" class="modal fade" id="joinProjectModal" tabindex="-1" role="dialog" aria-labelledby="joinProjectModalLabel" aria-hidden="true">
-                            <div class="modal-dialog modal-lg" role="document">
+                        <!-- Edit Organization Modal -->
+                        <div class="modal fade" id="editOrganizationModal" tabindex="-1" role="dialog" aria-labelledby="viewAccessKeyModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="joinProjectModalLabel">Join Project</h5>
+                                        <h5 class="modal-title" id="editOrganizationModalLabel">Edit Organization</h5>
                                         <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
-                                    <form action="#" th:action="@{/projects/join}" th:object="${newProject}" method="post">
+                                    <form th:action="@{/organization/update}" method="post">
                                         <div class="modal-body">
                                             <div class="mb-0">
-                                                <label class="mb-1" for="joinFormProjectName" style="font-size: 14px">Project Access Key<span style="color: red">*</span></label>
-                                                <input th:name="accessKey" class="form-control" id="joinFormProjectName" type="text" placeholder="Enter project access key..." required/>
+                                                <label class="mb-1" for="editOrganization" style="font-size: 14px;">Organization Name<span style="color: red">*</span></label>
+                                                <div class="d-flex">
+                                                    <input th:value="${currentUser.getOrganization().id}" th:name="id" class="form-control" id="id" type="hidden" readonly/>
+                                                    <input th:value="${currentUser.getOrganization().getName()}" th:name="organizationName" class="form-control" id="editOrganization" type="text" placeholder="Enter organization name..."/>
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="modal-footer">
                                             <button class="btn btn-danger-soft text-danger" type="button" data-bs-dismiss="modal">Cancel</button>
-                                            <button class="btn btn-primary-soft text-primary" type="submit">Join Project</button>
+                                            <button class="btn btn-primary-soft text-primary" type="submit">Save Changes</button>
                                         </div>
                                     </form>
                                 </div>
@@ -349,7 +336,7 @@
                                                 <img th:unless="${projectManager.hasProfilePicture()}" src="/assets/img/demo/user-placeholder.svg" class="avatar-img img-fluid" alt="">
                                             </div>
                                             <div class="ms-3">
-                                                <div th:text="${projectManager.firstName} + ' ' + ${projectManager.lastName}" class="fs-4 text-dark fw-500"></div>
+                                                <div th:text="${projectManager.getFullName()}" class="fs-4 text-dark fw-500"></div>
                                                 <div th:text="${projectManager.role.name}" class="small text-muted"></div>
                                             </div>
                                         </div>
@@ -371,7 +358,7 @@
                                                 <img th:unless="${admin.hasProfilePicture()}" src="/assets/img/demo/user-placeholder.svg" class="avatar-img img-fluid" alt="">
                                             </div>
                                             <div class="ms-3">
-                                                <div th:text="${admin.firstName} + ' ' + ${admin.lastName}" class="fs-4 text-dark fw-500"></div>
+                                                <div th:text="${admin.getFullName()}" class="fs-4 text-dark fw-500"></div>
                                                 <div th:text="${admin.role.name}" class="small text-muted"></div>
                                             </div>
                                         </div>
@@ -393,7 +380,7 @@
                                                 <img th:unless="${developer.hasProfilePicture()}" src="/assets/img/demo/user-placeholder.svg" class="avatar-img img-fluid" alt="">
                                             </div>
                                             <div class="ms-3">
-                                                <div th:text="${developer.firstName} + ' ' + ${developer.lastName}" class="fs-4 text-dark fw-500"></div>
+                                                <div th:text="${developer.getFullName()}" class="fs-4 text-dark fw-500"></div>
                                                 <div th:text="${developer.role.name}" class="small text-muted"></div>
                                             </div>
                                         </div>
@@ -415,7 +402,7 @@
                                                 <img th:unless="${guest.hasProfilePicture()}" src="/assets/img/demo/user-placeholder.svg" class="avatar-img img-fluid" alt="">
                                             </div>
                                             <div class="ms-3">
-                                                <div th:text="${guest.firstName} + ' ' + ${guest.lastName}" class="fs-4 text-dark fw-500"></div>
+                                                <div th:text="${guest.getFullName()}" class="fs-4 text-dark fw-500"></div>
                                                 <div th:text="${guest.role.name}" class="small text-muted"></div>
                                             </div>
                                         </div>
@@ -470,6 +457,14 @@
 
                 navigator.clipboard.writeText(textToCopy.value);
             }
+
+            // displays popup alerts
+            let buttonElement = document.createElement("button");
+            buttonElement.className = "btn-close";
+            buttonElement.setAttribute("data-bs-dismiss", "alert");
+            buttonElement.setAttribute("aria-label", "Close");
+            buttonElement.setAttribute("type", "button");
+            document.getElementById("popupAlerts").appendChild(buttonElement);
         </script>
     </body>
 </html>

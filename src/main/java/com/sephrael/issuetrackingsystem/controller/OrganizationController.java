@@ -12,6 +12,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
 import java.util.Random;
@@ -98,14 +99,49 @@ public class OrganizationController {
         return "redirect:/dashboard";
     }
 
+    @PostMapping("/update")
+    public String updateOrganization(@RequestParam(value = "id") Long id, RedirectAttributes redirectAttributes,
+                                     @RequestParam(value = "organizationName") String organizationName, Principal principal) {
+        User currentUser = userRepository.findByEmail(principal.getName());
+
+        if(currentUser.getOrganization() == null)
+            return "/organization/select-organization";
+
+        try {
+            Organization previousOrganization = organizationRepository.findOrganizationById(id);
+            previousOrganization.setName(organizationName);
+
+            organizationRepository.save(previousOrganization);
+
+            redirectAttributes.addFlashAttribute("updateOrganizationSuccess", "Organization has been successfully updated!");
+        } catch(Exception exception) {
+            redirectAttributes.addFlashAttribute("updateOrganizationError", "An error has occurred while attempting to save Organization changes");;
+        }
+
+        return "redirect:/organization";
+    }
+
     @PostMapping("/joining")
     public String joinOrganization(@RequestParam(value = "accessKey") String accessKey, Principal principal) {
+        User currentUser = userRepository.findByEmail(principal.getName());
+        Organization organization = organizationRepository.findByAccessKey(accessKey);
+
+        // if the Organization that was requested to be joined, has ZERO members, grant the User with the Project Manager role
+        if(organization.getUsers().size() == 0) {
+            roleRepository.findByName("Project Manager").addToUser(currentUser);
+            userRepository.save(currentUser);
+        }
+
         // this gets the access key input by the user from the "Join Organization Form" and uses the access key to find
         // the associated Organization and adds the current user to the desired Organization
-        organizationRepository.findByAccessKey(accessKey).addToUser(userRepository.findByEmail(principal.getName()));
+        organizationRepository.findByAccessKey(accessKey).addToUser(currentUser);
 
         // after adding the current user to the desired Organization, this saves the Organization
         organizationRepository.save(organizationRepository.findByAccessKey(accessKey));
+
+        // logs out the Current User to allow the Authorization of 'Project Manager'
+        if(organization.getUsers().size() == 0)
+            SecurityContextHolder.getContext().setAuthentication(null);
 
         return "redirect:/dashboard";
     }

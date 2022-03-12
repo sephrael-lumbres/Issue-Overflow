@@ -55,14 +55,6 @@
                             </div>
                         </a>
                         <div class="dropdown-divider m-0"></div>
-                        <a class="dropdown-item py-3" href="#">
-                            <div class="icon-stack bg-primary-soft text-primary me-4"><i data-feather="list"></i></div>
-                            <div>
-                                <div class="small text-gray-500">Issues</div>
-                                Submit an Issue
-                            </div>
-                        </a>
-                        <div class="dropdown-divider m-0"></div>
                         <a class="dropdown-item py-3" href="https://github.com/sephraellumbres/IssueTrackingSystem" target="_blank">
                             <div class="icon-stack bg-primary-soft text-primary me-4"><i data-feather="github"></i></div>
                             <div>
@@ -86,7 +78,7 @@
                             <img th:unless="${currentUser.hasProfilePicture()}" src="/assets/img/demo/user-placeholder.svg"
                                  class="dropdown-user-img" alt="">
                             <div class="dropdown-user-details">
-                                <div th:text="${currentUser.firstName} + ' ' + ${currentUser.lastName}" class="dropdown-user-details-name"></div>
+                                <div th:text="${currentUser.getFullName()}" class="dropdown-user-details-name"></div>
                                 <div th:text="${currentUser.email}" class="dropdown-user-details-email"></div>
                             </div>
                         </div>
@@ -200,7 +192,7 @@
                     <div class="sidenav-footer">
                         <div class="sidenav-footer-content">
                             <div class="sidenav-footer-subtitle">Logged in as:</div>
-                            <div th:text="${currentUser.firstName} + ' ' + ${currentUser.lastName}" class="sidenav-footer-title"></div>
+                            <div th:text="${currentUser.getFullName()}" class="sidenav-footer-title"></div>
                         </div>
                     </div>
                 </nav>
@@ -236,13 +228,9 @@
                                                     <div class="dropdown-item-icon"><i class="text-gray-500" data-feather="plus"></i></div>
                                                     Create Project
                                                 </a>
-                                                <a style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#joinProjectModal" class="dropdown-item">
-                                                    <div class="dropdown-item-icon"><i class="text-gray-500" data-feather="users"></i></div>
-                                                    Join Project
-                                                </a>
                                                 <a class="dropdown-item" href="/projects">
                                                     <div class="dropdown-item-icon"><i class="text-gray-500" data-feather="eye"></i></div>
-                                                    View Projects
+                                                    View List of Projects
                                                 </a>
                                             </div>
                                         </div>
@@ -265,11 +253,7 @@
                                                             <label class="mb-1" for="createFormProjectIdentifier" style="font-size: 14px">Project ID<span style="color: red">*</span></label>
                                                             <input th:field="*{identifier}" style="text-transform: uppercase;" class="form-control" id="createFormProjectIdentifier" type="text" required/>
                                                             <p class="form-text mb-n2" style="font-size: 12px">The project ID is a unique identifier for a project. A short, concise key is recommended.</p>
-                                                            <p class="form-text" style="font-size: 12px">(e.g. Project ID for 'Call of Duty' could be 'COD') Uppercase letters (A-Z), numbers (0-9) and underscore (_) can be used.</p>
-
-                                                            <label class="mb-1" for="createFormProjectAccessKey" style="font-size: 14px">Project Access Key<span style="color: red">*</span></label>
-                                                            <input th:field="*{accessKey}" class="form-control" id="createFormProjectAccessKey" type="text" placeholder="Enter project access key..." required/>
-                                                            <p class="form-text mb-3" style="font-size: 12px">The project access key is a password that could be shared to allow other users in an Organization to join a project.</p>
+                                                            <p class="form-text mb-2" style="font-size: 12px">(e.g. Project ID for 'Call of Duty' could be 'COD') Uppercase letters (A-Z), numbers (0-9) and underscore (_) can be used.</p>
 
                                                             <label class="mb-1" for="color" style="font-size: 14px;">Project Color<span style="color: red">*</span></label>
                                                             <select th:field="*{color}" name="color" class="form-control mb-auto" id="color">
@@ -296,37 +280,11 @@
                                         </div>
                                     </div>
 
-                                    <!-- Join project modal-->
-                                    <div class="modal fade" id="joinProjectModal" tabindex="-1" role="dialog" aria-labelledby="joinProjectModalLabel" aria-hidden="true">
-                                        <div class="modal-dialog modal-lg" role="document">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title" id="joinProjectModalLabel">Join Project</h5>
-                                                    <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                </div>
-                                                <form action="#" th:action="@{/projects/join}" th:object="${newProject}" method="post">
-                                                    <div class="modal-body">
-                                                        <div class="mb-0">
-                                                            <label class="mb-1" for="joinFormProjectName" style="font-size: 14px">Project Access Key<span style="color: red">*</span></label>
-                                                            <input th:name="accessKey" class="form-control" id="joinFormProjectName" type="text" placeholder="Enter project access key..." required/>
-                                                        </div>
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button class="btn btn-danger-soft text-danger" type="button" data-bs-dismiss="modal">Cancel</button>
-                                                        <button class="btn btn-primary-soft text-primary" type="submit">Join Project</button>
-                                                    </div>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
-
                                     <div class="card-body h-100 p-2">
 
                                         <div th:if="${currentUserProjects.size() == 0}" class="text-center">
                                             <div>There are no projects at the moment.</div>
                                             <a sec:authorize="hasAuthority('Project Manager')" class="text-primary" style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#createProjectModal">Create a new Project</a>
-                                            <span sec:authorize="hasAuthority('Project Manager')">or</span>
-                                            <a class="text-primary" style="cursor: pointer" data-bs-toggle="modal" data-bs-target="#joinProjectModal">Join a Project</a>
                                         </div>
 
                                         <ul th:each="project : ${currentUserProjects}" class="list-group">
@@ -400,7 +358,7 @@
                                             <div th:if="${issues.size() == 0 || currentUserProjects.size() == 0}" class="text-center">Issue Updates are displayed here. There are no updates currently.</div>
 
                                             <!-- Timeline item for newly created and updated Issues -->
-                                            <div th:each="issue, list : ${issues}" th:if="${currentUser.getProjects().contains(issue.project)}" class="timeline-item">
+                                            <div th:each="issue : ${issues}" th:if="${currentUser.getProjects().contains(issue.project)}" class="timeline-item">
                                                 <div class="timeline-item-marker">
                                                     <div th:text="${issueService.getIssueDateTimeString(issue)}" class="timeline-item-marker-text"></div>
                                                     <div th:if="${issue.dateCreated.until(issue.getDateUpdated(), seconds) == 0}" class="timeline-item-marker-indicator bg-success"></div>
@@ -412,7 +370,7 @@
                                                        class="fw-bold text-dark">
                                                         <u th:text="${issue.issueKey}"></u>
                                                     </a>
-                                                    has been opened by <strong th:text="${issue.user.firstName} + ' ' + ${issue.user.lastName}"></strong>.
+                                                    has been opened by <strong th:text="${issue.user.getFullName()}"></strong>.
                                                 </div>
                                                 <div th:unless="${issue.dateCreated.until(issue.getDateUpdated(), seconds) == 0}" class="timeline-item-content">
                                                     Details for
@@ -634,7 +592,7 @@
                                     </tr>
                                     </tfoot>
                                     <tbody>
-                                    <tr th:each="user: ${usersByOrganization}">
+                                    <tr th:each="user, list : ${usersByOrganization}">
                                         <td class="align-middle">
                                             <div class="d-flex align-items-center">
                                                 <div class="avatar me-2">
@@ -643,13 +601,13 @@
                                                     <img th:unless="${user.hasProfilePicture()}" src="/assets/img/demo/user-placeholder.svg"
                                                          class="avatar-img img-fluid" alt="">
                                                 </div>
-                                                <span th:text="${user.firstName} + ' ' + ${user.lastName}"></span>
+                                                <span th:text="${user.getFullName()}"></span>
                                             </div>
                                         </td>
                                         <td th:text="${user.email}" class="align-middle"></td>
                                         <td th:text="${user.role.name}" class="align-middle"></td>
                                         <td class="align-middle">
-                                            <span th:each="project : ${currentUser.organization.getProjects()}">
+                                            <span th:each="project, list : ${currentUser.organization.getProjects()}">
                                                 <span th:if="${project.users.contains(user)}" th:text="${project.name}" th:classappend="'bg-' + ${project.color} + '-soft' + ' text-' + ${project.color}" class="badge"></span>
                                             </span>
                                         </td>
@@ -658,9 +616,9 @@
                                                class="btn btn-datatable btn-icon btn-transparent-dark me-2">
                                                 <i data-feather="edit"></i>
                                             </a>
-                                            <a th:href="@{'/users/delete/' + ${user.id}}" title="Delete"
-                                               class="btn btn-datatable btn-icon btn-transparent-dark"
-                                               onclick="return confirm('Are you sure you want to delete this user?');">
+                                            <a th:href="@{'/users/remove/' + ${user.id} + '/' + ${user.organization.id}}"
+                                               class="btn btn-datatable btn-icon btn-transparent-dark" title="Delete"
+                                               th:attr="onclick=|return confirm('Are you sure you want to remove &quot;${user.firstName} ${user.lastName}&quot; from &quot;${user.organization.name}&quot;?')|">
                                                 <i data-feather="trash-2"></i>
                                             </a>
                                         </td>

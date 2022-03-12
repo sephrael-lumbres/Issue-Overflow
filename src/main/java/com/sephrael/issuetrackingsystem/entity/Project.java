@@ -29,10 +29,6 @@ public class Project {
 
     @Column
     @NotNull
-    private String accessKey;
-
-    @Column
-    @NotNull
     private String identifier;
 
     @NotNull
@@ -100,14 +96,6 @@ public class Project {
 
     public void setDateCreated(LocalDate dateCreated) {
         this.dateCreated = dateCreated;
-    }
-
-    public String getAccessKey() {
-        return accessKey;
-    }
-
-    public void setAccessKey(String accessKey) {
-        this.accessKey = accessKey;
     }
 
     public String getIdentifier() {

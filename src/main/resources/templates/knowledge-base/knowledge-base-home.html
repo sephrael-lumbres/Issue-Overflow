@@ -56,14 +56,6 @@
                                 </div>
                             </a>
                             <div class="dropdown-divider m-0"></div>
-                            <a class="dropdown-item py-3" href="#">
-                                <div class="icon-stack bg-primary-soft text-primary me-4"><i data-feather="list"></i></div>
-                                <div>
-                                    <div class="small text-gray-500">Issues</div>
-                                    Issues
-                                </div>
-                            </a>
-                            <div class="dropdown-divider m-0"></div>
                             <a class="dropdown-item py-3" href="https://github.com/sephraellumbres/IssueTrackingSystem"
                                target="_blank">
                                 <div class="icon-stack bg-primary-soft text-primary me-4"><i data-feather="github"></i>
@@ -102,7 +94,7 @@
                                      src="/assets/img/demo/user-placeholder.svg"
                                      class="dropdown-user-img" alt="">
                                 <div class="dropdown-user-details">
-                                    <div th:text="${currentUser.firstName} + ' ' + ${currentUser.lastName}"
+                                    <div th:text="${currentUser.getFullName()}"
                                          class="dropdown-user-details-name"></div>
                                     <div th:text="${currentUser.email}" class="dropdown-user-details-email"></div>
                                 </div>
@@ -164,7 +156,7 @@
                                     <i data-feather="compass"></i>
                                 </div>
                                 <h6>Getting Started</h6>
-                                <p class="card-text">Welcome to Issue Overflow! Let's get to trackin'!</p>
+                                <p class="card-text">Welcome to Issue Overflow, a tool for development teams to track bugs, tasks, requests, etc. Let's get to trackin'!</p>
                             </div>
                             <div class="card-footer border-0 bg-transparent pt-0 pb-5">
                                 <div class="badge rounded-pill bg-light text-dark fw-normal px-3 py-2">2 Articles</div>
@@ -178,7 +170,7 @@
                                     <i data-feather="settings"></i>
                                 </div>
                                 <h6>Account Settings</h6>
-                                <p class="card-text">Troubleshooting guides specific to your account including creating new accounts, modifying existing accounts, and deleting accounts.</p>
+                                <p class="card-text">Tutorials on how to navigate through your personal account settings.</p>
                             </div>
                             <div class="card-footer border-0 bg-transparent pt-0 pb-5">
                                 <div class="badge rounded-pill bg-light text-dark fw-normal px-3 py-2">3 Articles</div>
@@ -192,7 +184,7 @@
                                     <i data-feather="users"></i>
                                 </div>
                                 <h6>User Settings</h6>
-                                <p class="card-text">Troubleshooting guides specific to your account including creating new accounts, modifying existing accounts, and deleting accounts.</p>
+                                <p class="card-text">Information about Users and their settings.</p>
                             </div>
                             <div class="card-footer border-0 bg-transparent pt-0 pb-5">
                                 <div class="badge rounded-pill bg-light text-dark fw-normal px-3 py-2">4 Articles</div>
@@ -206,7 +198,7 @@
                                     <i data-feather="activity"></i>
                                 </div>
                                 <h6>Dashboard</h6>
-                                <p class="card-text">Improving your system's speed and reliability.</p>
+                                <p class="card-text">Information of the Dashboard and how to navigate through it.</p>
                             </div>
                             <div class="card-footer border-0 bg-transparent pt-0 pb-5">
                                 <div class="badge rounded-pill bg-light text-dark fw-normal px-3 py-2">7 Articles</div>
@@ -220,10 +212,10 @@
                                     <i data-feather="globe"></i>
                                 </div>
                                 <h6>Organization</h6>
-                                <p class="card-text">Setting up and managing collections of users.</p>
+                                <p class="card-text">Information of the Organization and its settings.</p>
                             </div>
                             <div class="card-footer border-0 bg-transparent pt-0 pb-5">
-                                <div class="badge rounded-pill bg-light text-dark fw-normal px-3 py-2">3 Articles</div>
+                                <div class="badge rounded-pill bg-light text-dark fw-normal px-3 py-2">4 Articles</div>
                             </div>
                         </a>
                     </div>
@@ -237,7 +229,7 @@
                                 <p class="card-text">Building custom modules on top of our platform.</p>
                             </div>
                             <div class="card-footer border-0 bg-transparent pt-0 pb-5">
-                                <div class="badge rounded-pill bg-light text-dark fw-normal px-3 py-2">5 Articles</div>
+                                <div class="badge rounded-pill bg-light text-dark fw-normal px-3 py-2">6 Articles</div>
                             </div>
                         </a>
                     </div>
