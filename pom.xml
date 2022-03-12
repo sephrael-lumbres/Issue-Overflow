@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.sephrael</groupId>
-	<artifactId>IssueTrackingSystem</artifactId>
+	<artifactId>Issue-Overflow</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>Issue Tracking System</name>
+	<name>Issue Overflow</name>
 	<description>Issue Tracking System with Spring Boot</description>
 	<properties>
 		<java.version>11</java.version>
