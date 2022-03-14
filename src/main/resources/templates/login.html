@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
     <head>
         <meta charset="utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -12,7 +12,7 @@
         <script data-search-pseudo-elements defer src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.28.0/feather.min.js" crossorigin="anonymous"></script>
     </head>
-    <body class="bg-primary">
+    <body class="bg-gradient-primary-to-secondary">
         <div id="layoutAuthentication">
             <div id="layoutAuthentication_content">
                 <main>
@@ -28,13 +28,17 @@
                                 <!-- Social login form-->
                                 <div class="card my-5">
                                     <div class="card-body p-5 text-center">
-                                        <div class="h3 fw-light mb-3">Sign In</div>
+                                        <div class="display-6 fw-bolder text-primary">
+                                            <img src="/assets/img/swirl-logo.png" style="height: 2.5rem;" alt="" class="mt-n1">
+                                            Issue Overflow
+                                        </div>
                                         <!-- Social login links-->
-                                        <a class="btn btn-icon btn-facebook mx-1" href="/oauth2/authorization/facebook"><i class="fab fa-facebook-f fa-fw fa-sm"></i></a>
-                                        <a class="btn btn-icon btn-github mx-1" href="/oauth2/authorization/github"><i class="fab fa-github fa-fw fa-sm"></i></a>
-                                        <a class="btn btn-icon btn-google mx-1" href="/oauth2/authorization/google"><i class="fab fa-google fa-fw fa-sm"></i></a>
-                                        <a class="btn btn-icon btn-twitter mx-1" href="#!"><i class="fab fa-twitter fa-fw fa-sm text-white"></i></a>
+<!--                                        <a class="btn btn-icon btn-facebook mx-1" href="/oauth2/authorization/facebook"><i class="fab fa-facebook-f fa-fw fa-sm"></i></a>-->
+<!--                                        <a class="btn btn-icon btn-github mx-1" href="/oauth2/authorization/github"><i class="fab fa-github fa-fw fa-sm"></i></a>-->
+<!--                                        <a class="btn btn-icon btn-google mx-1" href="/oauth2/authorization/google"><i class="fab fa-google fa-fw fa-sm"></i></a>-->
+<!--                                        <a class="btn btn-icon btn-twitter mx-1" href="#!"><i class="fab fa-twitter fa-fw fa-sm text-white"></i></a>-->
                                     </div>
+                                    <div class="h3 fw-light text-center">Log In</div>
                                     <hr class="my-0" />
                                     <div class="card-body p-5">
                                         <!-- Login form-->
@@ -63,12 +67,15 @@
                                         </form>
                                     </div>
                                     <hr class="my-0" />
-                                    <form th:action="@{/register}" name="registerForm" method="get" class="card-body px-5 py-4">
+                                    <div class="card-body px-5 py-4">
                                         <div class="small text-center">
                                             New user?
-                                            <a href="javascript: registerForm.submit();">Create an account!</a>
+                                            <a href="/register">Create an account!</a>
                                         </div>
-                                    </form>
+                                        <div class="small text-center">
+                                            <a href="/knowledge-base">Learn more</a> about Issue Overflow
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -78,7 +85,7 @@
             <div id="layoutAuthentication_footer">
                 <footer class="footer-admin mt-auto footer-dark">
                     <div class="container-xl px-4">
-                        <div class="text-end small">
+                        <div class="text-center small">
                             <a href="#!">Privacy Policy</a>
                             &middot;
                             <a href="#!">Terms &amp; Conditions</a>

@@ -324,3 +324,11 @@ directly adding a user to a project
 the users within Issue Overflow
 - Cleaned up some code
 - Removed some unused code and elements
+
+
+
+Add Finishing Touches Before Website Deployment
+
+- Added logo to Registration and Login pages
+- Removed elements that are not being used
+- Changed background color on registration/login pages

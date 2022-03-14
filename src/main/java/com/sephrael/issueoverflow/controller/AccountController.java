@@ -183,21 +183,22 @@ public class AccountController {
         return "redirect:/login";
     }
 
-    @RequestMapping("/notifications/{id}")
-    public String showAccountNotificationsPage(@PathVariable("id") long id, Principal principal, Model model) {
-        User currentUser = userRepository.findByEmail(principal.getName());
-
-        if(currentUser.getOrganization() == null)
-            return "/organization/select-organization";
-
-        if(currentUser.getId() != id)
-            return "/error/404";
-
-        model.addAttribute("newProject", new Project());
-        model.addAttribute("user", userRepository.getById(id));
-        model.addAttribute("currentUser", currentUser);
-        model.addAttribute("currentUserProjects", currentUser.getProjects());
-
-        return "/account-settings/account-notifications";
-    }
+    // feature to be added in the future
+//    @RequestMapping("/notifications/{id}")
+//    public String showAccountNotificationsPage(@PathVariable("id") long id, Principal principal, Model model) {
+//        User currentUser = userRepository.findByEmail(principal.getName());
+//
+//        if(currentUser.getOrganization() == null)
+//            return "/organization/select-organization";
+//
+//        if(currentUser.getId() != id)
+//            return "/error/404";
+//
+//        model.addAttribute("newProject", new Project());
+//        model.addAttribute("user", userRepository.getById(id));
+//        model.addAttribute("currentUser", currentUser);
+//        model.addAttribute("currentUserProjects", currentUser.getProjects());
+//
+//        return "/account-settings/account-notifications";
+//    }
 }

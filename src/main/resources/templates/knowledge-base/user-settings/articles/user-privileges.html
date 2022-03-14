@@ -136,12 +136,13 @@
                             </ol>
                         </nav>
 
-                        <div class="page-header-search mt-4">
-                            <div class="input-group input-group-joined">
-                                <span class="input-group-text me-n3"><i data-feather="search"></i></span>
-                                <input class="form-control" type="text" placeholder="How can we help you?" aria-label="Search" autofocus />
-                            </div>
-                        </div>
+                        <!-- SEARCH BAR -->
+<!--                        <div class="page-header-search mt-4">-->
+<!--                            <div class="input-group input-group-joined">-->
+<!--                                <span class="input-group-text me-n3"><i data-feather="search"></i></span>-->
+<!--                                <input class="form-control" type="text" placeholder="How can we help you?" aria-label="Search" autofocus />-->
+<!--                            </div>-->
+<!--                        </div>-->
                     </div>
                 </div>
             </header>
@@ -157,33 +158,37 @@
                     </div>
                     <div class="card-body">
                         <p class="lead mb-4">Here is the list of User Roles and their privileges:</p>
-                        <h3>Project Manager</h3>
+                        <h3 class="mb-0">Project Manager</h3>
                         <ul class="lead">
+                            <li>can add/edit/delete projects</li>
+                            <li>can edit users roles within their Organization</li>
+                            <li>can add/remove users to/from projects</li>
+                            <li>can mark Issues as <strong>Closed</strong></li>
                             <li>can create, edit, and delete all Issues</li>
                             <li>can attach and delete all Files of all Issues</li>
                             <li>can create, edit, and delete all Comments</li>
                         </ul>
 
-                        <h3>Administrator</h3>
+                        <h3 class="mb-0">Administrator</h3>
                         <ul class="lead">
-                            <li>can view Project Access Keys that can be shared to other Users</li>
+                            <li>can mark Issues as <strong>Closed</strong></li>
                             <li>can create, edit, and delete all Issues</li>
                             <li>can attach and delete all Files of all Issues</li>
                             <li>can create, edit, and delete all Comments</li>
                         </ul>
 
-                        <h3>Developer</h3>
+                        <h3 class="mb-0">Developer</h3>
                         <ul class="lead">
                             <li>can create Issues but can only edit and delete their own Issues</li>
                             <li>can attach Files to Issues but can only delete their own attached Files</li>
                             <li>can add Comments to Issues but can only edit and delete their own Comments</li>
                         </ul>
 
-                        <h3>Guest</h3>
+                        <h3 class="mb-0">Guest</h3>
                         <ul class="lead mb-5">
                             <li>can only view Issues and its details</li>
                             <li>can add Comments to Issues but can only edit and delete their own Comments</li>
-                            <li>can view and edit their own account settings</li>
+                            <li>can edit their own account settings</li>
                         </ul>
 
                         <table class="table table-bordered table-hover">
@@ -200,86 +205,65 @@
                             <tr>
                                 <td>Edit/Delete Users</td>
                                 <td class="text-center">✓</td>
-                                <td class="text-center"></td>
-                                <td class="text-center"></td>
-                                <td class="text-center"></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
                             </tr>
                             <tr>
                                 <td>Edit User Role</td>
                                 <td class="text-center">✓</td>
-                                <td class="text-center"></td>
-                                <td class="text-center"></td>
-                                <td class="text-center"></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
                             </tr>
                             <tr>
                                 <td>Add/Remove Users to/from Projects</td>
                                 <td class="text-center">✓</td>
-                                <td class="text-center"></td>
-                                <td class="text-center"></td>
-                                <td class="text-center"></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
                             </tr>
                             <tr>
                                 <td>Edit Organization Name</td>
                                 <td class="text-center">✓</td>
-                                <td class="text-center"></td>
-                                <td class="text-center"></td>
-                                <td class="text-center"></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
                             </tr>
                             <tr>
                                 <td>View Organization Access Key</td>
                                 <td class="text-center">✓</td>
-                                <td class="text-center"></td>
-                                <td class="text-center"></td>
-                                <td class="text-center"></td>
-                            </tr>
-                            <tr>
-                                <td>Generate New Organization Access Key</td>
-                                <td class="text-center">✓</td>
-                                <td class="text-center"></td>
-                                <td class="text-center"></td>
-                                <td class="text-center"></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
                             </tr>
                             <tr>
                                 <td>Add/Edit/Delete Projects</td>
                                 <td class="text-center">✓</td>
-                                <td class="text-center"></td>
-                                <td class="text-center"></td>
-                                <td class="text-center"></td>
-                            </tr>
-                            <tr>
-                                <td>View Project Access Key</td>
-                                <td class="text-center">✓</td>
-                                <td class="text-center">✓</td>
-                                <td class="text-center"></td>
-                                <td class="text-center"></td>
-                            </tr>
-                            <tr>
-                                <td>Join Projects</td>
-                                <td class="text-center">✓</td>
-                                <td class="text-center">✓</td>
-                                <td class="text-center">✓</td>
-                                <td class="text-center">✓</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
                             </tr>
                             <tr>
                                 <td>Add/Edit/Delete Issues</td>
                                 <td class="text-center">✓</td>
                                 <td class="text-center">✓</td>
                                 <td class="text-center">✓</td>
-                                <td class="text-center"></td>
+                                <td></td>
                             </tr>
                             <tr>
                                 <td>Attach Files to Issues</td>
                                 <td class="text-center">✓</td>
                                 <td class="text-center">✓</td>
                                 <td class="text-center">✓</td>
-                                <td class="text-center"></td>
+                                <td></td>
                             </tr>
                             <tr>
                                 <td>Delete Files from Issues</td>
                                 <td class="text-center">✓</td>
                                 <td class="text-center">✓</td>
                                 <td class="text-center">✓</td>
-                                <td class="text-center"></td>
+                                <td></td>
                             </tr>
                             <tr>
                                 <td>View Issues and its details</td>
@@ -314,32 +298,15 @@
 
                     </div>
                 </div>
-                <!-- Knowledge base rating-->
-                <div class="text-center mt-5">
-                    <h4 class="mb-3">Was this page helpful?</h4>
-                    <div class="mb-3">
-                        <button class="btn btn-primary mx-2 px-3" role="button">
-                            <i class="me-2" data-feather="thumbs-up"></i>
-                            Yes
-                        </button>
-                        <button class="btn btn-primary mx-2 px-3" role="button">
-                            <i class="me-2" data-feather="thumbs-down"></i>
-                            No
-                        </button>
-                    </div>
-                    <div class="text-small text-muted"><em>29 people found this page helpful so far!</em></div>
-                </div>
+
             </div>
         </main>
         <footer class="footer-admin mt-auto footer-light">
             <div class="container-xl px-4">
-                <div class="row">
-                    <div class="col-md-6 small">Copyright &copy; Your Website 2021</div>
-                    <div class="col-md-6 text-md-end small">
-                        <a href="#!">Privacy Policy</a>
-                        &middot;
-                        <a href="#!">Terms &amp; Conditions</a>
-                    </div>
+                <div class="text-center small">
+                    <a href="#!">Privacy Policy</a>
+                    &middot;
+                    <a href="#!">Terms &amp; Conditions</a>
                 </div>
             </div>
         </footer>
