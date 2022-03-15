@@ -51,17 +51,19 @@
                             <div class="icon-stack bg-primary-soft text-primary me-4"><i data-feather="file-text"></i></div>
                             <div>
                                 <div class="small text-gray-500">Knowledge Base</div>
-                                Updates and changes
+                                Articles to help you understand
+                                <br>
+                                individual features and settings.
                             </div>
                         </a>
-                        <div class="dropdown-divider m-0"></div>
-                        <a class="dropdown-item py-3" href="https://github.com/sephraellumbres/IssueTrackingSystem" target="_blank">
-                            <div class="icon-stack bg-primary-soft text-primary me-4"><i data-feather="github"></i></div>
-                            <div>
-                                <div class="small text-gray-500">Github</div>
-                                Code snippets and reference
-                            </div>
-                        </a>
+<!--                        <div class="dropdown-divider m-0"></div>-->
+<!--                        <a class="dropdown-item py-3" href="https://github.com/sephraellumbres/Issue-Overflow" target="_blank">-->
+<!--                            <div class="icon-stack bg-primary-soft text-primary me-4"><i data-feather="github"></i></div>-->
+<!--                            <div>-->
+<!--                                <div class="small text-gray-500">Github</div>-->
+<!--                                Code snippets and reference-->
+<!--                            </div>-->
+<!--                        </a>-->
                     </div>
                 </li>
                 <!-- User Dropdown-->
@@ -215,11 +217,11 @@
                                             <i class="me-1" data-feather="users"></i>
                                             Manage Projects
                                         </a>
-                                        <a class="btn btn-sm btn-light text-primary" data-bs-toggle="modal" data-bs-target="#viewAccessKeyModal">
+                                        <a sec:authorize="hasAuthority('Project Manager')" class="btn btn-sm btn-light text-primary" data-bs-toggle="modal" data-bs-target="#viewAccessKeyModal">
                                             <i class="me-1" data-feather="key"></i>
                                             Access Key
                                         </a>
-                                        <a class="btn btn-sm btn-light text-primary" data-bs-toggle="modal" data-bs-target="#editOrganizationModal">
+                                        <a sec:authorize="hasAuthority('Project Manager')" class="btn btn-sm btn-light text-primary" data-bs-toggle="modal" data-bs-target="#editOrganizationModal">
                                             <i class="me-1" data-feather="edit"></i>
                                             Edit Organization
                                         </a>
@@ -286,7 +288,7 @@
                         </div>
 
                         <!-- Edit Organization Modal -->
-                        <div class="modal fade" id="editOrganizationModal" tabindex="-1" role="dialog" aria-labelledby="viewAccessKeyModalLabel" aria-hidden="true">
+                        <div sec:authorize="hasAuthority('Project Manager')" class="modal fade" id="editOrganizationModal" tabindex="-1" role="dialog" aria-labelledby="editOrganizationModalLabel" aria-hidden="true">
                             <div class="modal-dialog" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
@@ -414,7 +416,7 @@
                     </div>
 
                     <!-- View Access Key Modal -->
-                    <div class="modal fade" id="viewAccessKeyModal" tabindex="-1" role="dialog" aria-labelledby="viewAccessKeyModalLabel" aria-hidden="true">
+                    <div sec:authorize="hasAuthority('Project Manager')" class="modal fade" id="viewAccessKeyModal" tabindex="-1" role="dialog" aria-labelledby="viewAccessKeyModalLabel" aria-hidden="true">
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">

@@ -51,17 +51,19 @@
                             <div class="icon-stack bg-primary-soft text-primary me-4"><i data-feather="file-text"></i></div>
                             <div>
                                 <div class="small text-gray-500">Knowledge Base</div>
-                                Updates and changes
+                                Articles to help you understand
+                                <br>
+                                individual features and settings.
                             </div>
                         </a>
-                        <div class="dropdown-divider m-0"></div>
-                        <a class="dropdown-item py-3" href="https://github.com/sephraellumbres/IssueTrackingSystem" target="_blank">
-                            <div class="icon-stack bg-primary-soft text-primary me-4"><i data-feather="github"></i></div>
-                            <div>
-                                <div class="small text-gray-500">Github</div>
-                                Code snippets and reference
-                            </div>
-                        </a>
+<!--                        <div class="dropdown-divider m-0"></div>-->
+<!--                        <a class="dropdown-item py-3" href="https://github.com/sephraellumbres/Issue-Overflow" target="_blank">-->
+<!--                            <div class="icon-stack bg-primary-soft text-primary me-4"><i data-feather="github"></i></div>-->
+<!--                            <div>-->
+<!--                                <div class="small text-gray-500">Github</div>-->
+<!--                                Code snippets and reference-->
+<!--                            </div>-->
+<!--                        </a>-->
                     </div>
                 </li>
                 <!-- User Dropdown-->
@@ -249,6 +251,9 @@
                                     </div>
                                     <div class="card-body" style="height: 25em; overflow-y: scroll;">
                                         <div class="timeline timeline-xs">
+
+                                            <div th:if="${issues.size() == 0 || currentUserProjects.size() == 0}" class="text-center">Issue Updates are displayed here. There are no updates currently.</div>
+
                                             <!-- Timeline item for newly created and updated Issues -->
                                             <div th:each="issue, list : ${issues}" class="timeline-item">
                                                 <div class="timeline-item-marker">

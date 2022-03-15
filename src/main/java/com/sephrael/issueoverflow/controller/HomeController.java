@@ -26,6 +26,11 @@ public class HomeController {
     @Autowired
     private IssueService issueService;
 
+    @RequestMapping(value = "/", method = RequestMethod.GET)
+    public String redirectToDashboard() {
+        return "redirect:/dashboard";
+    }
+
     @RequestMapping(value = "/dashboard", method = RequestMethod.GET)
     public String dashboard(Model model, Principal principal) {
 

@@ -54,10 +54,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/reset-password", "/change-password*").permitAll()
                 .antMatchers("/error", "/js/**", "/assets/**", "/css/**", "/webjars/**").permitAll()
 
-                // Update operations on Users allowed to Project Managers
-                .antMatchers("/users/edit/*", "/users/update/*").hasAnyAuthority("Project Manager")
+                // Update and Removal operations on Users allowed only to Project Managers
+                .antMatchers("/users/edit/*", "/users/update/*", "/users/remove/**")
+                .hasAuthority("Project Manager")
 
-                // CRUD operations on Projects allowed to Project Managers
+                // Update operations on Organization allowed only to Project Managers
+                .antMatchers("/organization/update")
+                .hasAuthority("Project Manager")
+
+                // CRUD operations on Projects allowed only to Project Managers
                 .antMatchers("/projects/new", "/projects/save", "/projects/delete/*")
                 .hasAnyAuthority("Project Manager")
 
@@ -66,13 +71,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .hasAnyAuthority("Project Manager", "Admin", "Developer")
 
                 // view Issues allowed to all Roles
-                .antMatchers("/issues/*/view/*").hasAnyAuthority("Project Manager", "Admin", "Developer", "Guest")
+                .antMatchers("/issues/*/view/*")
+                .hasAnyAuthority("Project Manager", "Admin", "Developer", "Guest")
 
                 // deletion of Files only allowed to PMs, Admins, and Developers
-                .antMatchers("/files/*/*/delete/*").hasAnyAuthority("Project Manager", "Admin", "Developer")
+                .antMatchers("/files/*/*/delete/*")
+                .hasAnyAuthority("Project Manager", "Admin", "Developer")
 
                 // CRUD operations on Comments allowed to all Roles
-                .antMatchers("/issues/*/view/*/comment/**").hasAnyAuthority("Project Manager", "Admin", "Developer", "Guest")
+                .antMatchers("/issues/*/view/*/comment/**")
+                .hasAnyAuthority("Project Manager", "Admin", "Developer", "Guest")
+
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()

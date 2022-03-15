@@ -26,8 +26,6 @@ public class OrganizationController {
     @Autowired
     private UserRepository userRepository;
     @Autowired
-    private UserService userService;
-    @Autowired
     private RoleRepository roleRepository;
 
     @RequestMapping("")

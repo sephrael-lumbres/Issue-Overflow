@@ -340,3 +340,16 @@ Fix Heroku 500 Error Bug and Add Contact Us
 - Fixed Heroku 500 error bug due to Controllers accessing HTML files
 - Contact Us page now sends a message/email to me
 - Removed some unused elements
+
+
+
+Fix Heroku Redirect on Login Bug and More...
+
+- Fixed bug on Heroku where, on successful login, the user was
+redirected to a nonexistent page (404 error)
+- Changed it so that only Project Managers are allowed to change an
+Organization's name
+- Changed it so that only Project Managers are allowed to remove users
+from an Organization
+- Made changes to the Help dropdown menu on the top navigation bar
+- Removed some elements
