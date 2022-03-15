@@ -39,7 +39,7 @@ public class IssueController {
         User currentUser = userRepository.findByEmail(principal.getName());
 
         if(currentUser.getOrganization() == null)
-            return "/organization/select-organization";
+            return "organization/select-organization";
 
         List<Issue> issuesByOrganization = issueRepository.findByOrganization(currentUser.getOrganization());
 
@@ -48,7 +48,7 @@ public class IssueController {
         model.addAttribute("currentUser", currentUser);
         model.addAttribute("currentUserProjects", currentUser.getProjects());
 
-        return("/issues/issues-by-organization");
+        return "issues/issues-by-organization";
     }
     
     @GetMapping("/all/results")
@@ -67,7 +67,7 @@ public class IssueController {
 
         model.addAttribute("newProject", new Project());
 
-        return ("/issues/issues-by-organization");
+        return "issues/issues-by-organization";
     }
 
     @GetMapping("/{identifier}")
@@ -76,7 +76,7 @@ public class IssueController {
         Organization currentOrganization = currentUser.getOrganization();
 
         if(currentOrganization == null)
-            return "/organization/select-organization";
+            return "organization/select-organization";
 
         Project currentProject = projectRepository.findByIdentifierAndOrganization(identifier, currentOrganization);
 
@@ -85,7 +85,7 @@ public class IssueController {
         model.addAttribute("currentProject", currentProject);
         model.addAttribute("currentUserProjects", currentUser.getProjects());
 
-        return("/issues/issues-by-project");
+        return "issues/issues-by-project";
     }
 
     @GetMapping("/{identifier}/results")
@@ -106,7 +106,7 @@ public class IssueController {
 
         model.addAttribute("currentProject", currentProject);
 
-        return ("/issues/issues-by-project");
+        return "issues/issues-by-project";
     }
 
     @RequestMapping("/{identifier}/new")
@@ -115,7 +115,7 @@ public class IssueController {
         Organization currentOrganization = currentUser.getOrganization();
 
         if(currentOrganization == null)
-            return "/organization/select-organization";
+            return "organization/select-organization";
 
         Issue issue = new Issue();
         model.addAttribute("issue", issue);
@@ -126,7 +126,7 @@ public class IssueController {
         // OLD CODE: this was previously used to CONNECT an 'Issue' to the 'User' that created the 'Issue'
         //model.addAttribute("users", userService.listAll());
 
-        return("/issues/create-issue");
+        return "issues/create-issue";
     }
 
     @PostMapping(value = "/new")
@@ -135,7 +135,7 @@ public class IssueController {
         User currentUser = userRepository.findByEmail(principal.getName());
 
         if(currentUser.getOrganization() == null)
-            return "/organization/select-organization";
+            return "organization/select-organization";
 
         // sets the Issue Key
         issueService.setIssueKey(issue, issue.getProject());
@@ -165,7 +165,7 @@ public class IssueController {
         User currentUser = userRepository.findByEmail(principal.getName());
 
         if(currentUser.getOrganization() == null)
-            return "/organization/select-organization";
+            return "organization/select-organization";
 
         Issue previousIssue = issueRepository.findIssueById(nextIssue.getId());
 
@@ -200,7 +200,7 @@ public class IssueController {
         Organization currentOrganization = currentUser.getOrganization();
 
         if(currentOrganization == null)
-            return "/organization/select-organization";
+            return "organization/select-organization";
 
         Issue issue = issueRepository.findByIssueKeyAndOrganization(issueKey, currentOrganization);
         model.addAttribute("newComment", new Comment());
@@ -213,7 +213,7 @@ public class IssueController {
         model.addAttribute("currentProject", projectRepository.findByIdentifierAndOrganization(identifier, currentOrganization));
         model.addAttribute("currentUserProjects", currentUser.getProjects());
 
-        return "/issues/issue-details";
+        return "issues/issue-details";
     }
 
     @GetMapping("/{identifier}/edit/{issueKey}")
@@ -223,7 +223,7 @@ public class IssueController {
         Organization currentOrganization = currentUser.getOrganization();
 
         if(currentOrganization == null)
-            return "/organization/select-organization";
+            return "organization/select-organization";
 
         Issue currentIssue = issueRepository.findByIssueKeyAndOrganization(issueKey, currentOrganization);
 
@@ -231,14 +231,14 @@ public class IssueController {
         if(!Objects.equals(currentIssue.getUser().getId(), currentUser.getId()) &&
                 authentication.getAuthorities().stream().noneMatch(a -> a.getAuthority().equals("Project Manager")) &&
                 authentication.getAuthorities().stream().noneMatch(a -> a.getAuthority().equals("Admin")))
-            return "/error/403";
+            return "error/403";
 
         model.addAttribute("issue", currentIssue);
         model.addAttribute("currentUser", currentUser);
         model.addAttribute("currentProject", projectRepository.findByIdentifierAndOrganization(identifier, currentOrganization));
         model.addAttribute("currentUserProjects", currentUser.getProjects());
 
-        return "/issues/edit-issue";
+        return "issues/edit-issue";
     }
 
     @RequestMapping("/{identifier}/delete/{issueKey}/{isOrganizationList}")
@@ -249,7 +249,7 @@ public class IssueController {
         Organization currentOrganization = currentUser.getOrganization();
 
         if(currentUser.getOrganization() == null)
-            return "/organization/select-organization";
+            return "organization/select-organization";
 
         Issue currentIssue = issueRepository.findByIssueKeyAndOrganization(issueKey, currentOrganization);
 
@@ -257,7 +257,7 @@ public class IssueController {
         if(!Objects.equals(currentIssue.getUser().getId(), currentUser.getId()) &&
                 authentication.getAuthorities().stream().noneMatch(a -> a.getAuthority().equals("Project Manager")) &&
                 authentication.getAuthorities().stream().noneMatch(a -> a.getAuthority().equals("Admin")))
-            return "/error/403";
+            return "error/403";
 
         Project currentProject = projectRepository.findByIdentifierAndOrganization(identifier, currentOrganization);
 

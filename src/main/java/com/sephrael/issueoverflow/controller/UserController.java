@@ -137,14 +137,14 @@ public class UserController {
         User currentUser = userRepository.findByEmail(principal.getName());
 
         if(currentUser.getOrganization() == null)
-            return "/organization/select-organization";
+            return "organization/select-organization";
 
         model.addAttribute("listUsers", userRepository.findByOrganizationOrderByRoleId(currentUser.getOrganization()));
         model.addAttribute("newProject", new Project());
         model.addAttribute("currentUser", currentUser);
         model.addAttribute("currentUserProjects", currentUser.getProjects());
 
-        return "/users/users-by-organization";
+        return "users/users-by-organization";
     }
 
     @GetMapping("/users/edit/{id}")
@@ -152,13 +152,13 @@ public class UserController {
         User currentUser = userRepository.findByEmail(principal.getName());
 
         if(currentUser.getOrganization() == null)
-            return "/organization/select-organization";
+            return "organization/select-organization";
 
         User user = userRepository.getById(id);
 
         // if the Current User is NOT in the same Organization as the Requested User, redirect to 404 page
         if(!currentUser.getOrganization().getUsers().contains(user)) {
-            return "/error/404";
+            return "error/404";
         }
 
         model.addAttribute("user", user);
@@ -168,7 +168,7 @@ public class UserController {
         model.addAttribute("editUser", userRepository.findUserById(id));
         model.addAttribute("allProjectsInOrganization", projectRepository.findAllProjectsByOrganizationId(userRepository.findUserById(id).getOrganization().getId()));
 
-        return "/users/edit-user";
+        return "users/edit-user";
     }
 
     // Allows for updating a User's Role and Projects(only Project Managers are allowed to make these changes)
@@ -179,13 +179,13 @@ public class UserController {
         User currentUser = userRepository.findByEmail(principal.getName());
 
         if(currentUser.getOrganization() == null)
-            return "/organization/select-organization";
+            return "organization/select-organization";
 
         User userToBeUpdated = userRepository.findUserById(id);
 
         // if the Current User is NOT in the same Organization as the Requested User, redirect to 404 page
         if(!currentUser.getOrganization().getUsers().contains(userToBeUpdated)) {
-            return "/error/404";
+            return "error/404";
         }
 
         // changes a User's Role
@@ -213,13 +213,13 @@ public class UserController {
         Organization currentOrganization = organizationRepository.findOrganizationById(organizationId);
 
         if(currentUser.getOrganization() == null)
-            return "/organization/select-organization";
+            return "organization/select-organization";
 
         User userBeforeRemoval = userRepository.findUserById(id);
 
         // if the Current User is NOT in the same Organization as the Requested User, redirect to 404 page
         if(!currentUser.getOrganization().getUsers().contains(userBeforeRemoval)) {
-            return "/error/404";
+            return "error/404";
         }
 
         // deletes all the User's issues

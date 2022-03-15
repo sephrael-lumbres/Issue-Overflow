@@ -36,7 +36,7 @@ public class OrganizationController {
         Organization currentOrganization = currentUser.getOrganization();
 
         if(currentOrganization == null) {
-            return "/organization/select-organization";
+            return "organization/select-organization";
         }
 
         model.addAttribute("newProject", new Project());
@@ -49,26 +49,26 @@ public class OrganizationController {
         model.addAttribute("developers", userRepository.findByOrganizationAndRole(currentOrganization, roleRepository.findByName("Developer")));
         model.addAttribute("guests", userRepository.findByOrganizationAndRole(currentOrganization, roleRepository.findByName("Guest")));
 
-        return "/organization/organization-details";
+        return "organization/organization-details";
     }
 
     @RequestMapping("/select")
     public String showCreateOrJoinOrganizationPage(Principal principal) {
 
         if(userRepository.findByEmail(principal.getName()).getOrganization() != null)
-            return("redirect:/organization");
+            return "redirect:/organization";
         else
-            return ("/organization/select-organization");
+            return "organization/select-organization";
     }
 
     @RequestMapping("/new")
     public String showCreateOrganizationPage(Model model, Principal principal) {
         if(userRepository.findByEmail(principal.getName()).getOrganization() != null)
-            return("redirect:/organization");
+            return "redirect:/organization";
 
         model.addAttribute("organization", new Organization());
 
-        return("/organization/create-organization");
+        return "organization/create-organization";
     }
 
     public static String generateRandomAccessKey(int len) {
@@ -105,7 +105,7 @@ public class OrganizationController {
         User currentUser = userRepository.findByEmail(principal.getName());
 
         if(currentUser.getOrganization() == null)
-            return "/organization/select-organization";
+            return "organization/select-organization";
 
         try {
             Organization previousOrganization = organizationRepository.findOrganizationById(id);
@@ -149,9 +149,9 @@ public class OrganizationController {
     @RequestMapping("/join")
     public String joinOrganization(Principal principal) {
         if(userRepository.findByEmail(principal.getName()).getOrganization() != null)
-            return("redirect:/organization");
+            return "redirect:/organization";
 
-        return("/organization/join-organization");
+        return "organization/join-organization";
     }
 
     // this returns the json of all the organizations

@@ -37,11 +37,11 @@ public class AccountController {
         User currentUser = userRepository.findByEmail(principal.getName());
 
         if(currentUser.getOrganization() == null)
-            return "/organization/select-organization";
+            return "organization/select-organization";
 
         // checks if the the requested Account Profile page matches the Current User
         if(currentUser.getId() != id)
-            return "/error/404";
+            return "error/404";
 
         model.addAttribute("user", userRepository.getById(id));
         model.addAttribute("file", new File());
@@ -49,7 +49,7 @@ public class AccountController {
         model.addAttribute("currentUser", currentUser);
         model.addAttribute("currentUserProjects", currentUser.getProjects());
 
-        return "/account-settings/account-profile";
+        return "account-settings/account-profile";
     }
 
     @PostMapping("/profile/{id}/save")
@@ -58,10 +58,10 @@ public class AccountController {
         User currentUser = userRepository.findByEmail(principal.getName());
 
         if(currentUser.getOrganization() == null)
-            return "/organization/select-organization";
+            return "organization/select-organization";
 
         if(currentUser.getId() != id)
-            return "/error/404";
+            return "error/404";
 
         try {
             User userToBeUpdated = userRepository.findUserById(id);
@@ -91,17 +91,17 @@ public class AccountController {
         User currentUser = userRepository.findByEmail(principal.getName());
 
         if(currentUser.getOrganization() == null)
-            return "/organization/select-organization";
+            return "organization/select-organization";
 
         if(currentUser.getId() != id)
-            return "/error/404";
+            return "error/404";
 
         model.addAttribute("newProject", new Project());
         model.addAttribute("user", userRepository.getById(id));
         model.addAttribute("currentUser", currentUser);
         model.addAttribute("currentUserProjects", currentUser.getProjects());
 
-        return "/account-settings/account-security";
+        return "account-settings/account-security";
     }
 
     @PostMapping("/security/{id}/save")
@@ -112,10 +112,10 @@ public class AccountController {
         User currentUser = userRepository.findByEmail(principal.getName());
 
         if(currentUser.getOrganization() == null)
-            return "/organization/select-organization";
+            return "organization/select-organization";
 
         if(currentUser.getId() != id)
-            return "/error/404";
+            return "error/404";
 
         User userToBeUpdated = userRepository.findUserById(id);
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
@@ -147,10 +147,10 @@ public class AccountController {
         Organization currentOrganization = organizationRepository.findOrganizationById(organizationId);
 
         if(currentOrganization == null)
-            return "/organization/select-organization";
+            return "organization/select-organization";
 
         if(currentUser.getId() != id)
-            return "/error/404";
+            return "error/404";
 
         User userToBeDeleted = userRepository.findUserById(id);
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
@@ -189,16 +189,16 @@ public class AccountController {
 //        User currentUser = userRepository.findByEmail(principal.getName());
 //
 //        if(currentUser.getOrganization() == null)
-//            return "/organization/select-organization";
+//            return "organization/select-organization";
 //
 //        if(currentUser.getId() != id)
-//            return "/error/404";
+//            return "error/404";
 //
 //        model.addAttribute("newProject", new Project());
 //        model.addAttribute("user", userRepository.getById(id));
 //        model.addAttribute("currentUser", currentUser);
 //        model.addAttribute("currentUserProjects", currentUser.getProjects());
 //
-//        return "/account-settings/account-notifications";
+//        return "account-settings/account-notifications";
 //    }
 }

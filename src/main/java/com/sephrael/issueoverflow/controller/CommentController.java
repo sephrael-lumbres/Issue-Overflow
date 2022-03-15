@@ -33,11 +33,11 @@ public class CommentController {
         Project currentProject = projectRepository.findByIdentifierAndOrganization(identifier, currentUser.getOrganization());
 
         if(currentUser.getOrganization() == null)
-            return "/organization/select-organization";
+            return "organization/select-organization";
 
         // checks if the Current User is involved with the requested Project
         if(!currentUser.getProjects().contains(currentProject))
-            return "/error/404";
+            return "error/404";
 
         userRepository.findByEmail(principal.getName()).addToComment(comment);
         issueRepository.findByIssueKeyAndOrganization(issueKey, currentUser.getOrganization()).addToComment(comment);
@@ -57,11 +57,11 @@ public class CommentController {
         Project currentProject = projectRepository.findByIdentifierAndOrganization(identifier, currentUser.getOrganization());
 
         if(currentUser.getOrganization() == null)
-            return "/organization/select-organization";
+            return "organization/select-organization";
 
         // checks if the Current User is involved with the requested Project
         if(!currentUser.getProjects().contains(currentProject))
-            return "/error/404";
+            return "error/404";
 
         Comment updatedComment = commentRepository.findCommentById(id);
 
@@ -86,11 +86,11 @@ public class CommentController {
         Project currentProject = projectRepository.findByIdentifierAndOrganization(identifier, currentUser.getOrganization());
 
         if(currentUser.getOrganization() == null)
-            return "/organization/select-organization";
+            return "organization/select-organization";
 
         // checks if the Current User is involved with the requested Project
         if(!currentUser.getProjects().contains(currentProject))
-            return "/error/404";
+            return "error/404";
 
 
         commentRepository.deleteById(commentId);

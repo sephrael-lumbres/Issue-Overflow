@@ -264,7 +264,7 @@ public class IssueService {
         Organization currentOrganization = currentUser.getOrganization();
 
         if(currentOrganization == null)
-            return "/organization/select-organization";
+            return "organization/select-organization";
 
         Project currentProject = projectRepository.findByIdentifierAndOrganization(identifier, currentOrganization);
         List<Issue> filteredIssues;

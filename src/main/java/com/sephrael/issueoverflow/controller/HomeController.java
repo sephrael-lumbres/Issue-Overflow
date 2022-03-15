@@ -36,7 +36,7 @@ public class HomeController {
         Organization currentOrganization = userRepository.findByEmail(principal.getName()).getOrganization();
 
         if(currentOrganization == null)
-            return "/organization/select-organization";
+            return "organization/select-organization";
 
         List<Issue> sortedIssues = issueService.getIssuesSortedByRecentActivity(
                 issueRepository.findByOrganization(currentOrganization),
@@ -62,6 +62,6 @@ public class HomeController {
         return "dashboard";
     }
 
-    @RequestMapping(value = "/", method = RequestMethod.GET)
-    public String home() {return "landing1";}
+//    @RequestMapping(value = "/", method = RequestMethod.GET)
+//    public String home() {return "landing1";}
 }

@@ -12,7 +12,7 @@
         <script data-search-pseudo-elements defer src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.28.0/feather.min.js" crossorigin="anonymous"></script>
     </head>
-    <body>
+    <body class="d-flex flex-column min-vh-100">
         <div class="shadow navbar-primary bg-white">
             <nav class="container-xl topnav navbar navbar-expand justify-content-between justify-content-sm-start">
                 <!-- Navbar Brand-->
@@ -139,24 +139,24 @@
                         <div class="card mb-4">
                             <div class="card-header">Contact Us Form</div>
                             <div class="card-body">
-                                <form>
+                                <form th:action="@{'/contact-us/send-message'}" method="post">
                                     <!-- Form Group (Name)-->
                                     <div class="mb-3">
                                         <label class="small mb-1" for="inputName">Name</label>
-                                        <input class="form-control" id="inputName" type="text">
+                                        <input th:name="name" class="form-control" id="inputName" type="text">
                                     </div>
                                     <!-- Form Group (Email address)-->
                                     <div class="mb-3">
                                         <label class="small mb-1" for="inputEmailAddress">Email address</label>
-                                        <input class="form-control" id="inputEmailAddress" type="email">
+                                        <input th:name="email" class="form-control" id="inputEmailAddress" type="email">
                                     </div>
                                     <!-- Form Group (Message)-->
                                     <div class="mb-3">
                                         <label class="small mb-1" for="inputMessage">Message</label>
-                                        <textarea class="form-control" id="inputMessage" style="height: 150px;"></textarea>
+                                        <textarea th:name="message" class="form-control" id="inputMessage" style="height: 150px;"></textarea>
                                     </div>
                                     <!-- Save changes button-->
-                                    <button class="btn btn-primary" type="button">Submit</button>
+                                    <button class="btn btn-primary" type="submit">Submit</button>
                                 </form>
                             </div>
                         </div>
@@ -164,48 +164,17 @@
                     <!-- SIDE CARDS -->
                     <div class="col-lg-4 mb-5">
                         <!-- KNOWLEDGE BASE CARD -->
-                        <a class="card border-bottom-0 border-start-0 border-end-0 border-top-lg border-secondary lift text-center o-visible mb-4" href="/knowledge-base">
+                        <a class="card border-bottom-0 border-start-0 border-end-0 border-top-lg border-primary lift text-center o-visible mb-4" href="/knowledge-base">
                             <div class="card-body">
-                                <div class="icon-stack icon-stack-xl bg-secondary-soft text-secondary mb-4 mt-n5 z-1 shadow">
+                                <div class="icon-stack icon-stack-xl bg-primary-soft text-primary mb-4 mt-n5 z-1 shadow">
                                     <i data-feather="life-buoy"></i>
                                 </div>
                                 <h5>Knowledge Base</h5>
-                                <p class="card-text">Need help with a product that you just purchased? Need help with your account?</p>
+                                <p class="card-text">Need help getting started with Issue Overflow?</p>
                             </div>
                             <div class="card-footer">
                                 <div class="text-secondary fw-bold d-inline-flex align-items-center">
-                                    Contact Support
-                                    <i class="fas fa-arrow-right text-xs ms-1"></i>
-                                </div>
-                            </div>
-                        </a>
-                        <a class="card border-bottom-0 border-start-0 border-end-0 border-top-lg border-primary lift text-center o-visible mb-4">
-                            <div class="card-body">
-                                <div class="icon-stack icon-stack-xl bg-primary-soft text-primary mb-4 mt-n5 z-1 shadow">
-                                    <i data-feather="user"></i>
-                                </div>
-                                <h5>Sales</h5>
-                                <p class="card-text">Ready to open an account? Have questions about purchasing a product?</p>
-                            </div>
-                            <div class="card-footer">
-                                <div class="text-primary fw-bold d-inline-flex align-items-center">
-                                    Contact Sales
-                                    <i class="fas fa-arrow-right text-xs ms-1"></i>
-                                </div>
-                            </div>
-                        </a>
-                        <!-- ISSUES CARD -->
-                        <a class="card border-bottom-0 border-start-0 border-end-0 border-top-lg border-teal lift text-center o-visible">
-                            <div class="card-body">
-                                <div class="icon-stack icon-stack-xl bg-teal-soft text-teal mb-4 mt-n5 z-1 shadow">
-                                    <i data-feather="tv"></i>
-                                </div>
-                                <h5>Media</h5>
-                                <p class="card-text">Looking to contact our media team for a press release or related story?</p>
-                            </div>
-                            <div class="card-footer">
-                                <div class="text-teal fw-bold d-inline-flex align-items-center">
-                                    Contact Media
+                                    Learn More
                                     <i class="fas fa-arrow-right text-xs ms-1"></i>
                                 </div>
                             </div>

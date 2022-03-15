@@ -1,6 +1,7 @@
 package com.sephrael.issueoverflow.controller;
 
 import com.sephrael.issueoverflow.entity.File;
+import com.sephrael.issueoverflow.entity.Organization;
 import com.sephrael.issueoverflow.entity.User;
 import com.sephrael.issueoverflow.message.ResponseFile;
 import com.sephrael.issueoverflow.repository.FileRepository;
@@ -37,14 +38,10 @@ public class FileController {
         File file = fileService.getFile(id);
         User currentUser = userRepository.findByEmail(principal.getName());
 
-        // if the requested file is a Profile Picture AND if it matches the Current User's Organization, redirect to NOT FOUND page
-        if(file.isProfilePicture() && file.getUser().getOrganization() != currentUser.getOrganization())
+        // if the requested file's Organization does NOT match the current User's Organization, redirect to NOT FOUND page
+        if(!Objects.equals(file.getUser().getOrganization().getId(), currentUser.getOrganization().getId())) {
             return ResponseEntity.notFound().build();
-
-        // if the requested file is NOT a Profile Picture AND if the Current User is NOT involved with the
-        // File's associated 'Project', redirect to NOT FOUND page
-        if(!file.isProfilePicture() && !file.getIssue().getProject().getUsers().contains(currentUser))
-            return ResponseEntity.notFound().build();
+        }
 
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getName() + "\"")
@@ -72,7 +69,7 @@ public class FileController {
 
         // if Current User does NOT match the requested User, redirect to 404 page
         if(userRepository.findByEmail(principal.getName()).getId() != userId)
-            return "/error/404";
+            return "error/404";
 
         // if 'File' is NOT empty and the 'User' already has a 'Profile Picture', DELETE the User's current
         // 'Profile Picture', then upload the new 'Profile Picture'
@@ -111,11 +108,11 @@ public class FileController {
         User currentUser = userRepository.findByEmail(principal.getName());
 
         if(currentUser.getOrganization() == null)
-            return "/organization/select-organization";
+            return "organization/select-organization";
 
         // if Current User does NOT match the requested File's original Uploader, redirect to 404 page
         if(!Objects.equals(currentUser.getId(), fileService.getFile(id).getUser().getId()))
-            return "/error/404";
+            return "error/404";
 
         fileRepository.deleteById(id);
 

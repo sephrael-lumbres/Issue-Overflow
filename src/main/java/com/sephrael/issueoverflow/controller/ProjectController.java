@@ -40,13 +40,13 @@ public class ProjectController {
         User currentUser = userRepository.findByEmail(principal.getName());
 
         if(currentUser.getOrganization() == null)
-            return "/organization/select-organization";
+            return "organization/select-organization";
 
         model.addAttribute("newProject", new Project());
         model.addAttribute("currentUser", currentUser);
         model.addAttribute("currentUserProjects", currentUser.getProjects());
 
-        return "/projects/projects-list";
+        return "projects/projects-list";
     }
 
     @RequestMapping("/{identifier}")
@@ -55,7 +55,7 @@ public class ProjectController {
         Organization currentOrganization = currentUser.getOrganization();
 
         if(currentOrganization == null)
-            return "/organization/select-organization";
+            return "organization/select-organization";
 
         Project currentProject = projectRepository.findByIdentifierAndOrganization(identifier, currentOrganization);
 
@@ -79,7 +79,7 @@ public class ProjectController {
         model.addAttribute("numberOfResolvedIssues", issueService.getNumberOfIssuesByProjectAndStatus("Resolved", identifier, currentOrganization));
         model.addAttribute("numberOfInProgressIssues", issueService.getNumberOfIssuesByProjectAndStatus("In-Progress", identifier, currentOrganization));
 
-        return "/projects/project-home";
+        return "projects/project-home";
     }
 
     @PostMapping("/new")
@@ -88,7 +88,7 @@ public class ProjectController {
         Organization currentUserOrganization = currentUser.getOrganization();
 
         if(currentUserOrganization == null)
-            return "/organization/select-organization";
+            return "organization/select-organization";
 
         model.addAttribute("project", new Project());
 
@@ -104,7 +104,7 @@ public class ProjectController {
         User currentUser = userRepository.findByEmail(principal.getName());
 
         if(currentUser.getOrganization() == null)
-            return "/organization/select-organization";
+            return "organization/select-organization";
 
         Project projectBeforeUpdate = projectRepository.findProjectById(id);
 
@@ -140,11 +140,11 @@ public class ProjectController {
         User currentUser = userRepository.findByEmail(principal.getName());
 
         if(currentUser.getOrganization() == null)
-            return "/organization/select-organization";
+            return "organization/select-organization";
 
         // checks if the Current User is involved with the Requested Project
         if(!currentUser.getProjects().contains(projectRepository.findProjectById(id))) {
-            return "/error/404";
+            return "error/404";
         }
 
         projectRepository.deleteById(id);

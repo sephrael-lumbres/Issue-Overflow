@@ -332,3 +332,11 @@ Add Finishing Touches Before Website Deployment
 - Added logo to Registration and Login pages
 - Removed elements that are not being used
 - Changed background color on registration/login pages
+
+
+
+Fix Heroku 500 Error Bug and Add Contact Us
+
+- Fixed Heroku 500 error bug due to Controllers accessing HTML files
+- Contact Us page now sends a message/email to me
+- Removed some unused elements
