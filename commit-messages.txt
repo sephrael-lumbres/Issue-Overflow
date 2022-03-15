@@ -353,3 +353,10 @@ Organization's name
 from an Organization
 - Made changes to the Help dropdown menu on the top navigation bar
 - Removed some elements
+
+
+
+Add Custom Domain and Custom Email Address
+
+- Added custom domain: www.issueoverflow.app
+- Added custom email addresss: support@issueoverflow.app

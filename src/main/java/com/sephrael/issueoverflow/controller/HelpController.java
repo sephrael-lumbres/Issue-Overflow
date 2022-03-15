@@ -61,8 +61,8 @@ public class HelpController {
         MimeMessage mimeMessage = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(mimeMessage);
 
-        helper.setFrom("lumbres.sephrael@gmail.com", "Issue Overflow");
-        helper.setTo("lumbres.sephrael@gmail.com");
+        helper.setFrom("support@issueoverflow.app", "Issue Overflow");
+        helper.setTo("support@issueoverflow.app");
 
         String subject = "Contact Us - Message from: " + name;
 
