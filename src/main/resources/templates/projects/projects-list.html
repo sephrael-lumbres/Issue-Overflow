@@ -223,7 +223,7 @@
                                             <i class="me-1" data-feather="plus"></i>
                                             Create New Project
                                         </button>
-                                        <div class="col-12 col-xl-auto mb-3" style="visibility: hidden;">
+                                        <div sec:authorize="hasAnyAuthority('Admin', 'Developer', 'Guest')" class="col-12 col-xl-auto mb-3" style="visibility: hidden;">
                                             <a class="btn btn-sm btn-light text-primary" href="/dashboard">
                                                 Dashboard
                                             </a>
