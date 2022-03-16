@@ -14,6 +14,7 @@ import java.util.Comparator;
 import java.util.List;
 
 @Entity
+@Table(name = "users")
 @Audited
 public class User {
     // variables to add: userRole, dateCreated, dateModified, assignedProject, assignedOrganization

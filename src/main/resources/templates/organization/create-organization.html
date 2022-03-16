@@ -32,7 +32,7 @@
                                     <div class="card-body p-5">
                                         <form action="#" th:action="@{/organization/save}" th:object="${organization}" method="post" name="createNewOrganizationForm">
                                             <div class="mb-3">
-                                                <input th:field="*{name}" class="form-control form-control-solid" type="text" placeholder="Enter new organization name" aria-label="Organization Name" aria-describedby="orgNameExample"/>
+                                                <input th:field="*{name}" class="form-control form-control-solid" type="text" placeholder="Enter new organization name" aria-label="Organization Name" aria-describedby="orgNameExample" required/>
                                             </div>
                                             <div class="d-grid"><a href="javascript: createNewOrganizationForm.submit();" class="btn btn-primary">Create organization</a></div>
                                         </form>
@@ -50,6 +50,11 @@
                             <a href="#!">Privacy Policy</a>
                             &middot;
                             <a href="#!">Terms &amp; Conditions</a>
+                            <form th:action="@{/logout}" name="logoutButton" method="post">
+                                <a href="javascript: logoutButton.submit();">
+                                    Logout
+                                </a>
+                            </form>
                         </div>
                     </div>
                 </footer>

@@ -33,7 +33,7 @@
                                     <div class="card-body p-5">
                                         <form action="#" th:action="@{/organization/joining}" method="post" name="joinOrganizationForm">
                                             <h5 class="mb-3">Have an access code?</h5>
-                                            <div class="mb-3"><input th:name="accessKey" class="form-control form-control-solid" type="text" placeholder="Enter access code" aria-label="Access Code" aria-describedby="accessCodeExample" /></div>
+                                            <div class="mb-3"><input th:name="accessKey" class="form-control form-control-solid" type="text" placeholder="Enter access code" aria-label="Access Code" aria-describedby="accessCodeExample" required/></div>
                                             <div class="d-grid"><a href="javascript: joinOrganizationForm.submit();" class="btn btn-secondary">Join</a></div>
                                         </form>
                                     </div>
@@ -58,6 +58,11 @@
                             <a href="#!">Privacy Policy</a>
                             &middot;
                             <a href="#!">Terms &amp; Conditions</a>
+                            <form th:action="@{/logout}" name="logoutButton" method="post">
+                                <a href="javascript: logoutButton.submit();">
+                                    Logout
+                                </a>
+                            </form>
                         </div>
                     </div>
                 </footer>

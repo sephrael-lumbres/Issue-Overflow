@@ -66,6 +66,11 @@
                             <a href="#!">Privacy Policy</a>
                             &middot;
                             <a href="#!">Terms &amp; Conditions</a>
+                            <form th:action="@{/logout}" name="logoutButton" method="post">
+                                <a href="javascript: logoutButton.submit();">
+                                    Logout
+                                </a>
+                            </form>
                         </div>
                     </div>
                 </footer>

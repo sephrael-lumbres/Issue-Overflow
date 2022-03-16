@@ -3,6 +3,7 @@ package com.sephrael.issueoverflow.entity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -29,7 +30,8 @@ public class File {
 
     @Lob
     @JsonIgnore
-    @Column(columnDefinition = "MEDIUMBLOB")
+//    @Column(columnDefinition = "MEDIUMBLOB")
+    @Type(type = "org.hibernate.type.BinaryType")
     private byte[] data;
 
     @ManyToOne

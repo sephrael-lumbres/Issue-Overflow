@@ -274,9 +274,9 @@
                                     <div class="ms-2 me-auto">
                                     <div class="fw-bold mb-2">Type</div>
                                         <h5>
-                                            <span class="badge bg-red-soft text-red" th:case="Bug">Bug</span>
-                                            <span class="badge bg-purple-soft text-purple" th:case="Task">Task</span>
-                                            <span class="badge bg-green-soft text-green" th:case="Request">Request</span>
+                                            <span class="badge bg-danger-soft text-danger" th:case="Bug">Bug</span>
+                                            <span class="badge bg-secondary-soft text-secondary" th:case="Task">Task</span>
+                                            <span class="badge bg-success-soft text-success" th:case="Request">Request</span>
                                             <span class="badge bg-gray-200 text-dark" th:case="Other">Other</span>
                                         </h5>
                                     </div>
@@ -290,10 +290,10 @@
                                     <div class="ms-2 me-auto">
                                     <div class="fw-bold mb-2">Priority</div>
                                         <h5>
-                                            <span th:case="Low" class="badge bg-green-soft text-green">Low</span>
+                                            <span th:case="Low" class="badge bg-success-soft text-success">Low</span>
                                             <span th:case="Normal"
-                                                  class="badge bg-yellow-soft text-yellow">Normal</span>
-                                            <span th:case="High" class="badge bg-red-soft text-red">High</span>
+                                                  class="badge bg-primary-soft text-primary">Normal</span>
+                                            <span th:case="High" class="badge bg-danger-soft text-danger">High</span>
                                         </h5>
                                     </div>
                                 </li>
@@ -450,17 +450,17 @@
                                         </td>
                                         <td th:if="${version.property == 'Type'}">
                                             <span th:switch="${version.oldValue}">
-                                                <span th:case="Bug" th:text="${version.oldValue}" class="badge bg-red-soft text-red"></span>
-                                                <span th:case="Task" th:text="${version.oldValue}" class="badge bg-purple-soft text-purple"></span>
-                                                <span th:case="Request" th:text="${version.oldValue}" class="badge bg-green-soft text-green"></span>
+                                                <span th:case="Bug" th:text="${version.oldValue}" class="badge bg-danger-soft text-danger"></span>
+                                                <span th:case="Task" th:text="${version.oldValue}" class="badge bg-secondary-soft text-secondary"></span>
+                                                <span th:case="Request" th:text="${version.oldValue}" class="badge bg-success-soft text-success"></span>
                                                 <span th:case="Other" th:text="${version.oldValue}" class="badge bg-gray-200 text-dark"></span>
                                             </span>
                                         </td>
                                         <td th:if="${version.property == 'Priority'}">
                                             <span th:switch="${version.oldValue}">
-                                                <span th:case="Low" th:text="${version.oldValue}" class="badge bg-green-soft text-green"></span>
-                                                <span th:case="Normal" th:text="${version.oldValue}" class="badge bg-yellow-soft text-yellow"></span>
-                                                <span th:case="High" th:text="${version.oldValue}" class="badge bg-red-soft text-red"></span>
+                                                <span th:case="Low" th:text="${version.oldValue}" class="badge bg-success-soft text-success"></span>
+                                                <span th:case="Normal" th:text="${version.oldValue}" class="badge bg-primary-soft text-primary"></span>
+                                                <span th:case="High" th:text="${version.oldValue}" class="badge bg-danger-soft text-danger"></span>
                                             </span>
                                         </td>
 
@@ -481,17 +481,17 @@
                                         </td>
                                         <td th:if="${version.property == 'Type'}">
                                             <span th:switch="${version.newValue}">
-                                                <span th:case="Bug" th:text="${version.newValue}" class="badge bg-red-soft text-red"></span>
-                                                <span th:case="Task" th:text="${version.newValue}" class="badge bg-purple-soft text-purple"></span>
-                                                <span th:case="Request" th:text="${version.newValue}" class="badge bg-green-soft text-green"></span>
+                                                <span th:case="Bug" th:text="${version.newValue}" class="badge bg-danger-soft text-danger"></span>
+                                                <span th:case="Task" th:text="${version.newValue}" class="badge bg-secondary-soft text-secondary"></span>
+                                                <span th:case="Request" th:text="${version.newValue}" class="badge bg-success-soft text-success"></span>
                                                 <span th:case="Other" th:text="${version.newValue}" class="badge bg-gray-200 text-dark"></span>
                                             </span>
                                         </td>
                                         <td th:if="${version.property == 'Priority'}">
                                             <span th:switch="${version.newValue}">
-                                                <span th:case="Low" th:text="${version.newValue}" class="badge bg-green-soft text-green"></span>
-                                                <span th:case="Normal" th:text="${version.newValue}" class="badge bg-yellow-soft text-yellow"></span>
-                                                <span th:case="High" th:text="${version.newValue}" class="badge bg-red-soft text-red"></span>
+                                                <span th:case="Low" th:text="${version.newValue}" class="badge bg-success-soft text-success"></span>
+                                                <span th:case="Normal" th:text="${version.newValue}" class="badge bg-primary-soft text-primary"></span>
+                                                <span th:case="High" th:text="${version.newValue}" class="badge bg-danger-soft text-danger"></span>
                                             </span>
                                         </td>
 

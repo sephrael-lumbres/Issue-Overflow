@@ -391,9 +391,9 @@
                                         th:href="@{'/issues/' + ${issue.project.identifier} + '/view/' + ${issue.issueKey}}"
                                         onclick="rowClicked(this.getAttribute('href'))" style="cursor: pointer">
                                         <td th:switch="${issue.type}" class="align-middle text-center">
-                                            <span class="badge bg-red-soft text-red" th:case="Bug">Bug</span>
-                                            <span class="badge bg-purple-soft text-purple" th:case="Task">Task</span>
-                                            <span class="badge bg-green-soft text-green" th:case="Request">Request</span>
+                                            <span class="badge bg-danger-soft text-danger" th:case="Bug">Bug</span>
+                                            <span class="badge badge bg-secondary-soft text-secondary" th:case="Task">Task</span>
+                                            <span class="badge bg-success-soft text-success" th:case="Request">Request</span>
                                             <span class="badge bg-gray-200 text-dark" th:case="Other">Other</span>
                                         </td>
                                         <td class="align-middle text-center">
@@ -408,9 +408,9 @@
                                                         </span>
                                         </td>
                                         <td th:switch="${issue.priority}" class="align-middle text-center">
-                                            <span th:case="Low" class="badge bg-green-soft text-green">Low</span>
-                                            <span th:case="Normal" class="badge bg-yellow-soft text-yellow">Normal</span>
-                                            <span th:case="High" class="badge bg-red-soft text-red">High</span>
+                                            <span th:case="Low" class="badge bg-success-soft text-success">Low</span>
+                                            <span th:case="Normal" class="badge bg-primary-soft text-primary">Normal</span>
+                                            <span th:case="High" class="badge bg-danger-soft text-danger">High</span>
                                         </td>
                                         <td class="align-middle text-center text-nowrap">
                                             <span th:text="${#temporals.format(issue.dateCreated, 'dd MMM yyyy')}"></span>
