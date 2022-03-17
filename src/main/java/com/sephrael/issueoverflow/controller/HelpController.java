@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
@@ -57,23 +58,29 @@ public class HelpController {
 
     @PostMapping("/contact-us/send-message")
     public String sendMessage(@RequestParam("name") String name, @RequestParam("email") String email,
-                              @RequestParam("message") String message) throws MessagingException, UnsupportedEncodingException {
-        MimeMessage mimeMessage = mailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(mimeMessage);
+                              @RequestParam("message") String message, RedirectAttributes redirectAttributes) {
+        try {
+            MimeMessage mimeMessage = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage);
 
-        helper.setFrom("support@issueoverflow.app", "Issue Overflow");
-        helper.setTo("support@issueoverflow.app");
+            helper.setFrom("support@issueoverflow.app", "Issue Overflow");
+            helper.setTo("support@issueoverflow.app");
 
-        String subject = "Contact Us - Message from: " + name;
+            String subject = "Contact Us - Message from: " + name;
 
-        helper.setSubject(subject);
+            helper.setSubject(subject);
 
-        message = message.replaceAll("(\r\n|\n)", "<br>");
-        message = message.concat("<br><br>From: " + name + " <br>Email address: " + email);
+            message = message.replaceAll("(\r\n|\n)", "<br>");
+            message = message.concat("<br><br>From: " + name + " <br>Email address: " + email);
 
-        helper.setText(message, true);
+            helper.setText(message, true);
 
-        mailSender.send(mimeMessage);
+            mailSender.send(mimeMessage);
+
+            redirectAttributes.addFlashAttribute("success", "Your message has been sent!");
+        } catch(UnsupportedEncodingException | MessagingException exception) {
+            redirectAttributes.addFlashAttribute("error", "An error has occurred while attempting to send your message.");
+        }
 
         return "redirect:/contact-us";
     }

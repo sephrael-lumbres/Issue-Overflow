@@ -315,6 +315,8 @@
                                             <th class="align-middle text-center">Priority</th>
                                             <th data-type="date" data-format="DD MMM YYYY" class="align-middle text-center">Created</th>
                                             <th data-type="date" data-format="DD MMM YYYY" class="align-middle text-center">Updated</th>
+                                            <th data-type="date" data-format="DD MMM YYYY" class="align-middle text-center text-nowrap">Due Date</th>
+                                            <th class="align-middle text-center text-nowrap">Estimated Hours</th>
                                             <th class="align-middle text-center">Opened By</th>
                                             <th class="align-middle text-center">Status</th>
                                             <th class="align-middle text-center">Actions</th>
@@ -351,7 +353,7 @@
                                                       th:classappend="'bg-' + ${issue.project.color} + '-soft' + ' text-' + ${issue.project.color}">
                                                 </span>
                                             </td>
-                                            <td th:text="${issue.title}" class="align-middle"></td>
+                                            <td th:text="${issue.title}" class="align-middle text-nowrap"></td>
                                             <td class="align-middle text-center text-nowrap">
                                                 <span th:text="${issue.assignedTo.getFullName()}"
                                                       th:if="${issue ne null and issue.assignedTo ne null}">
@@ -368,6 +370,10 @@
                                             <td class="align-middle text-center text-nowrap">
                                                 <span th:text="${#temporals.format(issue.dateUpdated, 'dd MMM yyyy')}"></span>
                                             </td>
+                                            <td class="align-middle text-center text-nowrap">
+                                                <span th:text="${#temporals.format(issue.dueDate, 'dd MMM yyyy')}"></span>
+                                            </td>
+                                            <td th:text="${issue.estimatedHours}" class="align-middle text-center text-nowrap"></td>
                                             <td th:text="${issue.user.getFullName()}"
                                                 class="align-middle text-center text-nowrap">
                                             </td>

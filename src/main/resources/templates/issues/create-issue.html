@@ -292,7 +292,7 @@
                                         </div>
                                     </div>
                                     <div class="col">
-                                        <div class="card mb-4">
+                                        <div class="card">
                                             <label for="priorityInput" class="card-header">Priority</label>
                                             <div class="card-body">
                                                 <select th:field="*{priority}" class="form-control" id="priorityInput">
@@ -304,7 +304,7 @@
                                         </div>
                                     </div>
                                     <div class="col">
-                                        <div class="card mb-4">
+                                        <div class="card">
                                             <label for="statusInput" class="card-header">Status</label>
                                             <div class="card-body">
                                                 <select th:field="*{status}" class="form-control" id="statusInput">
@@ -313,6 +313,23 @@
                                                     <option sec:authorize="hasAnyAuthority('Project Manager', 'Admin', 'Developer')" value="Resolved">Resolved</option>
                                                     <option sec:authorize="hasAnyAuthority('Project Manager', 'Admin')" value="Closed">Closed</option>
                                                 </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col">
+                                        <div class="card mb-4 pb-2">
+                                            <label for="estimatedHoursInput" class="card-header">Estimated Hours</label>
+                                            <div class="card-body">
+                                                <input th:field="*{estimatedHours}" class="form-control" id="estimatedHoursInput" name="estimatedHours">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="card mb-4">
+                                            <label for="dueDateInput" class="card-header">Due Date</label>
+                                            <div class="card-body">
+                                                <input th:field="*{dueDate}" id="dueDateInput" name="dueDate" type="date" class="form-control">
                                             </div>
                                         </div>
                                     </div>

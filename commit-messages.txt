@@ -360,3 +360,13 @@ Add Custom Domain and Custom Email Address
 
 - Added custom domain: www.issueoverflow.app
 - Added custom email addresss: support@issueoverflow.app
+
+
+
+Add Email Notifications and Add Two Issue Fields
+
+- Added email notifications for when issues are created, updated, and
+when comments are added to issues
+- Added two issue fields: 'Estimated Hours' and 'Due Date'
+- Added a popup alert when a 'Contact Us' message has been sent
+- Fixed Heroku high memory usage

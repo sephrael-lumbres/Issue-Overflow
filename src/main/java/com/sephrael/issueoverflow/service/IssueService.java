@@ -7,12 +7,19 @@ import com.sephrael.issueoverflow.repository.ProjectRepository;
 import com.sephrael.issueoverflow.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.history.RevisionMetadata;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
+import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
+import java.io.UnsupportedEncodingException;
 import java.security.Principal;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 
@@ -27,6 +34,8 @@ public class IssueService {
     private ProjectRepository projectRepository;
     @Autowired
     private IssueKeySequenceRepository issueKeySequenceRepository;
+    @Autowired
+    private JavaMailSender mailSender;
 
     public List<Issue> listAll() {
         return (List<Issue>) issueRepository.findAll();
@@ -140,6 +149,25 @@ public class IssueService {
             newIssue.setProperty("Status");
             newIssue.setOldValue(issue2.getStatus());
             newIssue.setNewValue(issue1.getStatus());
+            newIssue.setChangeVersion(issue2.getChangeVersion());
+            newIssue.setUpdatedBy(updatedBy);
+            issues.add(newIssue);
+        }
+
+        if(!Objects.equals(issue1.getEstimatedHours(), issue2.getEstimatedHours())) {
+            newIssue = new Issue();
+            newIssue.setProperty("Estimated Hours");
+            newIssue.setOldValue(issue2.getEstimatedHours().toString());
+            newIssue.setNewValue(issue1.getEstimatedHours().toString());
+            newIssue.setChangeVersion(issue2.getChangeVersion());
+            newIssue.setUpdatedBy(updatedBy);
+            issues.add(newIssue);
+        }
+        if(!issue1.getDueDate().equals(issue2.getDueDate())) {
+            newIssue = new Issue();
+            newIssue.setProperty("Due Date");
+            newIssue.setOldValue(issue2.getDueDate().format(DateTimeFormatter.ofPattern("dd MMM yyyy")));
+            newIssue.setNewValue(issue1.getDueDate().format(DateTimeFormatter.ofPattern("dd MMM yyyy")));
             newIssue.setChangeVersion(issue2.getChangeVersion());
             newIssue.setUpdatedBy(updatedBy);
             issues.add(newIssue);
@@ -290,5 +318,70 @@ public class IssueService {
         model.addAttribute("currentUserProjects", currentUser.getProjects());
 
         return null;
+    }
+    
+    public void sendEmailNotifications(Issue issue, boolean isNewIssue, HttpServletRequest request) throws MessagingException, UnsupportedEncodingException {
+        List<User> users = issue.getProject().getUsers();
+        String[] emailRecipients = new String[users.size()];
+        String rootURL = request.getRequestURL().toString();
+        String link = rootURL.replace(request.getServletPath(), "") + "/issues/" + issue.getProject().getIdentifier() + "/view/" + issue.getIssueKey();
+
+        for(int i=0; i < users.size(); i++) {
+            emailRecipients[i] = users.get(i).getEmail();
+        }
+
+        MimeMessage message = mailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message);
+
+        helper.setFrom("notifications@issueoverflow.app", "Issue Overflow");
+        helper.setTo(emailRecipients);
+
+        String subject = "[" + issue.getIssueKey() + "] " + issue.getTitle();
+        String content;
+
+        // checks if the issue is a newly created one or if its an updated issue
+        if(isNewIssue) {
+            content = "<h2>" + issue.getUser().getFullName() + " added a new issue to " + issue.getProject().getName() + ".</h2>"
+                    + "<p>Click the link below to view the full details of this issue:</p>"
+                    + "<p><a href=\"" + link + "\">" + link + "</a></p>";
+        } else {
+            content = "<h2>Details for " + issue.getIssueKey() + " have been updated by " + issue.getUpdatedBy().getFullName() + ".</h2>"
+                    + "<p>Click the link below to view the updated details of this issue:</p>"
+                    + "<p><a href=\"" + link + "\">" + link + "</a></p>"
+                    + "<p>Updated: " + issue.getDateUpdated().format(DateTimeFormatter.ofPattern("dd MMM yyyy HH:mm:ss")) + "</p>";
+        }
+
+        helper.setSubject(subject);
+        helper.setText(content, true);
+
+        mailSender.send(message);
+    }
+
+    public void sendEmailNotificationsComments(Comment comment, HttpServletRequest request) throws MessagingException, UnsupportedEncodingException {
+        Issue issue = comment.getIssue();
+        List<User> users = issue.getProject().getUsers();
+        String[] emailRecipients = new String[users.size()];
+        String rootURL = request.getRequestURL().toString();
+        String link = rootURL.replace(request.getServletPath(), "") + "/issues/" + issue.getProject().getIdentifier() + "/view/" + issue.getIssueKey();
+
+        for(int i=0; i < users.size(); i++) {
+            emailRecipients[i] = users.get(i).getEmail();
+        }
+
+        MimeMessage message = mailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message);
+
+        helper.setFrom("notifications@issueoverflow.app", "Issue Overflow");
+        helper.setTo(emailRecipients);
+
+        String subject = "[" + issue.getIssueKey() + "] " + issue.getTitle();
+        String content = "<h2>" + issue.getComments() + " added a new comment to " + issue.getIssueKey() + ".</h2>"
+                + "<p>Click the link below to view the full details of this issue:</p>"
+                + "<p><a href=\"" + link + "\">" + link + "</a></p>";
+
+        helper.setSubject(subject);
+        helper.setText(content, true);
+
+        mailSender.send(message);
     }
 }

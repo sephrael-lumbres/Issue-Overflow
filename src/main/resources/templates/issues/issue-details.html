@@ -314,7 +314,7 @@
 
                             <hr class="ms-auto me-auto mt-1" style="width: 95%;">
 
-                            <ul class="row mb-4">
+                            <ul class="row mb-2">
                                 <li class="col d-flex justify-content-between align-items-start">
                                     <div class="ms-2 me-auto">
                                     <div class="fw-bold mb-2">Created</div>
@@ -326,6 +326,25 @@
                                     <div class="ms-2 me-auto">
                                     <div class="fw-bold mb-2">Updated</div>
                                         <span th:text="${#temporals.format(issue.dateUpdated, 'dd MMM yyyy HH:mm:ss')}"></span>
+                                    </div>
+                                </li>
+                            </ul>
+
+                            <hr class="ms-auto me-auto mt-1" style="width: 95%;">
+                            <ul class="row mb-4">
+                                <li class="col d-flex justify-content-between align-items-start">
+                                    <div class="ms-2 me-auto">
+                                        <div class="fw-bold mb-2">Estimated Hours</div>
+                                        <span th:text="${issue.estimatedHours}"></span>
+                                        <span th:if="${issue.estimatedHours == null}">Estimated Hours has not been set</span>
+                                    </div>
+                                </li>
+
+                                <li class="col d-flex justify-content-between align-items-start">
+                                    <div class="ms-2 me-auto">
+                                        <div class="fw-bold mb-2">Due Date</div>
+                                        <span th:text="${#temporals.format(issue.dueDate, 'dd MMM yyyy')}"></span>
+                                        <span th:if="${issue.dueDate == null}">No Assigned Due Date</span>
                                     </div>
                                 </li>
                             </ul>

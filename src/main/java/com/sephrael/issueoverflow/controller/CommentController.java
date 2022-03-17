@@ -8,10 +8,14 @@ import com.sephrael.issueoverflow.repository.CommentRepository;
 import com.sephrael.issueoverflow.repository.IssueRepository;
 import com.sephrael.issueoverflow.repository.ProjectRepository;
 import com.sephrael.issueoverflow.repository.UserRepository;
+import com.sephrael.issueoverflow.service.IssueService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
+import javax.servlet.http.HttpServletRequest;
+import java.io.UnsupportedEncodingException;
 import java.security.Principal;
 
 @Controller
@@ -22,13 +26,15 @@ public class CommentController {
     @Autowired
     private IssueRepository issueRepository;
     @Autowired
+    private IssueService issueService;
+    @Autowired
     private UserRepository userRepository;
     @Autowired
     private ProjectRepository projectRepository;
 
     @PostMapping("/new")
     public String addComment(@PathVariable(value = "issueKey") String issueKey, Comment comment, Principal principal,
-                             @PathVariable String identifier) {
+                             @PathVariable String identifier, HttpServletRequest request) throws MessagingException, UnsupportedEncodingException {
         User currentUser = userRepository.findByEmail(principal.getName());
         Project currentProject = projectRepository.findByIdentifierAndOrganization(identifier, currentUser.getOrganization());
 
@@ -39,11 +45,15 @@ public class CommentController {
         if(!currentUser.getProjects().contains(currentProject))
             return "error/404";
 
-        userRepository.findByEmail(principal.getName()).addToComment(comment);
-        issueRepository.findByIssueKeyAndOrganization(issueKey, currentUser.getOrganization()).addToComment(comment);
+        Issue issue = issueRepository.findByIssueKeyAndOrganization(issueKey, currentUser.getOrganization());
+
+        currentUser.addToComment(comment);
+        issue.addToComment(comment);
 
         comment.setIsEdited(false);
         commentRepository.save(comment);
+
+        issueService.sendEmailNotificationsComments(comment, request);
 
         return "redirect:/issues/{identifier}/view/" + issueKey;
     }

@@ -11,6 +11,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.mail.MessagingException;
+import javax.servlet.http.HttpServletRequest;
+import java.io.UnsupportedEncodingException;
 import java.security.Principal;
 import java.util.List;
 import java.util.Objects;
@@ -130,8 +133,8 @@ public class IssueController {
     }
 
     @PostMapping(value = "/new")
-    public String saveNewIssue(@ModelAttribute("issue") Issue issue, Principal principal,
-                            @RequestParam(value = "files", required = false)MultipartFile[] files) {
+    public String saveNewIssue(@ModelAttribute("issue") Issue issue, Principal principal, HttpServletRequest request,
+                               @RequestParam(value = "files", required = false)MultipartFile[] files) throws MessagingException, UnsupportedEncodingException {
         User currentUser = userRepository.findByEmail(principal.getName());
 
         if(currentUser.getOrganization() == null)
@@ -155,13 +158,15 @@ public class IssueController {
             }
         }
 
+        issueService.sendEmailNotifications(issue, true, request);
+
         return ("redirect:/issues/" + issue.getProject().getIdentifier() + "/view/" + issue.getIssueKey());
     }
 
     @PostMapping(value = "/update")
-    public String updateIssue(@ModelAttribute("issue") Issue nextIssue, Principal principal,
+    public String updateIssue(@ModelAttribute("issue") Issue nextIssue, Principal principal, HttpServletRequest request,
                               @RequestParam(value = "files", required = false)MultipartFile[] files,
-                              @RequestParam(value = "isAttachFileForm", required = false) boolean isAttachFileForm) {
+                              @RequestParam(value = "isAttachFileForm", required = false) boolean isAttachFileForm) throws MessagingException, UnsupportedEncodingException {
         User currentUser = userRepository.findByEmail(principal.getName());
 
         if(currentUser.getOrganization() == null)
@@ -176,6 +181,8 @@ public class IssueController {
             previousIssue.setType(nextIssue.getType());
             previousIssue.setPriority(nextIssue.getPriority());
             previousIssue.setStatus(nextIssue.getStatus());
+            previousIssue.setEstimatedHours(nextIssue.getEstimatedHours());
+            previousIssue.setDueDate(nextIssue.getDueDate());
             issueService.setIssueKey(previousIssue, nextIssue.getProject());
             previousIssue.setAssignedTo(nextIssue.getAssignedTo());
             previousIssue.setProject(nextIssue.getProject());
@@ -189,6 +196,8 @@ public class IssueController {
                 fileService.uploadIssueAttachments(currentUser, file, false, previousIssue);
             }
         }
+
+        issueService.sendEmailNotifications(previousIssue, false, request);
 
         return ("redirect:/issues/" + previousIssue.getProject().getIdentifier() + "/view/" + previousIssue.getIssueKey());
     }
