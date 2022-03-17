@@ -157,17 +157,37 @@ public class IssueService {
         if(!Objects.equals(issue1.getEstimatedHours(), issue2.getEstimatedHours())) {
             newIssue = new Issue();
             newIssue.setProperty("Estimated Hours");
-            newIssue.setOldValue(issue2.getEstimatedHours().toString());
-            newIssue.setNewValue(issue1.getEstimatedHours().toString());
+
+            if(issue2.getEstimatedHours() == null)
+                newIssue.setOldValue(null);
+            else
+                newIssue.setOldValue(issue2.getEstimatedHours().toString());
+
+            if(issue1.getEstimatedHours() == null)
+                newIssue.setNewValue(null);
+            else
+                newIssue.setNewValue(issue1.getEstimatedHours().toString());
+
             newIssue.setChangeVersion(issue2.getChangeVersion());
             newIssue.setUpdatedBy(updatedBy);
             issues.add(newIssue);
         }
-        if(!issue1.getDueDate().equals(issue2.getDueDate())) {
+        if(issue2.getDueDate() == null && issue1.getDueDate() != null ||
+                issue1.getDueDate() == null && issue2.getDueDate() != null ||
+                issue2.getDueDate() != null && !issue1.getDueDate().equals(issue2.getDueDate())) {
             newIssue = new Issue();
             newIssue.setProperty("Due Date");
-            newIssue.setOldValue(issue2.getDueDate().format(DateTimeFormatter.ofPattern("dd MMM yyyy")));
-            newIssue.setNewValue(issue1.getDueDate().format(DateTimeFormatter.ofPattern("dd MMM yyyy")));
+
+            if(issue2.getDueDate() == null)
+                newIssue.setOldValue(null);
+            else
+                newIssue.setOldValue(issue2.getDueDate().format(DateTimeFormatter.ofPattern("dd MMM yyyy")));
+
+            if(issue1.getDueDate() == null)
+                newIssue.setNewValue(null);
+            else
+                newIssue.setNewValue(issue1.getDueDate().format(DateTimeFormatter.ofPattern("dd MMM yyyy")));
+
             newIssue.setChangeVersion(issue2.getChangeVersion());
             newIssue.setUpdatedBy(updatedBy);
             issues.add(newIssue);
