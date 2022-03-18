@@ -53,7 +53,7 @@ public class CommentController {
         comment.setIsEdited(false);
         commentRepository.save(comment);
 
-        issueService.sendEmailNotificationsComments(comment, request);
+        issueService.sendEmailNotification(issue, comment, request, false, true);
 
         return "redirect:/issues/{identifier}/view/" + issueKey;
     }

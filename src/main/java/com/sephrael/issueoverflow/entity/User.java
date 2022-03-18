@@ -20,7 +20,7 @@ public class User {
     // variables to add: userRole, dateCreated, dateModified, assignedProject, assignedOrganization
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
     @Column(unique = true)
@@ -115,6 +115,18 @@ public class User {
         file.setUser(this);
     }
 
+    boolean isCreatedEnabled = true;
+
+    boolean isUpdatedEnabled = true;
+
+    boolean isCommentsEnabled = true;
+
+    boolean isAllIssuesEnabled = false;
+
+    boolean isAssignedIssuesEnabled = true;
+
+    boolean isAuthoredIssuesEnabled = true;
+
     public Long getId() {
         return id;
     }
@@ -181,5 +193,53 @@ public class User {
 
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
+    }
+
+    public boolean isCreatedEnabled() {
+        return isCreatedEnabled;
+    }
+
+    public void setIsCreatedEnabled(boolean isCreatedEnabled) {
+        this.isCreatedEnabled = isCreatedEnabled;
+    }
+
+    public boolean isUpdatedEnabled() {
+        return isUpdatedEnabled;
+    }
+
+    public void setIsUpdatedEnabled(boolean isUpdatedEnabled) {
+        this.isUpdatedEnabled = isUpdatedEnabled;
+    }
+
+    public boolean isCommentsEnabled() {
+        return isCommentsEnabled;
+    }
+
+    public void setIsCommentsEnabled(boolean isCommentsEnabled) {
+        this.isCommentsEnabled = isCommentsEnabled;
+    }
+
+    public boolean isAllIssuesEnabled() {
+        return isAllIssuesEnabled;
+    }
+
+    public void setIsAllIssuesEnabled(boolean isAllIssuesEnabled) {
+        this.isAllIssuesEnabled = isAllIssuesEnabled;
+    }
+
+    public boolean isAssignedIssuesEnabled() {
+        return isAssignedIssuesEnabled;
+    }
+
+    public void setIsAssignedIssuesEnabled(boolean isAssignedIssuesEnabled) {
+        this.isAssignedIssuesEnabled = isAssignedIssuesEnabled;
+    }
+
+    public boolean isAuthoredIssuesEnabled() {
+        return isAuthoredIssuesEnabled;
+    }
+
+    public void setIsAuthoredIssuesEnabled(boolean isAuthoredIssuesEnabled) {
+        this.isAuthoredIssuesEnabled = isAuthoredIssuesEnabled;
     }
 }

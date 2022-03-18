@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
 import java.util.Objects;
 
@@ -79,7 +80,7 @@ public class AccountController {
                 return "redirect:/login";
             }
             redirectAttributes.addFlashAttribute("profileChangeSuccess", "Account Profile changes have been saved");
-        } catch (Exception exception) {
+        } catch(Exception exception) {
             redirectAttributes.addFlashAttribute("profileChangeError", "An error has occurred while attempting to save Account Profile Changes");;
         }
 
@@ -184,21 +185,52 @@ public class AccountController {
     }
 
     // feature to be added in the future
-//    @RequestMapping("/notifications/{id}")
-//    public String showAccountNotificationsPage(@PathVariable("id") long id, Principal principal, Model model) {
-//        User currentUser = userRepository.findByEmail(principal.getName());
-//
-//        if(currentUser.getOrganization() == null)
-//            return "organization/select-organization";
-//
-//        if(currentUser.getId() != id)
-//            return "error/404";
-//
-//        model.addAttribute("newProject", new Project());
-//        model.addAttribute("user", userRepository.getById(id));
-//        model.addAttribute("currentUser", currentUser);
-//        model.addAttribute("currentUserProjects", currentUser.getProjects());
-//
-//        return "account-settings/account-notifications";
-//    }
+    @RequestMapping("/notifications/{id}")
+    public String showAccountNotificationsPage(@PathVariable("id") long id, Principal principal, Model model) {
+        User currentUser = userRepository.findByEmail(principal.getName());
+
+        if(currentUser.getOrganization() == null)
+            return "organization/select-organization";
+
+        if(currentUser.getId() != id)
+            return "error/404";
+
+        model.addAttribute("newProject", new Project());
+        model.addAttribute("user", userRepository.getById(id));
+        model.addAttribute("currentUser", currentUser);
+        model.addAttribute("currentUserProjects", currentUser.getProjects());
+
+        return "account-settings/account-notifications";
+    }
+
+    @PostMapping("/notifications/{id}/save")
+    public String saveNotificationSettings(@PathVariable("id") long id, HttpServletRequest request, Principal principal, RedirectAttributes redirectAttributes) {
+        User currentUser = userRepository.findByEmail(principal.getName());
+        User user = userRepository.findUserById(id);
+
+        if(currentUser.getOrganization() == null)
+            return "organization/select-organization";
+
+        if(currentUser.getId() != id)
+            return "error/404";
+
+        try {
+            // if checkbox is checked, enable notifications for the checked box,
+            // but if checkbox is unchecked, disable notifications for the unchecked box
+            user.setIsCreatedEnabled(request.getParameter("created") != null);
+            user.setIsUpdatedEnabled(request.getParameter("updated") != null);
+            user.setIsCommentsEnabled(request.getParameter("comments") != null);
+            user.setIsAllIssuesEnabled(request.getParameter("allIssues") != null);
+            user.setIsAssignedIssuesEnabled(request.getParameter("assignedIssues") != null);
+            user.setIsAuthoredIssuesEnabled(request.getParameter("authoredIssues") != null);
+
+            userRepository.save(user);
+
+            redirectAttributes.addFlashAttribute("notificationsSuccess", "Your notification settings have been saved!");
+        } catch(Exception exception) {
+            redirectAttributes.addFlashAttribute("notificationsError", "An error has occurred while attempting to save your notifications settings.");;
+        }
+
+        return "redirect:/account/notifications/" + id;
+    }
 }

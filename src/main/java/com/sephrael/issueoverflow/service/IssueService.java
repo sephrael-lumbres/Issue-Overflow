@@ -339,69 +339,107 @@ public class IssueService {
 
         return null;
     }
-    
-    public void sendEmailNotifications(Issue issue, boolean isNewIssue, HttpServletRequest request) throws MessagingException, UnsupportedEncodingException {
-        List<User> users = issue.getProject().getUsers();
-        String[] emailRecipients = new String[users.size()];
-        String rootURL = request.getRequestURL().toString();
-        String link = rootURL.replace(request.getServletPath(), "") + "/issues/" + issue.getProject().getIdentifier() + "/view/" + issue.getIssueKey();
 
-        for(int i=0; i < users.size(); i++) {
-            emailRecipients[i] = users.get(i).getEmail();
+    // checks which users agreed to receive notifications and adds them to the email recipient list
+    public void checkEmailRecipients(User user, Issue issue, String[] emailRecipients, int i) {
+        // checks if user agreed to send notifications of ALL created issues
+        if(user.isAllIssuesEnabled()) {
+            emailRecipients[i] = user.getEmail();
+
+            // checks if user agreed to send notifications of ONLY created issues CREATED BY THEM
+        } else if(user.isAuthoredIssuesEnabled()) {
+            if(issue.getUser() == user) {
+                emailRecipients[i] = user.getEmail();
+            }
+
+            // checks if user agreed to send notifications of ONLY created issues ASSIGNED TO THEM
+        } else if(user.isAssignedIssuesEnabled()) {
+            if(issue.getAssignedTo() == user) {
+                emailRecipients[i] = user.getEmail();
+            }
         }
-
-        MimeMessage message = mailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(message);
-
-        helper.setFrom("notifications@issueoverflow.app", "Issue Overflow");
-        helper.setTo(emailRecipients);
-
-        String subject = "[" + issue.getIssueKey() + "] " + issue.getTitle();
-        String content;
-
-        // checks if the issue is a newly created one or if its an updated issue
-        if(isNewIssue) {
-            content = "<h2>" + issue.getUser().getFullName() + " added a new issue to " + issue.getProject().getName() + ".</h2>"
-                    + "<p>Click the link below to view the full details of this issue:</p>"
-                    + "<p><a href=\"" + link + "\">" + link + "</a></p>";
-        } else {
-            content = "<h2>Details for " + issue.getIssueKey() + " have been updated by " + issue.getUpdatedBy().getFullName() + ".</h2>"
-                    + "<p>Click the link below to view the updated details of this issue:</p>"
-                    + "<p><a href=\"" + link + "\">" + link + "</a></p>"
-                    + "<p>Updated: " + issue.getDateUpdated().format(DateTimeFormatter.ofPattern("dd MMM yyyy HH:mm:ss")) + "</p>";
-        }
-
-        helper.setSubject(subject);
-        helper.setText(content, true);
-
-        mailSender.send(message);
     }
 
-    public void sendEmailNotificationsComments(Comment comment, HttpServletRequest request) throws MessagingException, UnsupportedEncodingException {
-        Issue issue = comment.getIssue();
-        List<User> users = issue.getProject().getUsers();
+    public String[] getEmailRecipients(List<User> users, Issue issue, boolean isCreatedIssue, boolean isComment) {
         String[] emailRecipients = new String[users.size()];
+
+        // if notification is for a newly created issue
+        if(isCreatedIssue && !isComment) {
+            for(int i=0; i < users.size(); i++) {
+                User user = users.get(i);
+
+                // checks if user agreed to send notifications of created issues
+                if(user.isCreatedEnabled()) {
+                    // checks which users agreed to receive notifications and adds them to the email recipient list
+                    checkEmailRecipients(user, issue, emailRecipients, i);
+                }
+            }
+
+            // else if notification is for an updated issue
+        } else if(!isCreatedIssue && !isComment) {
+            for(int i=0; i < users.size(); i++) {
+                User user = users.get(i);
+
+                if(user.isUpdatedEnabled()) {
+                    // checks which users agreed to receive notifications and adds them to the email recipient list
+                    checkEmailRecipients(user, issue, emailRecipients, i);
+                }
+            }
+
+            // else, the notification is for a new comment
+        } else {
+            for(int i=0; i < users.size(); i++) {
+                User user = users.get(i);
+
+                if(user.isCommentsEnabled()) {
+                    // checks which users agreed to receive notifications and adds them to the email recipient list
+                    checkEmailRecipients(user, issue, emailRecipients, i);
+                }
+            }
+        }
+
+        return emailRecipients;
+    }
+
+    public void sendEmailNotification(Issue issue, Comment comment, HttpServletRequest request, boolean isCreatedIssue,
+                               boolean isComment) throws MessagingException, UnsupportedEncodingException {
+        List<User> users = issue.getProject().getUsers();
         String rootURL = request.getRequestURL().toString();
         String link = rootURL.replace(request.getServletPath(), "") + "/issues/" + issue.getProject().getIdentifier() + "/view/" + issue.getIssueKey();
-
-        for(int i=0; i < users.size(); i++) {
-            emailRecipients[i] = users.get(i).getEmail();
-        }
+        String content;
 
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message);
 
         helper.setFrom("notifications@issueoverflow.app", "Issue Overflow");
-        helper.setTo(emailRecipients);
 
-        String subject = "[" + issue.getIssueKey() + "] " + issue.getTitle();
-        String content = "<h2>" + issue.getComments() + " added a new comment to " + issue.getIssueKey() + ".</h2>"
-                + "<p>Click the link below to view the full details of this issue:</p>"
-                + "<p><a href=\"" + link + "\">" + link + "</a></p>";
+        if(getEmailRecipients(users, issue, isCreatedIssue, isComment)[0] != null) {
+            helper.setTo(getEmailRecipients(users, issue, isCreatedIssue, isComment));
 
-        helper.setSubject(subject);
-        helper.setText(content, true);
+            String subject = "[" + issue.getIssueKey() + "] " + issue.getTitle();
+            helper.setSubject(subject);
 
-        mailSender.send(message);
+            // if notification is for a newly created issue
+            if (isCreatedIssue && !isComment) {
+                content = "<h2>" + issue.getUser().getFullName() + " added a new issue to " + issue.getProject().getName() + ".</h2>"
+                        + "<p>Click the link below to view the full details of this issue:</p>"
+                        + "<p><a href=\"" + link + "\">" + link + "</a></p>";
+                // else if notification is for an updated issue
+            } else if (!isCreatedIssue && !isComment) {
+                content = "<h2>Details for " + issue.getIssueKey() + " have been updated by " + issue.getUpdatedBy().getFullName() + ".</h2>"
+                        + "<p>Click the link below to view the updated details of this issue:</p>"
+                        + "<p><a href=\"" + link + "\">" + link + "</a></p>"
+                        + "<p>Updated: " + issue.getDateUpdated().format(DateTimeFormatter.ofPattern("dd MMM yyyy HH:mm:ss")) + "</p>";
+                // else, the notification is for a new comment
+            } else {
+                content = "<h2>" + comment.getUser().getFullName() + " added a new comment to " + comment.getIssue().getIssueKey() + ".</h2>"
+                        + "<p>Click the link below to view the full details of this issue:</p>"
+                        + "<p><a href=\"" + link + "\">" + link + "</a></p>";
+            }
+
+            helper.setText(content, true);
+
+            mailSender.send(message);
+        }
     }
 }

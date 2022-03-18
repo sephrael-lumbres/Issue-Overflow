@@ -370,3 +370,13 @@ when comments are added to issues
 - Added two issue fields: 'Estimated Hours' and 'Due Date'
 - Added a popup alert when a 'Contact Us' message has been sent
 - Fixed Heroku high memory usage
+
+
+
+Add Functionality to Sub or Unsub to Email Notifs
+
+- The user is now able to unsubscribe or subscribe to email
+notifications, the 6 options are to send notifications: when issues are
+created, updated, when comments are added. they can choose which issues
+such as: All the issues, only the issues that are assigned to them,
+only the issues created by them.

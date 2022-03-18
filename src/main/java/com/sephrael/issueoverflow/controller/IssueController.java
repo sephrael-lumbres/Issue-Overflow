@@ -158,7 +158,7 @@ public class IssueController {
             }
         }
 
-        issueService.sendEmailNotifications(issue, true, request);
+        issueService.sendEmailNotification(issue, null, request, true, false);
 
         return ("redirect:/issues/" + issue.getProject().getIdentifier() + "/view/" + issue.getIssueKey());
     }
@@ -197,7 +197,7 @@ public class IssueController {
             }
         }
 
-        issueService.sendEmailNotifications(previousIssue, false, request);
+        issueService.sendEmailNotification(previousIssue, null, request, false, false);
 
         return ("redirect:/issues/" + previousIssue.getProject().getIdentifier() + "/view/" + previousIssue.getIssueKey());
     }
