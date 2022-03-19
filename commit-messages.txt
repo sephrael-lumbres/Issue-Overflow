@@ -380,3 +380,13 @@ notifications, the 6 options are to send notifications: when issues are
 created, updated, when comments are added. they can choose which issues
 such as: All the issues, only the issues that are assigned to them,
 only the issues created by them.
+
+
+
+Add Privacy and Cookie Policy and Extra Notifs...
+
+- Added a privacy and cookie policy
+- Added extra functionality to verify email address before sending any
+email notifications
+- Also added choices of when and which issues to send notifications
+about

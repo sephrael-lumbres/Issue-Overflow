@@ -9,6 +9,7 @@ import com.sephrael.issueoverflow.repository.IssueRepository;
 import com.sephrael.issueoverflow.repository.ProjectRepository;
 import com.sephrael.issueoverflow.repository.UserRepository;
 import com.sephrael.issueoverflow.service.IssueService;
+import com.sephrael.issueoverflow.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -29,6 +30,8 @@ public class CommentController {
     private IssueService issueService;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private UserService userService;
     @Autowired
     private ProjectRepository projectRepository;
 
@@ -53,7 +56,7 @@ public class CommentController {
         comment.setIsEdited(false);
         commentRepository.save(comment);
 
-        issueService.sendEmailNotification(issue, comment, request, false, true);
+        userService.sendEmailNotification(issue, comment, request, false, true);
 
         return "redirect:/issues/{identifier}/view/" + issueKey;
     }

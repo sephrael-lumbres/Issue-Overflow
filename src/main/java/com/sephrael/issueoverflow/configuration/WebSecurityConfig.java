@@ -50,8 +50,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 // the line below is the paths that require authentication and role permissions to access
                 .antMatchers("/register", "/login", "/process_register").permitAll()
+                .antMatchers("/privacy", "/cookie-policy").permitAll()
                 .antMatchers("/getting-started", "/getting-started/*", "/knowledge-base/**", "/contact-us/**").permitAll()
-                .antMatchers("/reset-password", "/change-password*").permitAll()
+                .antMatchers("/reset-password", "/change-password*", "/verify-email*").permitAll()
                 .antMatchers("/error", "/js/**", "/assets/**", "/css/**", "/webjars/**").permitAll()
 
                 // Update and Removal operations on Users allowed only to Project Managers

@@ -248,6 +248,14 @@
                         <div th:text="${idNotUniqueToOrganization}" th:if="${idNotUniqueToOrganization}" id="popupAlerts" class="alert alert-danger alert-dismissible fade show text-center mt-n1" role="alert"></div>
                         <div th:text="${projectNotFound}" th:if="${projectNotFound}" id="popupAlerts" class="alert alert-danger alert-dismissible fade show text-center mt-n1" role="alert"></div>
 
+                        <!-- ALERT MESSAGE IF THE CURRENT USER HAS NOTIFICATIONS ENABLED BUT EMAIL IS NOT VERIFIED -->
+                        <div th:text="${verificationEmailSentSuccess}" th:if="${verificationEmailSentSuccess}" id="popupAlerts" class="alert alert-success alert-dismissible fade show text-center mt-n1" role="alert"></div>
+                        <div th:text="${verificationEmailSentError}" th:if="${verificationEmailSentError}" id="popupAlerts" class="alert alert-danger alert-dismissible fade show text-center mt-n1" role="alert"></div>
+                        <div th:if="${currentUser.isNotificationsEnabled() && !currentUser.isEmailVerified()}" class="alert alert-danger text-center mt-n2" role="alert">
+                            <i data-feather="alert-triangle" class="feather-lg"></i>
+                            Please verify email address to receive notifications. <a href="/resend-verification-email" style="cursor: pointer" class="alert-link">Resend verification email</a>.
+                        </div>
+
                         <div class="card">
                             <div class="card-body">
                                 <table id="datatablesSimple">
@@ -402,7 +410,7 @@
                 <footer class="footer-admin mt-auto footer-light">
                     <div class="container-xl px-4">
                         <div class="text-end small">
-                            <a href="#!">Privacy Policy</a>
+                            <a href="/privacy" target="_blank">Privacy Policy</a>
                             &middot;
                             <a href="#!">Terms &amp; Conditions</a>
                         </div>

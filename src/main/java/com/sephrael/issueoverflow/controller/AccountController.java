@@ -8,6 +8,7 @@ import com.sephrael.issueoverflow.repository.OrganizationRepository;
 import com.sephrael.issueoverflow.repository.UserRepository;
 import com.sephrael.issueoverflow.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -226,7 +227,11 @@ public class AccountController {
 
             userRepository.save(user);
 
-            redirectAttributes.addFlashAttribute("notificationsSuccess", "Your notification settings have been saved!");
+            if(user.isNotificationsEnabled() && !user.isEmailVerified()) {
+                userService.sendVerificationEmail(user, request);
+                redirectAttributes.addFlashAttribute("notificationsSuccess", "Your notification settings have been saved! Please check your email for a link to verify your account.");
+            } else
+                redirectAttributes.addFlashAttribute("notificationsSuccess", "Your notification settings have been saved!");
         } catch(Exception exception) {
             redirectAttributes.addFlashAttribute("notificationsError", "An error has occurred while attempting to save your notifications settings.");;
         }

@@ -6,7 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>Change Password - Issue Overflow</title>
+        <title>Verified Email Address - Issue Overflow</title>
         <link href="/css/styles.css" rel="stylesheet" />
         <link rel="icon" type="image/x-icon" href="/assets/img/swirl-logo.png" />
         <script data-search-pseudo-elements defer src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js" crossorigin="anonymous"></script>
@@ -27,31 +27,24 @@
 
                                 <!-- Social forgot password form-->
                                 <div class="card my-5">
-                                    <div class="card-body p-5 text-center">
-                                        <div class="h3 fw-light mb-0">Change Password</div>
+                                    <div class="card-body text-center">
+                                        <div class="h1 fw-bolder text-primary">
+                                            <img src="/assets/img/swirl-logo.png" style="height: 1.5rem;" alt="" class="mt-n1">
+                                            Issue Overflow
+                                        </div>
                                     </div>
-                                    <hr class="my-0" />
-                                    <div class="card-body p-5">
-                                        <!-- Forgot password form-->
-                                        <form th:action="@{'/change-password'}" method="post">
-                                            <input type="hidden" name="token" th:value="${token}">
-                                            <!-- Form Group (new password)-->
-                                            <div class="mb-3">
-                                                <label class="text-gray-600 small mb-1" for="newPassword">New Password</label>
-                                                <input name="password" class="form-control form-control-solid" id="newPassword" type="password" placeholder="Enter new password" required/>
-                                            </div>
-                                            <!-- Form Group (confirm password)-->
-                                            <div class="mb-3">
-                                                <label class="text-gray-600 small mb-1" for="confirmPassword">Confirm Password</label>
-                                                <input name="confirmPassword" class="form-control form-control-solid" id="confirmPassword" type="password" placeholder="Confirm new password" required/>
-                                            </div>
-                                            <button class="btn btn-primary" type="submit">Change Password</button>
-                                        </form>
+                                    <hr class="my-n2" />
+                                    <div th:if="${userIsValid}" class="card-body p-5">
+                                        <div class="h3 fw-bold mb-4 text-center">Your email has been verified!</div>
+                                        <div class="text-center">
+                                            <a class="btn btn-primary" type="button" href="/login">Login</a>
+                                        </div>
                                     </div>
-                                    <hr class="my-0" />
-                                    <div class="card-body px-5 py-4">
-                                        <div class="small text-center">
-                                            <a href="/login"><i data-feather="arrow-left"></i> Back to Login</a>
+
+                                    <div th:if="${userIsNull}" class="card-body p-5">
+                                        <div class="h3 fw-bold mb-4 text-center">Token is invalid!</div>
+                                        <div class="text-center">
+                                            <a class="btn btn-primary" type="button" href="/login">Login</a>
                                         </div>
                                     </div>
                                 </div>

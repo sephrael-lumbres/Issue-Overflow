@@ -24,7 +24,6 @@ public class Project {
 
     @CreationTimestamp
     @Column(updatable = false)
-    @NotAudited
     private LocalDate dateCreated;
 
     @Column

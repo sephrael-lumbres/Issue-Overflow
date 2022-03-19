@@ -6,9 +6,9 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>Deleting Issues - Issue Overflow Knowledge Base</title>
-        <link href="/css/styles.css" rel="stylesheet" />
-        <link rel="icon" type="image/x-icon" href="/assets/img/swirl-logo.png" />
+        <title>Terms of Use - Issue Overflow</title>
+        <link href="/static/css/styles.css" rel="stylesheet" />
+        <link rel="icon" type="image/x-icon" href="/static/assets/img/swirl-logo.png" />
         <script data-search-pseudo-elements defer src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.28.0/feather.min.js" crossorigin="anonymous"></script>
     </head>
@@ -17,7 +17,7 @@
             <nav class="container-xl topnav navbar navbar-expand justify-content-between justify-content-sm-start">
                 <!-- Navbar Brand-->
                 <a class="navbar-brand ps-4" href="/dashboard">
-                    <img src="/assets/img/swirl-logo.png" style="height: 1.0rem;" alt="">
+                    <img src="/static/assets/img/swirl-logo.png" style="height: 1.0rem;" alt="">
                     Issue Overflow
                 </a>
                 <!-- Navbar Items-->
@@ -80,8 +80,8 @@
                            aria-expanded="false">
                             <img th:if="${currentUser.hasProfilePicture()}"
                                  th:src="@{'/files/' +${currentUser.id} + '/true'}"
-                                 src="/assets/img/demo/user-placeholder.svg" class="img-fluid" alt="">
-                            <img th:unless="${currentUser.hasProfilePicture()}" src="/assets/img/demo/user-placeholder.svg"
+                                 src="/static/assets/img/demo/user-placeholder.svg" class="img-fluid" alt="">
+                            <img th:unless="${currentUser.hasProfilePicture()}" src="/static/assets/img/demo/user-placeholder.svg"
                                  class="img-fluid" alt="">
                         </a>
                         <div class="dropdown-menu dropdown-menu-end border-0 shadow animated--fade-in-up"
@@ -89,9 +89,9 @@
                             <div class="h6 dropdown-header d-flex align-items-center">
                                 <img th:if="${currentUser.hasProfilePicture()}"
                                      th:src="@{'/files/' +${currentUser.id} + '/true'}"
-                                     src="/assets/img/demo/user-placeholder.svg" class="dropdown-user-img" alt="">
+                                     src="/static/assets/img/demo/user-placeholder.svg" class="dropdown-user-img" alt="">
                                 <img th:unless="${currentUser.hasProfilePicture()}"
-                                     src="/assets/img/demo/user-placeholder.svg"
+                                     src="/static/assets/img/demo/user-placeholder.svg"
                                      class="dropdown-user-img" alt="">
                                 <div class="dropdown-user-details">
                                     <div th:text="${currentUser.getFullName()}"
@@ -116,49 +116,15 @@
             </nav>
         </div>
         <main>
-            <header class="page-header page-header-dark bg-gradient-primary-to-secondary mb-4">
-                <div class="container-xl px-4">
-                    <div class="page-header-content pt-4">
-                        <div class="row align-items-center justify-content-between">
-                            <div class="col-auto mt-4">
-                                <h1 class="page-header-title">
-                                    <div class="page-header-icon"><i data-feather="life-buoy"></i></div>
-                                    Knowledge Base
-                                </h1>
-                            </div>
-                        </div>
-                        <!-- BREADCRUMBS -->
-                        <nav class="mt-4 rounded" aria-label="breadcrumb">
-                            <ol class="breadcrumb px-3 py-2 rounded mb-0">
-                                <li class="breadcrumb-item"><a href="/knowledge-base">Knowledge Base</a></li>
-                                <li class="breadcrumb-item"><a href="/knowledge-base/issues">Issues</a></li>
-                                <li class="breadcrumb-item active">Deleting Issues</li>
-                            </ol>
-                        </nav>
-                        <!-- SEARCH BAR -->
-                        <!-- SEARCH BAR -->
-<!--                        <div class="page-header-search mt-4">-->
-<!--                            <div class="input-group input-group-joined">-->
-<!--                                <span class="input-group-text me-n3"><i data-feather="search"></i></span>-->
-<!--                                <input class="form-control" type="text" placeholder="How can we help you?" aria-label="Search" autofocus />-->
-<!--                            </div>-->
-<!--                        </div>-->
-                    </div>
-                </div>
-            </header>
             <!-- Main page content-->
-            <div class="container-xl px-4">
+            <div class="container-xl p-4">
                 <!-- Knowledge base article-->
                 <div class="card mb-4">
-                    <div class="card-header d-flex align-items-center">
-                        <a class="btn btn-transparent-dark btn-icon" href="/knowledge-base/issues"><i data-feather="arrow-left"></i></a>
-                        <div class="ms-3"><h2 class="my-3">Deleting Issues</h2></div>
+                    <div class="card-header">
+                        <div class="ms-3"><h1 class="my-3 text-center">Privacy Policy</h1></div>
                     </div>
                     <div class="card-body">
-                        <p class="lead mb-0">To delete an issue, go to it's details page, then select the <strong><i data-feather="edit" class="mt-1 me-1"></i>Edit Issue</strong> button on the top right.</p>
-                        <img src="/assets/img/knowledge-base/issues/editing-issues.png" class="w-100 mb-4" alt="">
-                        <p class="lead mb-0">You will be redirected to the <strong>Edit Issue</strong> page. On the bottom of this page, select the <strong><i data-feather="alert-triangle" class="me-1 mt-1"></i>Delete Issue</strong> button, then select <strong>OK</strong>.</p>
-                        <img src="/assets/img/knowledge-base/issues/deleting-issues.png" class="w-100 mb-4" alt="">
+
                     </div>
                 </div>
 
@@ -174,6 +140,6 @@
             </div>
         </footer>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-        <script src="/js/scripts.js"></script>
+        <script src="/static/js/scripts.js"></script>
     </body>
 </html>

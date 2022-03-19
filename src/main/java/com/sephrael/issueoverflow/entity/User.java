@@ -17,37 +17,31 @@ import java.util.List;
 @Table(name = "users")
 @Audited
 public class User {
-    // variables to add: userRole, dateCreated, dateModified, assignedProject, assignedOrganization
-
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
     @Column(unique = true)
-    @NotNull(message = "Email is required")
-    @NotEmpty(message = "Email may not be empty")
+    @NotNull
+    @NotEmpty
     private String email;
 
     @Column
     @JsonIgnore
-    @NotNull(message = "Password is required")
-    @NotEmpty(message = "Password may not be empty")
+    @NotNull
+    @NotEmpty
+    @NotAudited
     private String password;
 
     @Column
-    @NotNull(message = "First name is required")
-    @NotEmpty(message = "First name may not be empty")
+    @NotNull
+    @NotEmpty
     private String firstName;
 
     @Column
-    @NotNull(message = "Last name is required")
-    @NotEmpty(message = "Last name may not be empty")
+    @NotNull
+    @NotEmpty
     private String lastName;
-
-    @Column(unique = true)
-    private String resetPasswordToken;
-
-    private boolean hasProfilePicture;
 
     @NotAudited
     private boolean enabled;
@@ -56,40 +50,13 @@ public class User {
     @NotAudited
     private Role role;
 
-    public Role getRole() {
-        return role;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
-    }
-
-    @ManyToMany(mappedBy = "users")
-    @NotAudited
-    private List<Project> projects = new ArrayList<>();
-
-    public List<Project> getProjects() {
-        // sorts the Projects alphabetically by their Names
-        projects.sort(Comparator.comparing(Project::getName));
-
-        return projects;
-    }
-
-    public void setProjects(List<Project> projects) {
-        this.projects = projects;
-    }
-
     @ManyToOne
     @NotAudited
     private Organization organization;
 
-    public Organization getOrganization() {
-        return organization;
-    }
-
-    public void setOrganization(Organization organization) {
-        this.organization = organization;
-    }
+    @ManyToMany(mappedBy = "users")
+    @NotAudited
+    private List<Project> projects = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @NotAudited
@@ -101,31 +68,54 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @NotAudited
-    private List<Comment> comments;
-
-    public void addToComment(Comment comment) {
-        comment.setUser(this);
-    }
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    @NotAudited
     private List<File> files;
 
     public void addToFiles(File file) {
         file.setUser(this);
     }
 
-    boolean isCreatedEnabled = true;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @NotAudited
+    private List<Comment> comments;
 
-    boolean isUpdatedEnabled = true;
+    public void addToComment(Comment comment) {
+        comment.setUser(this);
+    }
 
-    boolean isCommentsEnabled = true;
+    @NotAudited
+    @Column(unique = true)
+    private String resetPasswordToken;
 
-    boolean isAllIssuesEnabled = false;
+    @NotAudited
+    private boolean hasProfilePicture;
 
-    boolean isAssignedIssuesEnabled = true;
+    @NotAudited
+    private boolean isCreatedEnabled;
 
-    boolean isAuthoredIssuesEnabled = true;
+    @NotAudited
+    private boolean isUpdatedEnabled;
+
+    @NotAudited
+    private boolean isCommentsEnabled;
+
+    @NotAudited
+    private boolean isAllIssuesEnabled;
+
+    @NotAudited
+    private boolean isAssignedIssuesEnabled;
+
+    @NotAudited
+    private boolean isAuthoredIssuesEnabled;
+
+    @Transient
+    private boolean isNotificationsEnabled;
+
+    @NotAudited
+    private boolean isEmailVerified;
+
+    @NotAudited
+    @Column(unique = true)
+    private String emailVerificationToken;
 
     public Long getId() {
         return id;
@@ -171,6 +161,41 @@ public class User {
         return this.firstName + " " + this.lastName;
     }
 
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
+    public Organization getOrganization() {
+        return organization;
+    }
+
+    public void setOrganization(Organization organization) {
+        this.organization = organization;
+    }
+
+    public List<Project> getProjects() {
+        // sorts the Projects alphabetically by their Names
+        projects.sort(Comparator.comparing(Project::getName));
+
+        return projects;
+    }
+
+    public void setProjects(List<Project> projects) {
+        this.projects = projects;
+    }
+
     public String getResetPasswordToken() {
         return resetPasswordToken;
     }
@@ -185,14 +210,6 @@ public class User {
 
     public void setHasProfilePicture(boolean hasProfilePicture) {
         this.hasProfilePicture = hasProfilePicture;
-    }
-
-    public boolean isEnabled() {
-        return enabled;
-    }
-
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
     }
 
     public boolean isCreatedEnabled() {
@@ -241,5 +258,26 @@ public class User {
 
     public void setIsAuthoredIssuesEnabled(boolean isAuthoredIssuesEnabled) {
         this.isAuthoredIssuesEnabled = isAuthoredIssuesEnabled;
+    }
+
+    public boolean isNotificationsEnabled() {
+        return isCreatedEnabled || isUpdatedEnabled || isCommentsEnabled || isAllIssuesEnabled ||
+                isAssignedIssuesEnabled || isAuthoredIssuesEnabled;
+    }
+
+    public boolean isEmailVerified() {
+        return isEmailVerified;
+    }
+
+    public void setEmailVerified(boolean emailVerified) {
+        isEmailVerified = emailVerified;
+    }
+
+    public String getEmailVerificationToken() {
+        return emailVerificationToken;
+    }
+
+    public void setEmailVerificationToken(String emailVerificationToken) {
+        this.emailVerificationToken = emailVerificationToken;
     }
 }

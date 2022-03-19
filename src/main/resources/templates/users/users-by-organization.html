@@ -228,11 +228,18 @@
 
                         <!-- Popup alerts -->
                         <div th:text="${userUpdateSuccess}" th:if="${userUpdateSuccess}" id="popupAlerts" class="alert alert-success alert-dismissible fade show text-center mt-n1" role="alert"></div>
+                        <div th:text="${verificationEmailSentSuccess}" th:if="${verificationEmailSentSuccess}" id="popupAlerts" class="alert alert-success alert-dismissible fade show text-center mt-n1" role="alert"></div>
+                        <div th:text="${verificationEmailSentError}" th:if="${verificationEmailSentError}" id="popupAlerts" class="alert alert-danger alert-dismissible fade show text-center mt-n1" role="alert"></div>
 
                         <!-- ALERT MESSAGE IF CURRENT USER IS NOT INVOLVED WITH ANY PROJECT -->
                         <div sec:authorize="hasAuthority('Project Manager')" th:if="${currentUser.getProjects().isEmpty()}" class="alert alert-danger text-center mt-n2" role="alert">
                             <i data-feather="alert-triangle" class="feather-lg"></i>
                             Please <a data-bs-toggle="modal" data-bs-target="#createProjectModal" style="cursor: pointer" class="alert-link">create a project</a> to start tracking Issues
+                        </div>
+
+                        <div th:if="${currentUser.isNotificationsEnabled() && !currentUser.isEmailVerified()}" class="alert alert-danger text-center mt-n2" role="alert">
+                            <i data-feather="alert-triangle" class="feather-lg"></i>
+                            Please verify email address to receive notifications. <a href="/resend-verification-email" style="cursor: pointer" class="alert-link">Resend verification email</a>.
                         </div>
 
                         <!-- Create project modal-->
@@ -340,7 +347,7 @@
                 <footer class="footer-admin mt-auto footer-light">
                     <div class="container-xl px-4">
                         <div class="text-end small">
-                            <a href="#!">Privacy Policy</a>
+                            <a href="/privacy" target="_blank">Privacy Policy</a>
                             &middot;
                             <a href="#!">Terms &amp; Conditions</a>
                         </div>

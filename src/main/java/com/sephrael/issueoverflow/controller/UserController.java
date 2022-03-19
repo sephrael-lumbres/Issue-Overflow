@@ -10,6 +10,7 @@ import com.sephrael.issueoverflow.service.UserService;
 import net.bytebuddy.utility.RandomString;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -72,10 +73,9 @@ public class UserController {
 
     @PostMapping("/reset-password")
     public String processResetPassword(@RequestParam("email") String email, HttpServletRequest request, Model model) {
-        String token = RandomString.make(30);
-
         try {
             if(userRepository.findByEmail(email) != null) {
+                String token = RandomString.make(30);
                 String siteURL = request.getRequestURL().toString();
                 String resetPasswordLink = siteURL.replace(request.getServletPath(), "") + "/change-password?token=" + token;
 
@@ -247,6 +247,38 @@ public class UserController {
             SecurityContextHolder.getContext().setAuthentication(null);
 
         return "redirect:/users";
+    }
+
+    @RequestMapping("/verify-email")
+    public String showEmailVerifiedPage(@Param(value = "emailVerificationToken") String emailVerificationToken, Model model) {
+        User user = userRepository.findByEmailVerificationToken(emailVerificationToken);
+
+        if(user == null)
+            model.addAttribute("userIsNull", true);
+        else {
+            model.addAttribute("userIsValid", true);
+            user.setEmailVerified(true);
+            user.setEmailVerificationToken(null);
+            userRepository.save(user);
+        }
+
+        return "account-settings/verified-email";
+    }
+
+    @RequestMapping("/resend-verification-email")
+    public String resendVerificationEmail(Principal principal, HttpServletRequest request, RedirectAttributes redirectAttributes) {
+
+        try {
+            User user = userRepository.findByEmail(principal.getName());
+
+            userService.sendVerificationEmail(user, request);
+
+            redirectAttributes.addFlashAttribute("verificationEmailSentSuccess", "Verification email has been sent!");
+        } catch(Exception exception) {
+            redirectAttributes.addFlashAttribute("verificationEmailSentError", "An error has occurred while attempting to send a verification email.");
+        }
+
+        return "redirect:" + request.getHeader("Referer");
     }
 
     // this returns the json of all the users

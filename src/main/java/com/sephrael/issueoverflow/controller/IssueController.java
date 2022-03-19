@@ -4,6 +4,7 @@ import com.sephrael.issueoverflow.entity.*;
 import com.sephrael.issueoverflow.repository.*;
 import com.sephrael.issueoverflow.service.FileService;
 import com.sephrael.issueoverflow.service.IssueService;
+import com.sephrael.issueoverflow.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -30,6 +31,8 @@ public class IssueController {
     private IssueKeySequenceRepository issueKeySequenceRepository;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private UserService userService;
     @Autowired
     private CommentRepository commentRepository;
     @Autowired
@@ -158,7 +161,7 @@ public class IssueController {
             }
         }
 
-        issueService.sendEmailNotification(issue, null, request, true, false);
+        userService.sendEmailNotification(issue, null, request, true, false);
 
         return ("redirect:/issues/" + issue.getProject().getIdentifier() + "/view/" + issue.getIssueKey());
     }
@@ -197,7 +200,7 @@ public class IssueController {
             }
         }
 
-        issueService.sendEmailNotification(previousIssue, null, request, false, false);
+        userService.sendEmailNotification(previousIssue, null, request, false, false);
 
         return ("redirect:/issues/" + previousIssue.getProject().getIdentifier() + "/view/" + previousIssue.getIssueKey());
     }
