@@ -390,3 +390,12 @@ Add Privacy and Cookie Policy and Extra Notifs...
 email notifications
 - Also added choices of when and which issues to send notifications
 about
+
+
+
+Fix File Upload Bug, Update README, and More...
+
+- Fixed bug when a file larger than 5MB is uploaded
+- Updated README file
+- Updated pom.xml file
+- Removed more unused elements and files

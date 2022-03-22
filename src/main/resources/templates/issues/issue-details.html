@@ -566,7 +566,7 @@
                                                           enctype="multipart/form-data">
                                                         <label class="mb-1 small text-muted" for="files" hidden></label>
                                                         <div class="d-flex">
-                                                            <input th:name="files" class="form-control" id="files" type="file" multiple/>
+                                                            <input th:name="files" onchange="validateFileSize()" class="form-control" id="files" type="file" multiple/>
                                                             <label hidden>
                                                                 <input th:field="*{id}" readonly>
                                                             </label>
@@ -610,41 +610,63 @@
                     <div class="container-xl px-4">
                         <div class="text-end small">
                             <a href="/privacy" target="_blank">Privacy Policy</a>
-                            &middot;
-                            <a href="#!">Terms &amp; Conditions</a>
+                            <!--&middot;-->
+                            <!--<a href="#!">Terms &amp; Conditions</a>-->
                         </div>
                     </div>
                 </footer>
             </div>
         </div>
+        <script src="https://unpkg.com/easymde/dist/easymde.min.js" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/showdown@1.9.1/dist/showdown.min.js" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
         <script src="/js/scripts.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" crossorigin="anonymous"></script>
-        <script src="/js/datatables/datatables-simple-demo.js"></script>
-        <script src="https://unpkg.com/easymde/dist/easymde.min.js" crossorigin="anonymous"></script>
-<!--        <script src="https://cdn.jsdelivr.net/npm/showdown@1.9.1/dist/showdown.min.js" crossorigin="anonymous"></script>-->
         <script src="/js/markdown.js"></script>
-        <script src="/js/showdown.min.js"></script>
-
+        <script src="/js/simple-datatables.js"></script>
         <script>
+            // makes sure file size is 5.0MB or less
+            function validateFileSize(){
+                let fileUploadInput = document.getElementById("files");
+                let maxSizeInBytes = 5000000;
+
+                if(fileUploadInput.files.length > 1) {
+                    for(let i=0; i < fileUploadInput.files.length; i++) {
+                        if(fileUploadInput.files[i].size > maxSizeInBytes) {
+                            fileUploadInput.setCustomValidity("File(s) must be 5.0MB or less");
+                        } else {
+                            fileUploadInput.setCustomValidity('');
+                        }
+                    }
+                } else {
+                    if(fileUploadInput.files[0].size > maxSizeInBytes) {
+                        fileUploadInput.setCustomValidity("File must be 5.0MB or less");
+                    } else {
+                        fileUploadInput.setCustomValidity('');
+                    }
+                }
+            }
+
+            let easyMDEContainer = document.getElementsByClassName("EasyMDEContainer");
+
             // this sets each Edit Comment Editor to have a unique ID to be used to show/hide itself
-            for(let i=0; i < document.getElementsByClassName("EasyMDEContainer").length - 1; i++) {
-                document.getElementsByClassName("EasyMDEContainer").item(i).setAttribute("id", "editCommentEditor" + i);
-                document.getElementsByClassName("EasyMDEContainer").item(i).setAttribute("style", "display: none;");
+            for(let i=0; i < easyMDEContainer.length - 1; i++) {
+                easyMDEContainer.item(i).setAttribute("id", "editCommentEditor" + i);
+                easyMDEContainer.item(i).setAttribute("style", "display: none;");
             }
 
             // this hides the Markdown formatted Comment Message and replaces it with a Markdown Editor to Edit a Comment
             function editComment(commentId) {
                 let commentIndex = commentId.id.replace("editCommentButton", "");
 
-                if(document.getElementsByClassName("EasyMDEContainer").item(commentIndex).getAttribute("style") === "display: none;") {
+                if(easyMDEContainer.item(commentIndex).getAttribute("style") === "display: none;") {
                     document.getElementsByClassName("markdownFormattedComment").item(commentIndex).setAttribute("style", "display: none;");
 
-                    document.getElementsByClassName("EasyMDEContainer").item(commentIndex).setAttribute("style", "display: block;");
+                    easyMDEContainer.item(commentIndex).setAttribute("style", "display: block;");
                     document.getElementsByClassName("cancelEditCommentButton").item(commentIndex).removeAttribute("hidden");
                     document.getElementsByClassName("submitEditCommentButton").item(commentIndex).removeAttribute("hidden");
                 } else {
-                    document.getElementsByClassName("EasyMDEContainer").item(commentIndex).setAttribute("style", "display: none;");
+                    easyMDEContainer.item(commentIndex).setAttribute("style", "display: none;");
                     document.getElementsByClassName("cancelEditCommentButton").item(commentIndex).setAttribute("hidden", "");
                     document.getElementsByClassName("submitEditCommentButton").item(commentIndex).setAttribute("hidden", "");
 
@@ -669,7 +691,6 @@
 
             target2.innerHTML = converter2.makeHtml(text2);
             }
-
 
             // Markdown Formatted Comments
             let converter3 = new showdown.Converter();
@@ -697,9 +718,15 @@
                 let markIssueOptions = document.getElementById('markIssueAsResolvedOrClosed');
                 markIssueOptions.selectedIndex = 0;
             }
+
             function markIssueAsClosed() {
                 let markIssueOptions = document.getElementById('markIssueAsResolvedOrClosed');
                 markIssueOptions.selectedIndex = 1;
+            }
+
+            // makes all images in this page have a max width of 100%
+            for(let i = 0; i < document.getElementsByTagName("img").length; i++) {
+                document.getElementsByTagName("img").item(i).setAttribute("style", "max-width: 100%;");
             }
         </script>
     </body>

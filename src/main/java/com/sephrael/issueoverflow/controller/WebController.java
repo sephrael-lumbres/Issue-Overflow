@@ -15,17 +15,14 @@ public class WebController {
     @Autowired
     private UserRepository userRepository;
 
-    @RequestMapping(value = "/auth-redirect.html", method = RequestMethod.GET)
-    public String authRedirect() {return "auth-redirect";}
-
     @RequestMapping(value = "/multi-tenant-add-users.html", method = RequestMethod.GET)
-    public String multiTenantAddUsers() {return "multi-tenant-add-users";}
+    public String multiTenantAddUsers() {return "future-features/multi-tenant-add-users";}
 
     @GetMapping("/user-management-add-user.html")
     public String userManagementAddUser(Model model, Principal principal) {
         model.addAttribute("currentUser", userRepository.findByEmail(principal.getName()));
         model.addAttribute("currentUserProjects", userRepository.findByEmail(principal.getName()).getProjects());
 
-        return "user-management-add-user";
+        return "future-features/user-management-add-user";
     }
 }
