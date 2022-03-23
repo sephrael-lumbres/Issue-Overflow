@@ -1,5 +1,3 @@
-// file from https://www.codejava.net/frameworks/spring-boot/user-registration-and-login-tutorial
-
 package com.sephrael.issueoverflow;
 
 import static org.assertj.core.api.Assertions.assertThat;

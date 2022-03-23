@@ -8,7 +8,6 @@ import com.sephrael.issueoverflow.repository.CommentRepository;
 import com.sephrael.issueoverflow.repository.IssueRepository;
 import com.sephrael.issueoverflow.repository.ProjectRepository;
 import com.sephrael.issueoverflow.repository.UserRepository;
-import com.sephrael.issueoverflow.service.IssueService;
 import com.sephrael.issueoverflow.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -26,8 +25,6 @@ public class CommentController {
     private CommentRepository commentRepository;
     @Autowired
     private IssueRepository issueRepository;
-    @Autowired
-    private IssueService issueService;
     @Autowired
     private UserRepository userRepository;
     @Autowired
@@ -111,11 +108,10 @@ public class CommentController {
         return "redirect:/issues/{identifier}/view/" + issueKey;
     }
 
-    // this shows the json format of all the Comments of an Issue
-    @GetMapping(path = "/all")
-    public @ResponseBody Iterable<Comment> getAllCommentsByIssueId(@PathVariable(value = "issueKey") String issueKey,
-                                                                   @PathVariable(name = "identifier") String identifier, Principal principal) {
-        return issueRepository.findByIssueKeyAndOrganization(issueKey,
-                userRepository.findByEmail(principal.getName()).getOrganization()).getComments();
-    }
+//    @GetMapping(path = "/json")
+//    public @ResponseBody Iterable<Comment> getAllCommentsByIssueId(@PathVariable(value = "issueKey") String issueKey,
+//                                                                   @PathVariable(name = "identifier") String identifier, Principal principal) {
+//        return issueRepository.findByIssueKeyAndOrganization(issueKey,
+//                userRepository.findByEmail(principal.getName()).getOrganization()).getComments();
+//    }
 }

@@ -1,7 +1,6 @@
 package com.sephrael.issueoverflow.controller;
 
 import com.sephrael.issueoverflow.entity.File;
-import com.sephrael.issueoverflow.entity.Organization;
 import com.sephrael.issueoverflow.entity.User;
 import com.sephrael.issueoverflow.message.ResponseFile;
 import com.sephrael.issueoverflow.repository.FileRepository;
@@ -119,22 +118,22 @@ public class FileController {
         return String.format("redirect:/issues/%s/view/%s", identifier, issueKey);
     }
 
-    @GetMapping("/all")
-    public ResponseEntity<List<ResponseFile>> getAllFilesJson() {
-        List<ResponseFile> files = fileService.getAllFiles().map(file -> {
-            String fileDownloadUri = ServletUriComponentsBuilder
-                    .fromCurrentContextPath()
-                    .path("/files/")
-                    .path(file.getId().toString())
-                    .toUriString();
-
-            return new ResponseFile(
-                    file.getName(),
-                    fileDownloadUri,
-                    file.getType(),
-                    file.getData().length);
-        }).collect(Collectors.toList());
-
-        return ResponseEntity.status(HttpStatus.OK).body(files);
-    }
+//    @GetMapping("/json")
+//    public ResponseEntity<List<ResponseFile>> getAllFilesJson() {
+//        List<ResponseFile> files = fileService.getAllFiles().map(file -> {
+//            String fileDownloadUri = ServletUriComponentsBuilder
+//                    .fromCurrentContextPath()
+//                    .path("/files/")
+//                    .path(file.getId().toString())
+//                    .toUriString();
+//
+//            return new ResponseFile(
+//                    file.getName(),
+//                    fileDownloadUri,
+//                    file.getType(),
+//                    file.getData().length);
+//        }).collect(Collectors.toList());
+//
+//        return ResponseEntity.status(HttpStatus.OK).body(files);
+//    }
 }

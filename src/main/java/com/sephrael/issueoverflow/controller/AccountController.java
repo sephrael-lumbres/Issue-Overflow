@@ -8,7 +8,6 @@ import com.sephrael.issueoverflow.repository.OrganizationRepository;
 import com.sephrael.issueoverflow.repository.UserRepository;
 import com.sephrael.issueoverflow.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;

@@ -152,10 +152,9 @@ public class ProjectController {
         return "redirect:/projects/all";
     }
 
-    // this returns the json of all the projects
-    @GetMapping(path = "/json")
-    public @ResponseBody
-    List<Project> getAllProjects() {
-        return projectRepository.findAll();
-    }
+//    @GetMapping(path = "/json")
+//    public @ResponseBody
+//    List<Project> getAllProjects() {
+//        return projectRepository.findAll();
+//    }
 }

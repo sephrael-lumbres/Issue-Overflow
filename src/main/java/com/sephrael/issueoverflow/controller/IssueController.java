@@ -285,21 +285,18 @@ public class IssueController {
             return "redirect:/issues/" + identifier;
     }
 
-    // this shows the json format of all the Issues
-    @GetMapping(path = "/json")
-    public @ResponseBody Iterable<Issue> getAllIssues() {
-        return issueService.listAll();
-    }
-
-    // this shows the json format of all the Issues by Project
-    @GetMapping(path = "/{identifier}/json")
-    public @ResponseBody Iterable<Issue> getAllIssuesByProject(@PathVariable("identifier") String identifier, Principal principal) {
-        return issueService.findProjectByIdentifierAndOrganization(identifier, userRepository.findByEmail(principal.getName()).getOrganization());
-    }
-
-    // this shows the json format of all the Comments
-    @GetMapping(path = "/comments/json")
-    public @ResponseBody Iterable<Comment> getAllComments() {
-        return commentRepository.findAll();
-    }
+//    @GetMapping(path = "/json")
+//    public @ResponseBody Iterable<Issue> getAllIssues() {
+//        return issueService.listAll();
+//    }
+//
+//    @GetMapping(path = "/{identifier}/json")
+//    public @ResponseBody Iterable<Issue> getAllIssuesByProject(@PathVariable("identifier") String identifier, Principal principal) {
+//        return issueService.findProjectByIdentifierAndOrganization(identifier, userRepository.findByEmail(principal.getName()).getOrganization());
+//    }
+//
+//    @GetMapping(path = "/comments/json")
+//    public @ResponseBody Iterable<Comment> getAllComments() {
+//        return commentRepository.findAll();
+//    }
 }

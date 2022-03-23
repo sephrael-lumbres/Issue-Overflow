@@ -53,7 +53,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/privacy", "/cookie-policy").permitAll()
                 .antMatchers("/getting-started", "/getting-started/*", "/knowledge-base/**", "/contact-us/**").permitAll()
                 .antMatchers("/reset-password", "/change-password*", "/verify-email*").permitAll()
-                .antMatchers("/error", "/js/**", "/assets/**", "/css/**", "/webjars/**").permitAll()
+                .antMatchers("/error", "/js/**", "/assets/**", "/css/**").permitAll()
 
                 // Update and Removal operations on Users allowed only to Project Managers
                 .antMatchers("/users/edit/*", "/users/update/*", "/users/remove/**")

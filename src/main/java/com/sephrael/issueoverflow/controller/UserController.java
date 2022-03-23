@@ -1,5 +1,3 @@
-// file from https://www.codejava.net/frameworks/spring-boot/user-registration-and-login-tutorial
-
 package com.sephrael.issueoverflow.controller;
 
 import com.sephrael.issueoverflow.entity.Organization;
@@ -10,7 +8,6 @@ import com.sephrael.issueoverflow.service.UserService;
 import net.bytebuddy.utility.RandomString;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -281,9 +278,8 @@ public class UserController {
         return "redirect:" + request.getHeader("Referer");
     }
 
-    // this returns the json of all the users
-    @GetMapping(path = "/users/json")
-    public @ResponseBody Iterable<User> getAllUsersJson() {
-        return userRepository.findAll();
-    }
+//    @GetMapping(path = "/users/json")
+//    public @ResponseBody Iterable<User> getAllUsersJson() {
+//        return userRepository.findAll();
+//    }
 }

@@ -6,7 +6,6 @@ import com.sephrael.issueoverflow.entity.User;
 import com.sephrael.issueoverflow.repository.OrganizationRepository;
 import com.sephrael.issueoverflow.repository.RoleRepository;
 import com.sephrael.issueoverflow.repository.UserRepository;
-import com.sephrael.issueoverflow.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -152,12 +151,11 @@ public class OrganizationController {
         return "organization/join-organization";
     }
 
-    // this returns the json of all the organizations
-    @GetMapping(path = "/all")
-    public @ResponseBody
-    Iterable<Organization> getAllOrganizations() {
-        return organizationRepository.findAll();
-    }
+//    @GetMapping(path = "/json")
+//    public @ResponseBody
+//    Iterable<Organization> getAllOrganizations() {
+//        return organizationRepository.findAll();
+//    }
 
     // feature request: be able to add users by email, to an organization
     // try to get "multi-tenant-add-users.html" to work
