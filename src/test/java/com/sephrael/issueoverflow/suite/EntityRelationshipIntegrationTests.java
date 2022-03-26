@@ -1,4 +1,4 @@
-package com.sephrael.issueoverflow;
+package com.sephrael.issueoverflow.suite;
 
 import com.sephrael.issueoverflow.entity.*;
 import com.sephrael.issueoverflow.repository.*;

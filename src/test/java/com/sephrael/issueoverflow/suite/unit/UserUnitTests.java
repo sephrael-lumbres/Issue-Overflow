@@ -1,4 +1,4 @@
-package com.sephrael.issueoverflow;
+package com.sephrael.issueoverflow.suite.unit;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -20,7 +20,7 @@ import java.util.List;
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @Rollback(value = false)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class UserRepositoryTests {
+public class UserUnitTests {
 
     @Autowired
     private TestEntityManager entityManager;
@@ -31,6 +31,7 @@ public class UserRepositoryTests {
     @Order(1)
     public void testCreateUser() {
         User user = new User();
+        user.setId(user.getId());
         user.setEmail("ravikumar@gmail.com");
         user.setPassword("ravi2020");
         user.setFirstName("Ravi");
@@ -41,6 +42,7 @@ public class UserRepositoryTests {
         User existingUser = entityManager.find(User.class, savedUser.getId());
 
         assertThat(user.getEmail()).isEqualTo(existingUser.getEmail());
+        assertThat(user.getId()).isEqualTo(existingUser.getId());
     }
 
     @Test
