@@ -56,9 +56,6 @@ public class UserControllerTest {
     protected CommentRepository commentRepository;
 
     @MockBean
-    protected FileRepository fileRepository;
-
-    @MockBean
     protected IssueRepository issueRepository;
 
     List<User> users = new ArrayList<>();

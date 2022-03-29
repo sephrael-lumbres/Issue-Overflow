@@ -71,6 +71,18 @@ public class Issue {
         file.setIssue(this);
     }
 
+    @NotAudited
+    @OneToMany(mappedBy = "issue", cascade = CascadeType.ALL)
+    private List<AWSFile> awsFiles;
+
+    public void addAWSFileToIssue(AWSFile awsFile) {
+        awsFile.setIssue(this);
+    }
+
+    public List<AWSFile> getAWSFiles() {
+        return awsFiles;
+    }
+
 //    @Enumerated(EnumType.STRING)
 //    private IssueStatus issueStatus;
 

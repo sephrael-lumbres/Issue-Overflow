@@ -2,7 +2,7 @@ package com.sephrael.issueoverflow.controller;
 
 import com.sephrael.issueoverflow.entity.*;
 import com.sephrael.issueoverflow.repository.*;
-import com.sephrael.issueoverflow.service.FileService;
+import com.sephrael.issueoverflow.service.AWSFileService;
 import com.sephrael.issueoverflow.service.IssueService;
 import com.sephrael.issueoverflow.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +38,7 @@ public class IssueController {
     @Autowired
     private ProjectRepository projectRepository;
     @Autowired
-    private FileService fileService;
+    private AWSFileService awsFileService;
 
     @GetMapping("/all")
     public String showIssuesByOrganization(Principal principal, Model model) {
@@ -156,8 +156,8 @@ public class IssueController {
 
         // if 'Attach File(s)' Field is NOT empty, they are uploaded to the DB and are CONNECTED to the requested 'Issue'
         if(!files[0].isEmpty()) {
-            for (MultipartFile file : files) {
-                fileService.uploadIssueAttachments(currentUser, file, false, issue);
+            for (MultipartFile multipartFile : files) {
+                awsFileService.uploadFile(multipartFile, currentUser, issue, false);
             }
         }
 
@@ -195,8 +195,8 @@ public class IssueController {
 
         // if 'Attach File(s)' Field is NOT null AND NOT empty, they are uploaded to the DB and are CONNECTED to the requested 'Issue'
         if(files != null && !files[0].isEmpty()) {
-            for (MultipartFile file : files) {
-                fileService.uploadIssueAttachments(currentUser, file, false, previousIssue);
+            for (MultipartFile multipartFile : files) {
+                awsFileService.uploadFile(multipartFile, currentUser, previousIssue, false);
             }
         }
 
@@ -218,7 +218,7 @@ public class IssueController {
         model.addAttribute("newComment", new Comment());
         model.addAttribute("comments", issue.getComments());
         model.addAttribute("issue", issue);
-        model.addAttribute("attachments", issue.getFiles());
+        model.addAttribute("attachments", issue.getAWSFiles());
         model.addAttribute("issueChangeHistoryList", issueService.getIssueChangeHistoryList(issue.getId()));
         model.addAttribute("findRevisions", issueRepository.findRevisions(issue.getId()));
         model.addAttribute("currentUser", currentUser);

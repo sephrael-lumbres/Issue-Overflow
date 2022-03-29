@@ -76,7 +76,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .hasAnyAuthority("Project Manager", "Admin", "Developer", "Guest")
 
                 // deletion of Files only allowed to PMs, Admins, and Developers
-                .antMatchers("/files/*/*/delete/*")
+                .antMatchers("/storage/*/*/delete/*")
                 .hasAnyAuthority("Project Manager", "Admin", "Developer")
 
                 // CRUD operations on Comments allowed to all Roles
