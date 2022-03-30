@@ -66,14 +66,6 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @NotAudited
-    private List<File> files;
-
-    public void addToFiles(File file) {
-        file.setUser(this);
-    }
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    @NotAudited
     private List<AWSFile> awsFiles;
 
     public void addUserToAWSFile(AWSFile awsFile) {

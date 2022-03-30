@@ -65,14 +65,6 @@ public class Issue {
 
     @NotAudited
     @OneToMany(mappedBy = "issue", cascade = CascadeType.ALL)
-    private List<File> files;
-
-    public void addToFiles(File file) {
-        file.setIssue(this);
-    }
-
-    @NotAudited
-    @OneToMany(mappedBy = "issue", cascade = CascadeType.ALL)
     private List<AWSFile> awsFiles;
 
     public void addAWSFileToIssue(AWSFile awsFile) {
@@ -285,10 +277,6 @@ public class Issue {
 
     public void setDateUpdated(LocalDateTime dateUpdated) {
         this.dateUpdated = dateUpdated;
-    }
-
-    public List<File> getFiles() {
-        return files;
     }
 
     //    public IssueStatus getIssueStatus() {

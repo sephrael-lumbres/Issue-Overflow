@@ -1,6 +1,5 @@
 package com.sephrael.issueoverflow.controller;
 
-import com.sephrael.issueoverflow.entity.File;
 import com.sephrael.issueoverflow.entity.Organization;
 import com.sephrael.issueoverflow.entity.Project;
 import com.sephrael.issueoverflow.entity.User;
@@ -45,7 +44,6 @@ public class AccountController {
             return "error/404";
 
         model.addAttribute("user", userRepository.getById(id));
-        model.addAttribute("file", new File());
         model.addAttribute("newProject", new Project());
         model.addAttribute("currentUser", currentUser);
         model.addAttribute("currentUserProjects", currentUser.getProjects());
