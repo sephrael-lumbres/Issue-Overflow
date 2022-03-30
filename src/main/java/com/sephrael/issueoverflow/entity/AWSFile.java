@@ -47,6 +47,10 @@ public class AWSFile {
 
     @ManyToOne
     @JsonIgnore
+    private Project project;
+
+    @ManyToOne
+    @JsonIgnore
     private Issue issue;
 
     public Long getId() {
@@ -119,6 +123,14 @@ public class AWSFile {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public Project getProject() {
+        return project;
+    }
+
+    public void setProject(Project project) {
+        this.project = project;
     }
 
     public Issue getIssue() {

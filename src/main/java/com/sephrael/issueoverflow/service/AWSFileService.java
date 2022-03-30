@@ -7,6 +7,7 @@ import com.amazonaws.services.s3.model.*;
 import com.amazonaws.util.IOUtils;
 import com.sephrael.issueoverflow.entity.AWSFile;
 import com.sephrael.issueoverflow.entity.Issue;
+import com.sephrael.issueoverflow.entity.Project;
 import com.sephrael.issueoverflow.entity.User;
 import com.sephrael.issueoverflow.repository.AWSFileRepository;
 import com.sephrael.issueoverflow.repository.UserRepository;
@@ -74,8 +75,11 @@ public class AWSFileService {
             AWSFile awsFile = new AWSFile(fileName, fileKey, contentType, fileSize, url, isProfilePicture);
             user.addUserToAWSFile(awsFile);
 
-            if(issue != null)
+            // connect AWSFile to an issue and its project
+            if(issue != null) {
                 issue.addAWSFileToIssue(awsFile);
+                issue.getProject().addAWSFileToProject(awsFile);
+            }
             awsFileRepository.save(awsFile);
         } catch (IOException ioException) {
             logger.error("IOException: " + ioException.getMessage());
@@ -110,5 +114,23 @@ public class AWSFileService {
     public void deleteFile(String fileKey) {
         s3Client.deleteObject(bucketName, fileKey);
         awsFileRepository.delete(awsFileRepository.findByFileKey(fileKey));
+    }
+
+    public void deleteAllFilesByUser(User user) {
+        for(AWSFile awsFile : awsFileRepository.findByUser(user)) {
+            s3Client.deleteObject(bucketName, awsFile.getFileKey());
+        }
+    }
+
+    public void deleteAllFilesByProject(Project project) {
+        for(AWSFile awsFile : awsFileRepository.findByProject(project)) {
+            s3Client.deleteObject(bucketName, awsFile.getFileKey());
+        }
+    }
+
+    public void deleteAllFilesByIssue(Issue issue) {
+        for(AWSFile awsFile : awsFileRepository.findByIssue(issue)) {
+            s3Client.deleteObject(bucketName, awsFile.getFileKey());
+        }
     }
 }

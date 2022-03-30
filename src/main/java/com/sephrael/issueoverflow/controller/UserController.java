@@ -4,6 +4,7 @@ import com.sephrael.issueoverflow.entity.Organization;
 import com.sephrael.issueoverflow.entity.Project;
 import com.sephrael.issueoverflow.entity.User;
 import com.sephrael.issueoverflow.repository.*;
+import com.sephrael.issueoverflow.service.AWSFileService;
 import com.sephrael.issueoverflow.service.UserService;
 import net.bytebuddy.utility.RandomString;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +37,8 @@ public class UserController {
     private ProjectRepository projectRepository;
     @Autowired
     private RoleRepository roleRepository;
+    @Autowired
+    private AWSFileService awsFileService;
 
     @GetMapping("/register")
     public String showRegistrationForm(Model model) {
@@ -218,6 +221,9 @@ public class UserController {
         if(!currentUser.getOrganization().getUsers().contains(userBeforeRemoval)) {
             return "error/404";
         }
+
+        // deletes all the files associated with this user from AWS S3 bucket
+        awsFileService.deleteAllFilesByUser(userBeforeRemoval);
 
         // deletes all the User's issues
         userService.deleteAllUserIssues(userBeforeRemoval);

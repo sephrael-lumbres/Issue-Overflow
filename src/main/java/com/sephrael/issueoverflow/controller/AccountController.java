@@ -5,6 +5,7 @@ import com.sephrael.issueoverflow.entity.Project;
 import com.sephrael.issueoverflow.entity.User;
 import com.sephrael.issueoverflow.repository.OrganizationRepository;
 import com.sephrael.issueoverflow.repository.UserRepository;
+import com.sephrael.issueoverflow.service.AWSFileService;
 import com.sephrael.issueoverflow.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -31,6 +32,8 @@ public class AccountController {
     private UserRepository userRepository;
     @Autowired
     private OrganizationRepository organizationRepository;
+    @Autowired
+    private AWSFileService awsFileService;
 
     @RequestMapping("/profile/{id}")
     public String showAccountProfilePage(@PathVariable("id") long id, Principal principal, Model model) {
@@ -156,6 +159,10 @@ public class AccountController {
 
         // checks if the Password actually matches the User's current password
         if(passwordEncoder.matches(password, userToBeDeleted.getPassword())) {
+
+            // deletes all the files associated with this user from AWS S3 bucket
+            awsFileService.deleteAllFilesByUser(userToBeDeleted);
+
             // unassigns a User from all Issues that they were previously assigned to
             userService.unassignAllIssuesBeforeUserDeletion(userToBeDeleted);
 

@@ -5,6 +5,7 @@ import com.sephrael.issueoverflow.repository.IssueKeySequenceRepository;
 import com.sephrael.issueoverflow.repository.IssueRepository;
 import com.sephrael.issueoverflow.repository.ProjectRepository;
 import com.sephrael.issueoverflow.repository.UserRepository;
+import com.sephrael.issueoverflow.service.AWSFileService;
 import com.sephrael.issueoverflow.service.IssueService;
 import com.sephrael.issueoverflow.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,8 @@ public class ProjectController {
     private IssueService issueService;
     @Autowired
     private IssueKeySequenceRepository issueKeySequenceRepository;
+    @Autowired
+    private AWSFileService awsFileService;
 
     @RequestMapping("/all")
     public String viewProjects(Model model, Principal principal) {
@@ -146,6 +149,9 @@ public class ProjectController {
         if(!currentUser.getProjects().contains(projectRepository.findProjectById(id))) {
             return "error/404";
         }
+
+        // deletes all the files associated with this project, from AWS S3 bucket
+        awsFileService.deleteAllFilesByProject(projectRepository.findProjectById(id));
 
         projectRepository.deleteById(id);
 

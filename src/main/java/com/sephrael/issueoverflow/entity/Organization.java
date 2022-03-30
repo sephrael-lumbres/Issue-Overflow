@@ -37,7 +37,7 @@ public class Organization {
         user.setOrganization(null);
     }
 
-    @OneToMany(mappedBy = "organization")
+    @OneToMany(mappedBy = "organization", cascade = CascadeType.ALL)
     private List<Project> projects;
 
     public List<Project> getProjects() {
@@ -48,7 +48,7 @@ public class Organization {
         project.setOrganization(this);
     }
 
-    @OneToMany(mappedBy = "organization")
+    @OneToMany(mappedBy = "organization", cascade = CascadeType.ALL)
     private List<Issue> issues;
 
     public void addToIssue(Issue issue) {

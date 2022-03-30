@@ -52,6 +52,14 @@ public class Project {
     @NotAudited
     private List<Issue> issues;
 
+    @NotAudited
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
+    private List<AWSFile> awsFiles;
+
+    public void addAWSFileToProject(AWSFile awsFile) {
+        awsFile.setProject(this);
+    }
+
     public List<Issue> getIssues() {
         return issues;
     }

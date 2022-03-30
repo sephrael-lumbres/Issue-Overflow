@@ -273,6 +273,9 @@ public class IssueController {
 
         Project currentProject = projectRepository.findByIdentifierAndOrganization(identifier, currentOrganization);
 
+        // deletes all the files associated with this issue, from the AWS S3 bucket
+        awsFileService.deleteAllFilesByIssue(currentIssue);
+
         issueService.delete(currentIssue.getId());
 
         if(currentProject.getIssues().isEmpty()) {
