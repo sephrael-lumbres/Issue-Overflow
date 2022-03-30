@@ -70,9 +70,14 @@ public class AWSFileController {
     }
 
     @GetMapping("/download/{fileKey}")
-    public ResponseEntity<byte[]> downloadFileByKey(@PathVariable String fileKey) throws IOException {
+    public ResponseEntity<byte[]> downloadFileByKey(@PathVariable String fileKey, Principal principal) throws IOException {
+        User currentUser = userRepository.findByEmail(principal.getName());
         AWSFile awsFile = awsFileRepository.findByFileKey(fileKey);
         byte[] AWSFileData = awsFileService.getAWSFile(fileKey);
+
+        // if the requested file's Organization does NOT match the current User's Organization, redirect to NOT FOUND page
+        if(!Objects.equals(awsFile.getUser().getOrganization().getId(), currentUser.getOrganization().getId()))
+            return ResponseEntity.notFound().build();
 
         return ResponseEntity.ok()
                 .contentLength(AWSFileData.length)
