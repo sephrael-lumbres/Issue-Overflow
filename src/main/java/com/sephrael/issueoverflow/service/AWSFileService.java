@@ -75,6 +75,12 @@ public class AWSFileService {
             AWSFile awsFile = new AWSFile(fileName, fileKey, contentType, fileSize, url, isProfilePicture);
             user.addUserToAWSFile(awsFile);
 
+            // if file is a profile picture, store the URL with the user
+            if(isProfilePicture) {
+                user.setProfilePictureURL(url);
+                userRepository.save(user);
+            }
+
             // connect AWSFile to an issue and its project
             if(issue != null) {
                 issue.addAWSFileToIssue(awsFile);

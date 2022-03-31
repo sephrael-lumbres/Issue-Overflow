@@ -88,6 +88,9 @@ public class User {
     private boolean hasProfilePicture;
 
     @NotAudited
+    private String profilePictureURL;
+
+    @NotAudited
     private boolean isCreatedEnabled;
 
     @NotAudited
@@ -208,6 +211,14 @@ public class User {
 
     public void setHasProfilePicture(boolean hasProfilePicture) {
         this.hasProfilePicture = hasProfilePicture;
+    }
+
+    public String getProfilePictureURL() {
+        return profilePictureURL;
+    }
+
+    public void setProfilePictureURL(String profilePictureURL) {
+        this.profilePictureURL = profilePictureURL;
     }
 
     public boolean isCreatedEnabled() {

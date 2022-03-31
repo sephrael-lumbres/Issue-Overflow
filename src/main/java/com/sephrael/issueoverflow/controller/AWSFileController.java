@@ -69,6 +69,7 @@ public class AWSFileController {
         return "redirect:/account/profile/" + userId;
     }
 
+    // this has been replaced by the actual object's resource direct URL
     @GetMapping("/download/{fileKey}")
     public ResponseEntity<byte[]> downloadFileByKey(@PathVariable String fileKey, Principal principal) throws IOException {
         User currentUser = userRepository.findByEmail(principal.getName());
@@ -86,6 +87,7 @@ public class AWSFileController {
                 .body(AWSFileData);
     }
 
+    // this has been replaced by the actual profile pictures' direct URL
     @GetMapping("/profile-picture/{userId}")
     public ResponseEntity<byte[]> getProfilePicture(@PathVariable("userId") long userId, Principal principal) throws IOException {
         // if the requested File's 'Organization' does NOT match the Current User's 'Organization', redirect to NOT FOUND page
